@@ -1,0 +1,79 @@
+{% extends 'layouts/admin.html.twig' %} {% block title "Tableau de bord" %} {%
+block body %}
+<twig:Card>
+  <div class="max-w-lg mb-4">
+    <h1 class="mb-3 text-base font-semibold text-slate-700 dark:text-gray-300">
+      Gestion des années académiques
+    </h1>
+  </div>
+
+  <div class="flex items-center justify-start gap-x-3 mb-4">
+    <twig:Search placeholder="Rechercher une année académique" />
+  </div>
+
+  <twig:Table>
+    <twig:TableHeader>
+      <twig:TableRow>
+        <twig:TableHead> Année </twig:TableHead>
+        <twig:TableHead> Statut </twig:TableHead>
+        <twig:TableHead> Cloturée </twig:TableHead>
+        <twig:TableHead> Générée </twig:TableHead>
+        <twig:TableHead> ... </twig:TableHead>
+      </twig:TableRow>
+    </twig:TableHeader>
+
+    <twig:TableBody>
+      {% for year in years %}
+      <twig:TableRow>
+        <twig:TableCell>
+          <a class="hover:underline" href="{{ path('~year-academic.show', {id: year.id}) }}">
+          {{ year.name|u.truncate(40, '...', false)}}
+          </a>
+        </twig:TableCell>
+        
+        <twig:TableCell>
+        <twig:Badge type="{{ year.closed ? 'destructive' : 'outline' }}">
+          {{ year.closed ? 'Cloturée' : 'En cours' }}
+        </twig:Badge>
+        </twig:TableCell>
+        <twig:TableCell>
+          {% if year.closed %}
+            {{ year.closedAt | ago }}
+            {%else %}
+              ...
+          {% endif %}
+        </twig:TableCell>
+        <twig:TableCell>
+          {{ year.createdAt | ago }}
+        </twig:TableCell>
+        <twig:TableCell>
+          <div class="flex justify-end items-center">
+          {% if year.closed == false %}
+              <twig:ButtonLink href="{{ path('~year-academic.closed', {id: year.id}) }}" size="sm" variant="outline">
+                <div class="flex gap-x-1 items-center">
+                <i class="bi bi-pen"></i> 
+              <span>Cloturer</span>
+              </div>
+        </twig:ButtonLink>
+
+        {% else %}
+          <twig:Button disabled="true" size="sm" variant="outline">
+              <div class="flex gap-x-1 items-center">
+                <i class="bi bi-lock"></i> 
+              <span>Cloturée</span>
+              </div>
+        </twig:Button>
+        {% endif %}
+          </div>
+        </twig:TableCell>
+
+      </twig:TableRow>
+      {% endfor %}
+    </twig:TableBody>
+  </twig:Table>
+
+  <div>
+    {{ knp_pagination_render(years) }}
+  </div>
+</twig:Card>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends 'layouts/admin.html.twig' %}
+
+{% block title "Cloturer l'année académique" %}
+
+{% block body %}
+  <twig:Card >
+    <div class="max-w-lg mb-4">
+      <h1 class="mb-3 text-base font-semibold text-slate-700 dark:text-gray-300">
+        Cloturer l'année académique #{{ year.id }}
+      </h1>
+      <p class="text-sm text-foreground">
+        Pour clôturer cette année académique, veuillez noter que cette action est irréversible. Toutes les actions liées à cette année seront bloquées. Merci de saisir votre mot de passe pour confirmer
+      </p>
+    </div>
+  
+  </twig:Card>
+{% endblock %}

@@ -32,16 +32,29 @@
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
                         Tableau de bord
                     </a>
-                    <div class="relative">
-                        <button id="edificeDropdown" class="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900">
+                    <div class="relative" id="dropdown-menu">
+                        <button id="dropdown-trigger" class="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><path d="m2 22 1-1h3l9-9"></path><path d="M3 21v-3l9-9"></path><path d="m15 6 3-3 3 3-3 3Z"></path></svg>
                             Edifice
                         </button>
-                        <div id="edificeMenu" class="absolute left-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 hidden">
-                            <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="edificeDropdown">
+                        <div id="dropdown-content" class="absolute z-30 left-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 hidden">
+                            <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="dropdown-menu">
                                 <a href="{{ path('~faculty.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Faculté</a>
                                 <a href="{{ path('~department.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Département</a>
                                 <a href="{{ path('~sector.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Option</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="relative" id="dropdown-menu">
+                        <button id="dropdown-trigger" class="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><path d="m2 22 1-1h3l9-9"></path><path d="M3 21v-3l9-9"></path><path d="m15 6 3-3 3 3-3 3Z"></path></svg>
+                            Académique
+                        </button>
+                        <div id="dropdown-content" class="absolute z-30 left-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 hidden">
+                            <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="dropdown-menu">
+                                <a href="{{ path('~programme.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Programme</a>
+                                <a href="{{ path('~year-academic.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Année academique</a>
                             </div>
                         </div>
                     </div>
@@ -57,11 +70,11 @@
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 mx-auto"><line x1="4" x2="20" y1="12" y2="12"></line><line x1="4" x2="20" y1="6" y2="6"></line><line x1="4" x2="20" y1="18" y2="18"></line></svg>
                 </button>
                 <div class="flex-1"></div>
-                <div class="relative">
-                    <button id="userMenuToggle" class="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center">
+                <div class="relative" id="dropdown-menu">
+                    <button id="dropdown-trigger" class="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="10" r="3"></circle><path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662"></path></svg>
                     </button>
-                    <div id="userMenu" class="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 hidden">
+                    <div id="dropdown-content" class="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 hidden">
                         <div class="py-1" role="menu" aria-orientation="vertical">
                             <div class="px-4 py-2 text-sm text-gray-700 font-medium">Mon compte</div>
                             <hr class="my-1">

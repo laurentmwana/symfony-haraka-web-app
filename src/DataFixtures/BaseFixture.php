@@ -6,6 +6,7 @@ use App\Entity\Sector;
 use App\Entity\Faculty;
 use App\Entity\Programme;
 use App\Entity\Department;
+use App\Entity\YearAcademic;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 
@@ -27,6 +28,25 @@ class BaseFixture extends Fixture
         ];
 
         $programmes = [];
+
+
+        $years = [];
+        for ($start = 2012; $start <= 2022; $start++) {
+            $end = $start + 1;
+
+            $name = $start . '-' . $end;
+
+            $y = $start === 2022
+                ? (new YearAcademic())
+                ->setName($name)
+                : (new YearAcademic())
+                ->setName($name)->setClosed(true)
+                ->setClosedAt(new \DateTime());
+
+            $manager->persist($y);
+
+            $years[] = $y;
+        }
 
         foreach ($newProgrammes as $programme) {
             $p = (new Programme())

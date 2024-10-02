@@ -2,9 +2,10 @@
 
 namespace App\Repository;
 
+use Doctrine\ORM\Query;
 use App\Entity\YearAcademic;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @extends ServiceEntityRepository<YearAcademic>
@@ -16,28 +17,23 @@ class YearAcademicRepository extends ServiceEntityRepository
         parent::__construct($registry, YearAcademic::class);
     }
 
-//    /**
-//     * @return YearAcademic[] Returns an array of YearAcademic objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('y')
-//            ->andWhere('y.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('y.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function findSearchQuery(?string $query): Query
+    {
+        $qb = $this->createQueryBuilder('y');
 
-//    public function findOneBySomeField($value): ?YearAcademic
-//    {
-//        return $this->createQueryBuilder('y')
-//            ->andWhere('y.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+        if (null !== $query && !empty($query)) {
+            $qb->where($qb->expr()->orX(
+                $qb->expr()->like('y.id', ':val'),
+                $qb->expr()->like('y.name', ':val'),
+                $qb->expr()->like('y.closed', ':val'),
+                $qb->expr()->like('y.created_at', ':val')
+            ))
+                ->setParameter('val', "%$query%");
+        }
+
+        return $qb
+            ->orderBy('y.created_at', 'DESC')
+            ->orderBy('y.closed', 'ASC')
+            ->getQuery();
+    }
 }
