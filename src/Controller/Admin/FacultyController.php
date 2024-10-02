@@ -48,6 +48,10 @@ class FacultyController extends AbstractController
     $form->handleRequest($request);
 
     if ($form->isSubmitted() && $form->isValid()) {
+
+      $faculty->setUpdatedAt(new \DateTime());
+
+      $this->em->persist($faculty);
       $this->em->flush();
 
       return $this->redirectToRoute('~faculty.index');

@@ -6,7 +6,6 @@ use App\Entity\Sector;
 use App\Entity\Faculty;
 use App\Entity\Programme;
 use App\Entity\Department;
-use App\Entity\YearAcademic;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 

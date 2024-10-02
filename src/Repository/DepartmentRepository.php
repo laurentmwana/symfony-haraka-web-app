@@ -2,9 +2,11 @@
 
 namespace App\Repository;
 
+use App\Entity\Faculty;
+use Doctrine\ORM\Query;
 use App\Entity\Department;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @extends ServiceEntityRepository<Department>
@@ -16,20 +18,25 @@ class DepartmentRepository extends ServiceEntityRepository
         parent::__construct($registry, Department::class);
     }
 
-    //    /**
-    //     * @return Department[] Returns an array of Department objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('d')
-    //            ->andWhere('d.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('d.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    public function findSearchQuery(?string $query): Query
+    {
+        $qb = $this->createQueryBuilder('d')
+            ->innerJoin('d.faculty', 'f')
+            ->addSelect('f');
+
+        if (null !== $query && !empty($query)) {
+            $qb->where($qb->expr()->orX(
+                $qb->expr()->like('d.id', ':val'),
+                $qb->expr()->like('d.name', ':val'),
+                $qb->expr()->like('d.alias', ':val'),
+                $qb->expr()->like('d.created_at', ':val')
+            ))
+                ->setParameter('val', "%$query%");
+        }
+
+        return $qb->orderBy('d.updated_at', 'DESC')->getQuery();
+    }
+
 
     //    public function findOneBySomeField($value): ?Department
     //    {

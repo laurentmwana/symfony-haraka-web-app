@@ -19,6 +19,7 @@ class YearAcademic
     #[ORM\Column]
     private ?bool $closed = null;
 
+
     public function getId(): ?int
     {
         return $this->id;

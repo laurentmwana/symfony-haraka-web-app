@@ -30,6 +30,12 @@ class Sector
     #[ORM\Column(length: 20)]
     private ?string $alias = null;
 
+    public function __construct()
+    {
+        $this->created_at = new \DateTime();
+        $this->updated_at = new \DateTime();
+    }
+
     public function getId(): ?int
     {
         return $this->id;

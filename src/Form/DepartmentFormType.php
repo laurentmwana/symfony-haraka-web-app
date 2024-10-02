@@ -15,16 +15,10 @@ class DepartmentFormType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('created_at', null, [
-                'widget' => 'single_text',
-            ])
-            ->add('updated_at', null, [
-                'widget' => 'single_text',
-            ])
             ->add('alias')
             ->add('faculty', EntityType::class, [
                 'class' => Faculty::class,
-                'choice_label' => 'id',
+                'choice_label' => 'name',
             ])
         ;
     }

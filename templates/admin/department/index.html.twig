@@ -1,0 +1,55 @@
+{% extends 'layouts/admin.html.twig' %} {% block title "Tableau de bord" %} {%
+block body %}
+<twig:Card>
+  <div class="max-w-lg mb-4">
+    <h1 class="mb-3 text-base font-semibold text-slate-700 dark:text-gray-300">
+      Gestion de département
+    </h1>
+  </div>
+
+  <div class="flex items-center justify-between gap-x-3 mb-4">
+    <twig:Search placeholder="Rechercher un département" />
+    <twig:ButtonLink size="default" href="{{ path('~department.create') }}">
+      <i class="bi bi-plus"></i>
+    </twig:ButtonLink>
+  </div>
+
+  <twig:Table>
+    <twig:TableHeader>
+      <twig:TableRow>
+        <twig:TableHead> Nom </twig:TableHead>
+        <twig:TableHead> Faculté </twig:TableHead>
+        <twig:TableHead> Créer </twig:TableHead>
+        <twig:TableHead> ... </twig:TableHead>
+      </twig:TableRow>
+    </twig:TableHeader>
+
+    <twig:TableBody>
+      {% for department in departments %}
+      <twig:TableRow>
+        <twig:TableCell>
+          <a class="hover:underline" href="{{ path('~department.show', {id: department.id}) }}">
+          {{ department.name|u.truncate(40, '...', false)}}
+          </a>
+        </twig:TableCell>
+        <twig:TableCell>
+          <a class="hover:underline" href="{{ path('~faculty.show', {id: department.faculty.id}) }}">
+          {{ department.faculty.name|u.truncate(40, '...', false)}}
+          </a>
+        </twig:TableCell>
+        <twig:TableCell>
+          {{ department.createdAt | ago }}
+        </twig:TableCell>
+        <twig:TableCell>
+          {% include 'shared/action.html.twig' with {routeDelete: path('~department.delete', {id: department.id}), routeEdit: path('~department.edit', {id: department.id})} %}
+        </twig:TableCell>
+      </twig:TableRow>
+      {% endfor %}
+    </twig:TableBody>
+  </twig:Table>
+
+  <div>
+    {{ knp_pagination_render(departments) }}
+  </div>
+</twig:Card>
+{% endblock %}
