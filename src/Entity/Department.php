@@ -2,13 +2,19 @@
 
 namespace App\Entity;
 
-use App\Repository\DepartmentRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\DepartmentRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Validator;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
 
 #[ORM\Entity(repositoryClass: DepartmentRepository::class)]
+#[UniqueEntity(['alias', 'faculty'], errorPath: 'alias')]
+#[UniqueEntity(['name', 'faculty'], errorPath: 'name')]
+
 class Department
 {
     #[ORM\Id]
@@ -17,10 +23,13 @@ class Department
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Validator\NotBlank()]
+    #[Validator\Length(min: 2, max: 255)]
     private ?string $name = null;
 
     #[ORM\ManyToOne(inversedBy: 'departments')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Validator\NotBlank()]
     private ?Faculty $faculty = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
@@ -36,6 +45,8 @@ class Department
     private Collection $sectors;
 
     #[ORM\Column(length: 20)]
+    #[Validator\NotBlank()]
+    #[Validator\Length(min: 2, max: 20)]
     private ?string $alias = null;
 
     public function __construct()

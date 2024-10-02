@@ -2,11 +2,17 @@
 
 namespace App\Entity;
 
-use App\Repository\SectorRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\SectorRepository;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Validator;
+
 
 #[ORM\Entity(repositoryClass: SectorRepository::class)]
+#[UniqueEntity(['alias', 'department'], errorPath: 'alias')]
+#[UniqueEntity(['name', 'department'], errorPath: 'name')]
+
 class Sector
 {
     #[ORM\Id]
@@ -15,10 +21,13 @@ class Sector
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Validator\NotBlank()]
+    #[Validator\Length(min: 2, max: 255)]
     private ?string $name = null;
 
     #[ORM\ManyToOne(inversedBy: 'sectors')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Validator\NotBlank()]
     private ?Department $department = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
@@ -28,6 +37,8 @@ class Sector
     private ?\DateTimeInterface $updated_at = null;
 
     #[ORM\Column(length: 20)]
+    #[Validator\NotBlank()]
+    #[Validator\Length(min: 2, max: 20)]
     private ?string $alias = null;
 
     public function __construct()

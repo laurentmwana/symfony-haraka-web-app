@@ -15,16 +15,10 @@ class SectorFormType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('created_at', null, [
-                'widget' => 'single_text',
-            ])
-            ->add('updated_at', null, [
-                'widget' => 'single_text',
-            ])
             ->add('alias')
             ->add('department', EntityType::class, [
                 'class' => Department::class,
-                'choice_label' => 'id',
+                'choice_label' => 'name',
             ])
         ;
     }

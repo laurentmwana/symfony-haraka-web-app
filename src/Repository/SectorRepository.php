@@ -3,8 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\Sector;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @extends ServiceEntityRepository<Sector>
@@ -16,20 +17,24 @@ class SectorRepository extends ServiceEntityRepository
         parent::__construct($registry, Sector::class);
     }
 
-    //    /**
-    //     * @return Sector[] Returns an array of Sector objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('s')
-    //            ->andWhere('s.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('s.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    public function findSearchQuery(?string $query): Query
+    {
+        $qb = $this->createQueryBuilder('s')
+            ->innerJoin('s.department', 'd')
+            ->addSelect('d');
+
+        if (null !== $query && !empty($query)) {
+            $qb->where($qb->expr()->orX(
+                $qb->expr()->like('s.id', ':val'),
+                $qb->expr()->like('s.name', ':val'),
+                $qb->expr()->like('s.alias', ':val'),
+                $qb->expr()->like('s.created_at', ':val')
+            ))
+                ->setParameter('val', "%$query%");
+        }
+
+        return $qb->orderBy('s.updated_at', 'DESC')->getQuery();
+    }
 
     //    public function findOneBySomeField($value): ?Sector
     //    {

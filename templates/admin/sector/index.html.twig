@@ -3,13 +3,13 @@ block body %}
 <twig:Card>
   <div class="max-w-lg mb-4">
     <h1 class="mb-3 text-base font-semibold text-slate-700 dark:text-gray-300">
-      Gestion de département
+      Gestion des options
     </h1>
   </div>
 
   <div class="flex items-center justify-between gap-x-3 mb-4">
-    <twig:Search placeholder="Rechercher un département" />
-    <twig:ButtonLink size="default" href="{{ path('~department.create') }}">
+    <twig:Search placeholder="Rechercher une option" />
+    <twig:ButtonLink size="default" href="{{ path('~sector.create') }}">
       <i class="bi bi-plus"></i>
     </twig:ButtonLink>
   </div>
@@ -19,35 +19,35 @@ block body %}
       <twig:TableRow>
         <twig:TableHead> Nom </twig:TableHead>
         <twig:TableHead> Alias </twig:TableHead>
-        <twig:TableHead> Faculté </twig:TableHead>
+        <twig:TableHead> Département </twig:TableHead>
         <twig:TableHead> Créer </twig:TableHead>
         <twig:TableHead> ... </twig:TableHead>
       </twig:TableRow>
     </twig:TableHeader>
 
     <twig:TableBody>
-      {% for department in departments %}
+      {% for sector in sectors %}
       <twig:TableRow>
         <twig:TableCell>
-          <a class="hover:underline" href="{{ path('~department.show', {id: department.id}) }}">
-          {{ department.name|u.truncate(40, '...', false)}}
+          <a class="hover:underline" href="{{ path('~sector.show', {id: sector.id}) }}">
+          {{ sector.name|u.truncate(40, '...', false)}}
           </a>
         </twig:TableCell>
         <twig:TableCell>
-          <a class="hover:underline" href="{{ path('~department.show', {id: department.id}) }}">
-          {{ department.alias|u.truncate(20, '...', false)}}
+          <a class="hover:underline" href="{{ path('~sector.show', {id: sector.id}) }}">
+          {{ sector.alias|u.truncate(20, '...', false)}}
           </a>
         </twig:TableCell>
         <twig:TableCell>
-          <a class="hover:underline" href="{{ path('~faculty.show', {id: department.faculty.id}) }}">
-          {{ department.faculty.name|u.truncate(40, '...', false)}}
+          <a class="hover:underline" href="{{ path('~department.show', {id: sector.department.id}) }}">
+          {{ sector.department.name|u.truncate(40, '...', false)}}
           </a>
         </twig:TableCell>
         <twig:TableCell>
-          {{ department.createdAt | ago }}
+          {{ sector.createdAt|ago }}
         </twig:TableCell>
         <twig:TableCell>
-          {% include 'shared/action.html.twig' with {routeDelete: path('~department.delete', {id: department.id}), routeEdit: path('~department.edit', {id: department.id})} %}
+          {% include 'shared/action.html.twig' with {routeDelete: path('~sector.delete', {id: sector.id}), routeEdit: path('~sector.edit', {id: sector.id})} %}
         </twig:TableCell>
       </twig:TableRow>
       {% endfor %}
@@ -55,7 +55,7 @@ block body %}
   </twig:Table>
 
   <div>
-    {{ knp_pagination_render(departments) }}
+    {{ knp_pagination_render(sectors) }}
   </div>
 </twig:Card>
 {% endblock %}
