@@ -2,9 +2,10 @@
 
 namespace App\Repository;
 
+use Doctrine\ORM\Query;
 use App\Entity\Programme;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @extends ServiceEntityRepository<Programme>
@@ -16,28 +17,22 @@ class ProgrammeRepository extends ServiceEntityRepository
         parent::__construct($registry, Programme::class);
     }
 
-    //    /**
-    //     * @return Programme[] Returns an array of Programme objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('p')
-    //            ->andWhere('p.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('p.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    public function findSearchQuery(?string $query): Query
+    {
+        $qb = $this->createQueryBuilder('p');
 
-    //    public function findOneBySomeField($value): ?Programme
-    //    {
-    //        return $this->createQueryBuilder('p')
-    //            ->andWhere('p.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        if (null !== $query && !empty($query)) {
+            $qb->where($qb->expr()->orX(
+                $qb->expr()->like('p.id', ':val'),
+                $qb->expr()->like('p.name', ':val'),
+                $qb->expr()->like('p.alias', ':val'),
+                $qb->expr()->like('p.created_at', ':val')
+            ))
+                ->setParameter('val', "%$query%");
+        }
+
+        return $qb
+            ->orderBy('p.created_at', 'DESC')
+            ->getQuery();
+    }
 }
