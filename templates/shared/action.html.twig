@@ -1,0 +1,13 @@
+<div class="flex items-center justify-end gap-2">
+  <twig:ButtonLink variant="secondary" href="{{ routeEdit }}">
+    <i class="bi bi-pen"></i>
+</twig:ButtonLink>
+  <form action="{{ routeDelete }}" method="POST" onsubmit="return confirm('Voulez-vous vraiment effectuer cette action ?')">
+    
+  <input type="hidden" name="_method" value="DELETE">
+  <input type="hidden" name="_token" value="{{ csrf_token(routeDelete) }}">
+      <twig:Button variant="destructive" type="submit">
+        <i class="bi bi-trash"></i>
+      </twig:Button>
+  </form>
+</div>

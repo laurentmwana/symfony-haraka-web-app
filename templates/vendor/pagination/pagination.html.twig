@@ -1,0 +1,102 @@
+{# templates/components/knp_paginator.html.twig #}
+
+{% if pageCount > 1 %}
+<div class="flex items-center justify-between mt-8">
+    <nav class="flex justify-center items-center space-x-2" aria-label="Pagination">
+        {# First page #}
+        <a href="{{ path(route, query|merge({(pageParameterName): 1, (pageParameterName): 1})) }}"
+           class="inline-flex items-center justify-center h-8 w-8 rounded-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 {{ current == 1 ? 'opacity-50 cursor-not-allowed' : '' }}"
+           aria-label="Go to first page"
+           {{ current == 1 ? 'aria-disabled="true"' : '' }}>
+            <span class="sr-only">First</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M15.707 15.707a1 1 0 01-1.414 0l-5-5a1 1 0 010-1.414l5-5a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 010 1.414zm-6 0a1 1 0 01-1.414 0l-5-5a1 1 0 010-1.414l5-5a1 1 0 011.414 1.414L5.414 10l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+            </svg>
+        </a>
+
+        {# Previous page #}
+        {% if previous is defined %}
+            <a href="{{ path(route, query|merge({(pageParameterName): previous})) }}"
+               class="inline-flex items-center justify-center h-8 w-8 rounded-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+               aria-label="Go to previous page">
+                <span class="sr-only">Previous</span>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+                </svg>
+            </a>
+        {% else %}
+            <span class="inline-flex items-center justify-center h-8 w-8 rounded-md border border-gray-300 bg-white text-sm font-medium text-gray-500 opacity-50 cursor-not-allowed"
+                  aria-disabled="true">
+                <span class="sr-only">Previous</span>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+                </svg>
+            </span>
+        {% endif %}
+
+        {# Page numbers #}
+        {% set pagesInRange = 5 %}
+        {% set startPage = current - (pagesInRange // 2) %}
+        {% set endPage = current + (pagesInRange // 2) %}
+        {% if startPage < 1 %}
+            {% set endPage = endPage - (startPage - 1) %}
+            {% set startPage = 1 %}
+        {% endif %}
+        {% if endPage > pageCount %}
+            {% set startPage = startPage - (endPage - pageCount) %}
+            {% set endPage = pageCount %}
+        {% endif %}
+        {% if startPage < 1 %}
+            {% set startPage = 1 %}
+        {% endif %}
+
+        {% for page in startPage..endPage %}
+            {% if page == current %}
+                <span aria-current="page"
+                      class="inline-flex items-center justify-center h-8 w-8 rounded-md bg-blue-600 text-white text-sm font-medium">
+                    {{ page }}
+                </span>
+            {% else %}
+                <a href="{{ path(route, query|merge({(pageParameterName): page})) }}"
+                   class="inline-flex items-center justify-center h-8 w-8 rounded-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+                   aria-label="Go to page {{ page }}">
+                    {{ page }}
+                </a>
+            {% endif %}
+        {% endfor %}
+
+        {# Next page #}
+        {% if next is defined %}
+            <a href="{{ path(route, query|merge({(pageParameterName): next})) }}"
+               class="inline-flex items-center justify-center h-8 w-8 rounded-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+               aria-label="Go to next page">
+                <span class="sr-only">Next</span>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                </svg>
+            </a>
+        {% else %}
+            <span class="inline-flex items-center justify-center h-8 w-8 rounded-md border border-gray-300 bg-white text-sm font-medium text-gray-500 opacity-50 cursor-not-allowed"
+                  aria-disabled="true">
+                <span class="sr-only">Next</span>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                </svg>
+            </span>
+        {% endif %}
+
+        {# Last page #}
+        <a href="{{ path(route, query|merge({(pageParameterName): pageCount})) }}"
+           class="inline-flex items-center justify-center h-8 w-8 rounded-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 {{ current == pageCount ? 'opacity-50 cursor-not-allowed' : '' }}"
+           aria-label="Go to last page"
+           {{ current == pageCount ? 'aria-disabled="true"' : '' }}>
+            <span class="sr-only">Last</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M4.293 15.707a1 1 0 001.414 0l5-5a1 1 0 000-1.414l-5-5a1 1 0 00-1.414 1.414L8.586 10 4.293 14.293a1 1 0 000 1.414zm6 0a1 1 0 001.414 0l5-5a1 1 0 000-1.414l-5-5a1 1 0 00-1.414 1.414L14.586 10l-4.293 4.293a1 1 0 000 1.414z" clip-rule="evenodd" />
+            </svg>
+        </a>
+    </nav>
+
+    
+</div>
+{% endif %}
