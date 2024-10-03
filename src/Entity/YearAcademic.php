@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\YearAcademicRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -26,9 +28,16 @@ class YearAcademic
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $closed_at = null;
 
+    /**
+     * @var Collection<int, Amount>
+     */
+    #[ORM\OneToMany(targetEntity: Amount::class, mappedBy: 'yearAcademic', orphanRemoval: true)]
+    private Collection $amounts;
+
     public function __construct()
     {
         $this->created_at = new \DateTime();
+        $this->amounts = new ArrayCollection();
     }
     public function getId(): ?int
     {
@@ -79,6 +88,36 @@ class YearAcademic
     public function setClosedAt(?\DateTimeInterface $closed_at): static
     {
         $this->closed_at = $closed_at;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Amount>
+     */
+    public function getAmounts(): Collection
+    {
+        return $this->amounts;
+    }
+
+    public function addAmount(Amount $amount): static
+    {
+        if (!$this->amounts->contains($amount)) {
+            $this->amounts->add($amount);
+            $amount->setYearAcademic($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAmount(Amount $amount): static
+    {
+        if ($this->amounts->removeElement($amount)) {
+            // set the owning side to null (unless already changed)
+            if ($amount->getYearAcademic() === $this) {
+                $amount->setYearAcademic(null);
+            }
+        }
 
         return $this;
     }

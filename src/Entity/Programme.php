@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ProgrammeRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -23,9 +25,16 @@ class Programme
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $created_at = null;
 
+    /**
+     * @var Collection<int, Amount>
+     */
+    #[ORM\OneToMany(targetEntity: Amount::class, mappedBy: 'programme', orphanRemoval: true)]
+    private Collection $amounts;
+
     public function __construct()
     {
         $this->created_at = new \DateTime();
+        $this->amounts = new ArrayCollection();
     }
 
 
@@ -66,6 +75,36 @@ class Programme
     public function setCreatedAt(\DateTimeInterface $created_at): static
     {
         $this->created_at = $created_at;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Amount>
+     */
+    public function getAmounts(): Collection
+    {
+        return $this->amounts;
+    }
+
+    public function addAmount(Amount $amount): static
+    {
+        if (!$this->amounts->contains($amount)) {
+            $this->amounts->add($amount);
+            $amount->setProgramme($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAmount(Amount $amount): static
+    {
+        if ($this->amounts->removeElement($amount)) {
+            // set the owning side to null (unless already changed)
+            if ($amount->getProgramme() === $this) {
+                $amount->setProgramme(null);
+            }
+        }
 
         return $this;
     }

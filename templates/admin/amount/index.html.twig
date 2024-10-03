@@ -1,0 +1,72 @@
+{% extends 'layouts/admin.html.twig' %} {% block title "Tableau de bord" %} {%
+block body %}
+<twig:Card>
+  <div class="max-w-lg mb-4">
+    <h1 class="mb-3 text-base font-semibold text-slate-700 dark:text-gray-300">
+      Gestion de frais académique
+    </h1>
+  </div>
+
+  <div class="flex items-center justify-between gap-x-3 mb-4">
+    <twig:Search placeholder="Rechercher un frais académique" />
+    <twig:ButtonLink size="default" href="{{ path('~amount.create') }}">
+      <i class="bi bi-plus"></i>
+    </twig:ButtonLink>
+  </div>
+
+  <twig:Table>
+    <twig:TableHeader>
+      <twig:TableRow>
+        <twig:TableHead> Montant </twig:TableHead>
+        <twig:TableHead> Année académique </twig:TableHead>
+        <twig:TableHead> Programme </twig:TableHead>
+        <twig:TableHead> Nombre de tranche </twig:TableHead>
+        <twig:TableHead> Créer </twig:TableHead>
+        <twig:TableHead> ... </twig:TableHead>
+      </twig:TableRow>
+    </twig:TableHeader>
+
+    <twig:TableBody>
+      {% for amount in amounts %}
+      <twig:TableRow>
+        <twig:TableCell>
+          <a class="hover:underline" href="{{ path('~amount.show', {id: amount.id}) }}">
+          {{ amount.price|number_format(2, '.', ',') }} FC
+          </a>
+        </twig:TableCell>
+        <twig:TableCell>
+          <a class="hover:underline" href="{{ path('~year-academic.show', {id: amount.yearAcademic.id}) }}">
+          {{ amount.yearAcademic.name|u.truncate(20, '...', false)}}
+          </a>
+        </twig:TableCell>
+        <twig:TableCell>
+          <a class="hover:underline" href="{{ path('~programme.show', {id: amount.programme.id}) }}">
+          {{ amount.programme.name|u.truncate(20, '...', false)}}
+          </a>
+        </twig:TableCell>
+
+        <twig:TableCell>
+          {{ amount.maxNumberInstallment }}
+        </twig:TableCell>
+       
+        <twig:TableCell>
+          {{ amount.createdAt | ago }}
+        </twig:TableCell>
+        <twig:TableCell>
+          <div class="flex items-center justify-end gap-x-1">
+          {% include 'shared/action.html.twig' with {routeDelete: path('~amount.delete', {id: amount.id}), routeEdit: path('~amount.edit', {id: amount.id})} %}
+            <twig:ButtonLink href="{{ path('~installment.manual', {id: amount.id}) }}" variant="outline">
+            <i class="bi bi-gear"></i>
+          </twig:ButtonLink>
+          </div>
+        </twig:TableCell>
+      </twig:TableRow>
+      {% endfor %}
+    </twig:TableBody>
+  </twig:Table>
+
+  <div>
+    {{ knp_pagination_render(amounts) }}
+  </div>
+</twig:Card>
+{% endblock %}

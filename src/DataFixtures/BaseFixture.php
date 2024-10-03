@@ -2,8 +2,10 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Amount;
 use App\Entity\Sector;
 use App\Entity\Faculty;
+use App\Helpers\Number;
 use App\Entity\Programme;
 use App\Entity\Department;
 use App\Entity\YearAcademic;
@@ -95,6 +97,27 @@ class BaseFixture extends Fixture
 
                 $sectors[] = $s;
             }
+        }
+
+        $year = $years[count($years) - 1];
+
+
+        $amounts = [];
+
+        foreach ($programmes as $programme) {
+            $price = (float)random_int(400000, 600000);
+            $numberInstallment = random_int(1, 6);
+
+            $amount = (new Amount())
+                ->setYearAcademic($year)
+                ->setProgramme($programme)
+                ->setPrice($price)
+                ->setMaxNumberInstallment($numberInstallment);
+
+            $manager->persist($amount);
+
+
+            $amounts[] = $amount;
         }
 
 

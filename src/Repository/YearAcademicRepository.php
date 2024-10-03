@@ -36,4 +36,13 @@ class YearAcademicRepository extends ServiceEntityRepository
             ->orderBy('y.closed', 'ASC')
             ->getQuery();
     }
+
+    public function findCurrentYear(): YearAcademic
+    {
+        return $this->createQueryBuilder('y')
+            ->andWhere('y.closed = :cl')
+            ->setParameter('cl', false)
+            ->getQuery()
+            ->getSingleResult();
+    }
 }

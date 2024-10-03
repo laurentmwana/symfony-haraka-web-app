@@ -1,0 +1,19 @@
+{% extends 'layouts/admin.html.twig' %}
+
+{% block title "Modification manuelle de tranches" %}
+
+{% block body %}
+  <twig:Card >
+    <div class="max-w-lg mb-4">
+      <h1 class="mb-3 text-base font-semibold text-slate-700 dark:text-gray-300">
+        Modification manuelle de tranches du montant #{{ amount.id }} 
+      </h1>
+      <p class="p-2 border rounded-md shadow-sm font-semibold text-sm inline-block inline-flex">
+       Total : {{ amount.price|number_format(2, '.', ',') }} Fc 
+      </p>
+    </div>
+
+    {% include "admin/installment/_form.html.twig" with {form: form} %}
+  
+  </twig:Card>
+{% endblock %}
