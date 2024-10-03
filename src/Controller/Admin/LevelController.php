@@ -4,10 +4,11 @@ namespace App\Controller\Admin;
 
 use App\Entity\Level;
 use App\Entity\Programme;
-use App\Form\FilterLevelFormType;
 use App\Hydrate\HydrateLevel;
+use App\Form\FilterLevelFormType;
 use App\Repository\LevelRepository;
 use App\Repository\ProgrammeRepository;
+use App\Form\FilterLevelStudentFormType;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -36,6 +37,30 @@ class LevelController extends AbstractController
     );
 
     return $this->render('admin/level/index.html.twig', [
+      'levels' => $levels,
+      'form' => $form
+    ]);
+  }
+
+
+  #[Route('/level-with-students', name: 'level.students', methods: ['GET'])]
+  public function student(
+    LevelRepository $repository,
+    PaginatorInterface $paginator,
+    Request $request
+  ): Response {
+
+    $hydrate = new HydrateLevel();
+
+    $form = $this->createForm(FilterLevelStudentFormType::class, $hydrate);
+    $form->handleRequest($request);
+
+    $levels = $paginator->paginate(
+      $repository->findSearchWithStudentQuery($hydrate),
+      $request->get('page', 1)
+    );
+
+    return $this->render('admin/level/student.html.twig', [
       'levels' => $levels,
       'form' => $form
     ]);

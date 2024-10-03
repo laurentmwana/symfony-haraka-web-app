@@ -14,6 +14,8 @@ class HydrateLevel
 
   private ?Sector $sector = null;
 
+  private ?string $query = null;
+
 
   public function getYearAcademic(): ?YearAcademic
   {
@@ -50,6 +52,18 @@ class HydrateLevel
   public function setSector(?Sector $sector): static
   {
     $this->sector = $sector;
+
+    return $this;
+  }
+
+  public function getQuery(): ?string
+  {
+    return $this->query;
+  }
+
+  public function setQuery(?string $query): static
+  {
+    $this->query = $query;
 
     return $this;
   }
