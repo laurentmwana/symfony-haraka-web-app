@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\SectorRepository;
@@ -41,10 +43,17 @@ class Sector
     #[Validator\Length(min: 2, max: 20)]
     private ?string $alias = null;
 
+    /**
+     * @var Collection<int, Level>
+     */
+    #[ORM\OneToMany(targetEntity: Level::class, mappedBy: 'sector', orphanRemoval: true)]
+    private Collection $levels;
+
     public function __construct()
     {
         $this->created_at = new \DateTime();
         $this->updated_at = new \DateTime();
+        $this->levels = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -108,6 +117,36 @@ class Sector
     public function setAlias(string $alias): static
     {
         $this->alias = $alias;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Level>
+     */
+    public function getLevels(): Collection
+    {
+        return $this->levels;
+    }
+
+    public function addLevel(Level $level): static
+    {
+        if (!$this->levels->contains($level)) {
+            $this->levels->add($level);
+            $level->setSector($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLevel(Level $level): static
+    {
+        if ($this->levels->removeElement($level)) {
+            // set the owning side to null (unless already changed)
+            if ($level->getSector() === $this) {
+                $level->setSector(null);
+            }
+        }
 
         return $this;
     }

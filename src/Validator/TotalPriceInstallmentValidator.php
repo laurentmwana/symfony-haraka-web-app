@@ -9,6 +9,11 @@ use Symfony\Component\Validator\ConstraintValidator;
 
 class TotalPriceInstallmentValidator extends ConstraintValidator
 {
+    /**
+     * @param Amount|null $value
+     * @param TotalPriceInstallment $constraint
+     * @return void
+     */
     public function validate(mixed $value, Constraint $constraint): void
     {
         /* @var TotalPriceInstallment $constraint */
@@ -31,8 +36,8 @@ class TotalPriceInstallmentValidator extends ConstraintValidator
         if ($totalItemsPrice !== $totalPrice) {
             // Construire le message d'erreur
             $this->context->buildViolation($constraint->message)
-                ->setParameter('{{ totalItemsPrice }}', $totalItemsPrice)
-                ->setParameter('{{ totalPrice }}', $totalPrice)
+                ->setParameter('{{ totalItemsPrice }}', (string)$totalItemsPrice)
+                ->setParameter('{{ totalPrice }}', (string)$totalPrice)
                 ->atPath('installments.price')  // Appliquer l'erreur sur le champ des items
                 ->addViolation();
         }

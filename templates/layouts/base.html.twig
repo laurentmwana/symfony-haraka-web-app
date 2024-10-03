@@ -17,9 +17,11 @@
       <header class="bg-background/75 backdrop-blur border-b border-gray-200 dark:border-gray-800 -mb-px sticky top-0 z-50 lg:mb-0 lg:border-0">
         <div class="container flex h-14 max-w-screen-2xl items-center">
           <div class="mr-4 hidden md:flex">
-            <a class="mr-4 flex items-center space-x-2 lg:mr-6" href="/">
-              <span class="hidden font-bold lg:inline-block">Haraka</span>
-            </a>
+
+            <div class="mr-4">
+              {% include 'shared/logo.html.twig' with {homeUrl: path('dashboard.index')} %}
+            </div>
+
             <nav class="flex items-center gap-4 text-sm lg:gap-6">
             <twig:Navigation href="{{ path('welcome') }}">Acceuil</twig:Navigation>
               <twig:Navigation href="{{ path('page.about') }}">A propos</twig:Navigation>
@@ -30,7 +32,26 @@
 
           <div class="flex flex-1 items-center justify-between space-x-2 md:justify-end">
             <nav class="flex items-center gap-x-4">
-              {# profile #}
+
+            <twig:Button href="" variant="outline">
+              Se connecter
+            </twig:Button>
+              {# <div class="relative" id="dropdown-menu">
+                    <button id="dropdown-trigger" class="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="10" r="3"></circle><path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662"></path></svg>
+                    </button>
+                    <div id="dropdown-content" class="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 hidden">
+                        <div class="py-1" role="menu" aria-orientation="vertical">
+                            <div class="px-4 py-2 text-sm text-gray-700 font-medium">Mon compte</div>
+                            <hr class="my-1">
+                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Paramètres</a>
+                            <a href="{{ path('welcome') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Voir le site</a>
+                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Support</a>
+                            <hr class="my-1">
+                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Se déconnecter</a>
+                        </div>
+                    </div>
+                </div> #}
             </nav>
           </div>
         </div>

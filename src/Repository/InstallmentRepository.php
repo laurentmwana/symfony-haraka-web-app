@@ -27,6 +27,10 @@ class InstallmentRepository extends ServiceEntityRepository
         return $this->getTotalPriceForAmount($amount, $installment->getId());
     }
 
+    /**
+     * @param \App\Entity\Amount $amount
+     * @return Installment[]
+     */
     public function findItemToAmount(Amount $amount): array
     {
         return $this->createQueryBuilder('i')
@@ -40,7 +44,7 @@ class InstallmentRepository extends ServiceEntityRepository
     /**
      * Méthode commune pour calculer le prix total des items, avec ou sans exclusion d'un item spécifique.
      */
-    private function getTotalPriceForAmount(Amount $amount, ?int $excludeItemId = null): float|int
+    private function getTotalPriceForAmount(Amount $amount, ?int $excludeItemId = null): float
     {
         $qb = $this->createQueryBuilder('i')
             ->select('SUM(i.price)')

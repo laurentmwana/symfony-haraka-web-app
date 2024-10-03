@@ -1,0 +1,66 @@
+{% extends 'layouts/admin.html.twig' %} {% block title "Tableau de bord" %} {%
+block body %}
+<twig:Card>
+  <div class="max-w-lg mb-4">
+    <h1 class="mb-3 text-base font-semibold text-slate-700 dark:text-gray-300">
+      Toutes les promotions
+    </h1>
+  </div>
+
+  <div class="flex items-center justify-start gap-x-3 mb-4">
+    {% include 'admin/level/_form.html.twig' with {form: form} %}
+  </div>
+
+  <twig:Table>
+    <twig:TableHeader>
+      <twig:TableRow>
+        <twig:TableHead> Promotion </twig:TableHead>
+        <twig:TableHead> Option </twig:TableHead>
+        <twig:TableHead> Année academique </twig:TableHead>
+        <twig:TableHead> Créer </twig:TableHead>
+        <twig:TableHead> ... </twig:TableHead>
+      </twig:TableRow>
+    </twig:TableHeader>
+
+    <twig:TableBody>
+      {% for level in levels %}
+      <twig:TableRow>
+        <twig:TableCell>
+          <a class="hover:underline" href="{{ path('~programme.show', {id: level.programme.id}) }}">
+          {{ level.programme.name|u.truncate(40, '...', false)}}
+          </a>
+        </twig:TableCell>
+
+        <twig:TableCell>
+          <a class="hover:underline" href="{{ path('~sector.show', {id: level.sector.id}) }}">
+          {{ level.sector.name|u.truncate(40, '...', false)}}
+          </a>
+        </twig:TableCell>
+
+        <twig:TableCell>
+          <a class="hover:underline" href="{{ path('~year-academic.show', {id: level.yearAcademic.id}) }}">
+          {{ level.yearAcademic.name|u.truncate(40, '...', false)}}
+          </a>
+        </twig:TableCell>
+
+
+        <twig:TableCell>
+          {{ level.createdAt|ago }}
+        </twig:TableCell>
+
+        <twig:TableCell>
+          <twig:Button variant="outline" href="{{ path('~level.show', {id: level.id}) }}">
+            <i class="bi bi-eye"></i>
+        </twig:Button>
+        </twig:TableCell>
+
+      </twig:TableRow>
+      {% endfor %}
+    </twig:TableBody>
+  </twig:Table>
+
+  <div>
+    {{ knp_pagination_render(levels) }}
+  </div>
+</twig:Card>
+{% endblock %}

@@ -1,7 +1,7 @@
 <div class="flex items-center justify-end gap-2">
-  <twig:ButtonLink variant="secondary" href="{{ routeEdit }}">
+  <twig:Button variant="secondary" href="{{ routeEdit }}">
     <i class="bi bi-pen"></i>
-</twig:ButtonLink>
+</twig:Button>
   <form action="{{ routeDelete }}" method="POST" onsubmit="return confirm('Voulez-vous vraiment effectuer cette action ?')">
     
   <input type="hidden" name="_method" value="DELETE">

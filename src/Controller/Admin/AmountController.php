@@ -23,7 +23,6 @@ class AmountController extends AbstractController
 {
   public function __construct(
     private EntityManagerInterface $em,
-    private YearAcademicRepository $yearAcademicRepository,
     private InstallmentRepository $installmentRepository,
   ) {}
 

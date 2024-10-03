@@ -2,6 +2,7 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Level;
 use App\Entity\Amount;
 use App\Entity\Sector;
 use App\Entity\Faculty;
@@ -104,6 +105,9 @@ class BaseFixture extends Fixture
 
         $amounts = [];
 
+        $levels = [];
+
+
         foreach ($programmes as $programme) {
             $price = (float)random_int(400000, 600000);
             $numberInstallment = random_int(1, 6);
@@ -117,8 +121,20 @@ class BaseFixture extends Fixture
             $manager->persist($amount);
 
 
+            $sector = $sectors[random_int(0, count($sectors) - 1)];
+
+            $l = (new Level())
+                ->setProgramme($programme)
+                ->setSector($sector)
+                ->setYearAcademic($year);
+            $manager->persist($l);
+
+            $levels[] = $l;
+
+
             $amounts[] = $amount;
         }
+
 
 
         $manager->flush();

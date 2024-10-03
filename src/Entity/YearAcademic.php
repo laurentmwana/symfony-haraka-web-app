@@ -34,10 +34,17 @@ class YearAcademic
     #[ORM\OneToMany(targetEntity: Amount::class, mappedBy: 'yearAcademic', orphanRemoval: true)]
     private Collection $amounts;
 
+    /**
+     * @var Collection<int, Level>
+     */
+    #[ORM\OneToMany(targetEntity: Level::class, mappedBy: 'yearAcademic', orphanRemoval: true)]
+    private Collection $levels;
+
     public function __construct()
     {
         $this->created_at = new \DateTime();
         $this->amounts = new ArrayCollection();
+        $this->levels = new ArrayCollection();
     }
     public function getId(): ?int
     {
@@ -116,6 +123,36 @@ class YearAcademic
             // set the owning side to null (unless already changed)
             if ($amount->getYearAcademic() === $this) {
                 $amount->setYearAcademic(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Level>
+     */
+    public function getLevels(): Collection
+    {
+        return $this->levels;
+    }
+
+    public function addLevel(Level $level): static
+    {
+        if (!$this->levels->contains($level)) {
+            $this->levels->add($level);
+            $level->setYearAcademic($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLevel(Level $level): static
+    {
+        if ($this->levels->removeElement($level)) {
+            // set the owning side to null (unless already changed)
+            if ($level->getYearAcademic() === $this) {
+                $level->setYearAcademic(null);
             }
         }
 

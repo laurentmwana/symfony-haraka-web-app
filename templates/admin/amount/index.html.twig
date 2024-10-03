@@ -9,9 +9,9 @@ block body %}
 
   <div class="flex items-center justify-between gap-x-3 mb-4">
     <twig:Search placeholder="Rechercher un frais académique" />
-    <twig:ButtonLink size="default" href="{{ path('~amount.create') }}">
+    <twig:Button size="default" href="{{ path('~amount.create') }}">
       <i class="bi bi-plus"></i>
-    </twig:ButtonLink>
+    </twig:Button>
   </div>
 
   <twig:Table>
@@ -55,9 +55,9 @@ block body %}
         <twig:TableCell>
           <div class="flex items-center justify-end gap-x-1">
           {% include 'shared/action.html.twig' with {routeDelete: path('~amount.delete', {id: amount.id}), routeEdit: path('~amount.edit', {id: amount.id})} %}
-            <twig:ButtonLink href="{{ path('~installment.manual', {id: amount.id}) }}" variant="outline">
+            <twig:Button href="{{ path('~installment.manual', {id: amount.id}) }}" variant="outline">
             <i class="bi bi-gear"></i>
-          </twig:ButtonLink>
+          </twig:Button>
           </div>
         </twig:TableCell>
       </twig:TableRow>

@@ -31,10 +31,17 @@ class Programme
     #[ORM\OneToMany(targetEntity: Amount::class, mappedBy: 'programme', orphanRemoval: true)]
     private Collection $amounts;
 
+    /**
+     * @var Collection<int, Level>
+     */
+    #[ORM\OneToMany(targetEntity: Level::class, mappedBy: 'programme', orphanRemoval: true)]
+    private Collection $levels;
+
     public function __construct()
     {
         $this->created_at = new \DateTime();
         $this->amounts = new ArrayCollection();
+        $this->levels = new ArrayCollection();
     }
 
 
@@ -103,6 +110,36 @@ class Programme
             // set the owning side to null (unless already changed)
             if ($amount->getProgramme() === $this) {
                 $amount->setProgramme(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Level>
+     */
+    public function getLevels(): Collection
+    {
+        return $this->levels;
+    }
+
+    public function addLevel(Level $level): static
+    {
+        if (!$this->levels->contains($level)) {
+            $this->levels->add($level);
+            $level->setProgramme($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLevel(Level $level): static
+    {
+        if ($this->levels->removeElement($level)) {
+            // set the owning side to null (unless already changed)
+            if ($level->getProgramme() === $this) {
+                $level->setProgramme(null);
             }
         }
 
