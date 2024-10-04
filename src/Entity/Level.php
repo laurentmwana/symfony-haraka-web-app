@@ -35,14 +35,21 @@ class Level
     /**
      * @var Collection<int, Student>
      */
-    #[ORM\ManyToMany(targetEntity: Student::class, mappedBy: 'levels')]
+    #[ORM\ManyToMany(targetEntity: Student::class, mappedBy: 'levels', cascade: ['persist'])]
     private Collection $students;
+
+    /**
+     * @var Collection<int, ActualLevel>
+     */
+    #[ORM\OneToMany(targetEntity: ActualLevel::class, mappedBy: 'level', orphanRemoval: true)]
+    private Collection $actualLevels;
 
     public function __construct()
     {
         $this->students = new ArrayCollection();
 
         $this->created_at = new \DateTime();
+        $this->actualLevels = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -120,6 +127,36 @@ class Level
     {
         if ($this->students->removeElement($student)) {
             $student->removeLevel($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ActualLevel>
+     */
+    public function getActualLevels(): Collection
+    {
+        return $this->actualLevels;
+    }
+
+    public function addActualLevel(ActualLevel $actualLevel): static
+    {
+        if (!$this->actualLevels->contains($actualLevel)) {
+            $this->actualLevels->add($actualLevel);
+            $actualLevel->setLevel($this);
+        }
+
+        return $this;
+    }
+
+    public function removeActualLevel(ActualLevel $actualLevel): static
+    {
+        if ($this->actualLevels->removeElement($actualLevel)) {
+            // set the owning side to null (unless already changed)
+            if ($actualLevel->getLevel() === $this) {
+                $actualLevel->setLevel(null);
+            }
         }
 
         return $this;

@@ -1,0 +1,83 @@
+{% extends 'layouts/admin.html.twig' %} {% block title "Tableau de bord" %} {%
+block body %}
+<twig:Card>
+  <div class="max-w-lg mb-4">
+    <h1 class="mb-3 text-base font-semibold text-slate-700 dark:text-gray-300">
+      Gestion des étudiants
+    </h1>
+  </div>
+
+  <div class="flex items-center justify-between gap-x-3 mb-4">
+    <twig:Search placeholder="Rechercher un étudiant" />
+    <twig:Button size="default" href="{{ path('~student.create') }}">
+      <i class="bi bi-plus"></i>
+    </twig:Button>
+  </div>
+
+  <twig:Table>
+    <twig:TableHeader>
+      <twig:TableRow>
+        <twig:TableHead> Nom </twig:TableHead>
+        <twig:TableHead> Postnom </twig:TableHead>
+        <twig:TableHead> Sexe </twig:TableHead>
+        <twig:TableHead> Téléphone </twig:TableHead>
+        <twig:TableHead> Promotion Actuelle </twig:TableHead>
+        <twig:TableHead> Créer </twig:TableHead>
+        <twig:TableHead> ... </twig:TableHead>
+      </twig:TableRow>
+    </twig:TableHeader>
+
+    <twig:TableBody>
+      {% for student in students %}
+      <twig:TableRow>
+        <twig:TableCell>
+          <a class="hover:underline" href="{{ path('~student.show', {id: student.id}) }}">
+          {{ student.name|u.truncate(40, '...', false)}}
+          </a>
+        </twig:TableCell>
+        <twig:TableCell>
+          <a class="hover:underline" href="{{ path('~student.show', {id: student.id}) }}">
+          {{ student.firstname|u.truncate(40, '...', false)}}
+          </a>
+        </twig:TableCell>
+
+        <twig:TableCell>
+          <a class="hover:underline" href="{{ path('~student.show', {id: student.id}) }}">
+          {{ student.gender.value}}
+          </a>
+        </twig:TableCell>
+
+        <twig:TableCell>
+          <a class="hover:underline" href="{{ path('~student.show', {id: student.id}) }}">
+          {{ student.numberPhone|u.truncate(12, '...', false)}}
+          </a>
+        </twig:TableCell>
+
+        <twig:TableCell>
+          {% if student.actualLevel is not null %}
+            <a class="hover:underline" href="{{ path('~student.show', {id: student.id}) }}">
+          
+          {% set level = student.actualLevel.level %}
+          {% set actual = level.programme.name ~ " - " ~ level.sector.alias ~ " [" ~ level.yearAcademic.name ~ "]" %}
+          
+          {{ actual|u.truncate(30, '...', false)}}
+          </a>
+            {% endif %}
+        
+        </twig:TableCell>
+        <twig:TableCell>
+          {{ student.createdAt | ago }}
+        </twig:TableCell>
+        <twig:TableCell>
+          {% include 'shared/action.html.twig' with {routeDelete: path('~student.delete', {id: student.id}), routeEdit: path('~student.edit', {id: student.id})} %}
+        </twig:TableCell>
+      </twig:TableRow>
+      {% endfor %}
+    </twig:TableBody>
+  </twig:Table>
+
+  <div>
+    {{ knp_pagination_render(students) }}
+  </div>
+</twig:Card>
+{% endblock %}

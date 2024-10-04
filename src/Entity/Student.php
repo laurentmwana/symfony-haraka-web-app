@@ -3,12 +3,14 @@
 namespace App\Entity;
 
 use App\Enum\GenderEnum;
+use App\Hydrate\HydrateDefault;
 use App\Repository\StudentRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Validator;
 
 
@@ -24,7 +26,7 @@ class Student
     /**
      * @var Collection<int, Level>
      */
-    #[ORM\ManyToMany(targetEntity: Level::class, inversedBy: 'students')]
+    #[ORM\ManyToMany(targetEntity: Level::class, inversedBy: 'students', cascade: ['persist'])]
     private Collection $levels;
 
     #[ORM\Column(length: 255)]
@@ -59,6 +61,10 @@ class Student
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $updated_at = null;
+
+    #[ORM\OneToOne(mappedBy: 'student', cascade: ['persist', 'remove'])]
+    #[Groups(['student:validator:actual'])]
+    private ?ActualLevel $actualLevel = null;
 
     public function __construct()
     {
@@ -189,6 +195,23 @@ class Student
     public function setUpdatedAt(?\DateTimeInterface $updated_at): static
     {
         $this->updated_at = $updated_at;
+
+        return $this;
+    }
+
+    public function getActualLevel(): ?ActualLevel
+    {
+        return $this->actualLevel;
+    }
+
+    public function setActualLevel(ActualLevel $actualLevel): static
+    {
+        // set the owning side of the relation if necessary
+        if ($actualLevel->getStudent() !== $this) {
+            $actualLevel->setStudent($this);
+        }
+
+        $this->actualLevel = $actualLevel;
 
         return $this;
     }

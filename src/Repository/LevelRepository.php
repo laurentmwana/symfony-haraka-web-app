@@ -16,8 +16,11 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
  */
 class LevelRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
-    {
+    public function __construct(
+        ManagerRegistry $registry,
+        private YearAcademicRepository $yearAcademicRepository
+
+    ) {
         parent::__construct($registry, Level::class);
     }
 
@@ -91,5 +94,27 @@ class LevelRepository extends ServiceEntityRepository
         }
 
         return $qb->orderBy('l.created_at', 'DESC')->getQuery();
+    }
+
+    /**
+     * @return Level[]
+     */
+    public function findAllWith(): array
+    {
+        $year = $this->yearAcademicRepository->findCurrentYear();
+
+        $qb = $this->createQueryBuilder('l')
+            ->innerJoin('l.programme', 'p')
+            ->innerJoin('l.yearAcademic', 'y')
+            ->innerJoin('l.sector', 's')
+            ->addSelect('s', 'y', 'p');
+
+
+        $qb->andWhere('l.yearAcademic = :yearAcademic')
+            ->setParameter('yearAcademic', $year);
+
+        return $qb->orderBy('l.created_at', 'DESC')
+            ->getQuery()
+            ->getResult();
     }
 }
