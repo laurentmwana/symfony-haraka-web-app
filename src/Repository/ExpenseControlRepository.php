@@ -17,7 +17,6 @@ class ExpenseControlRepository extends ServiceEntityRepository
         parent::__construct($registry, ExpenseControl::class);
     }
 
-
     public function findSearchQuery(?string $query): Query
     {
         $qb = $this->createQueryBuilder('e')

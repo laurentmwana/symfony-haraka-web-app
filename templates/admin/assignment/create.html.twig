@@ -1,0 +1,16 @@
+{% extends 'layouts/admin.html.twig' %}
+
+{% block title "Ajouter une affectation" %}
+
+{% block body %}
+  <twig:Card >
+    <div class="max-w-lg mb-4">
+      <h1 class="mb-3 text-base font-semibold text-slate-700 dark:text-gray-300">
+        Ajouter une affectation
+      </h1>
+    </div>
+
+    {% include "admin/assignment/_form.html.twig" with {form: form} %}
+  
+  </twig:Card>
+{% endblock %}

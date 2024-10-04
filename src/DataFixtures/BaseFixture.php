@@ -140,7 +140,6 @@ class BaseFixture extends Fixture
 
         $checkers = [];
 
-
         for ($index = 0; $index < 100; $index++) {
 
             $c = (new Checker())
@@ -151,6 +150,12 @@ class BaseFixture extends Fixture
 
 
             $manager->persist($c);
+
+
+            $checkers[] = $c;
+        }
+
+        foreach ($years as $year) {
         }
 
 

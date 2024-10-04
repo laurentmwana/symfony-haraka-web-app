@@ -109,7 +109,6 @@ class LevelRepository extends ServiceEntityRepository
             ->innerJoin('l.sector', 's')
             ->addSelect('s', 'y', 'p');
 
-
         $qb->andWhere('l.yearAcademic = :yearAcademic')
             ->setParameter('yearAcademic', $year);
 

@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Enum\GenderEnum;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\CheckerRepository;
@@ -45,10 +47,17 @@ class Checker
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $updated_at = null;
 
+    /**
+     * @var Collection<int, Assignment>
+     */
+    #[ORM\ManyToMany(targetEntity: Assignment::class, mappedBy: 'checkers')]
+    private Collection $assignments;
+
     public function __construct()
     {
         $this->created_at = new \DateTime();
         $this->updated_at = new \DateTime();
+        $this->assignments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -124,6 +133,33 @@ class Checker
     public function setUpdatedAt(?\DateTimeInterface $updated_at): static
     {
         $this->updated_at = $updated_at;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Assignment>
+     */
+    public function getAssignments(): Collection
+    {
+        return $this->assignments;
+    }
+
+    public function addAssignment(Assignment $assignment): static
+    {
+        if (!$this->assignments->contains($assignment)) {
+            $this->assignments->add($assignment);
+            $assignment->addChecker($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAssignment(Assignment $assignment): static
+    {
+        if ($this->assignments->removeElement($assignment)) {
+            $assignment->removeChecker($this);
+        }
 
         return $this;
     }

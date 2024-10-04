@@ -46,6 +46,12 @@ class ExpenseControl
 
     private Collection $yearAcademics;
 
+    /**
+     * @var Collection<int, Assignment>
+     */
+    #[ORM\OneToMany(targetEntity: Assignment::class, mappedBy: 'expenseControl', orphanRemoval: true)]
+    private Collection $assignments;
+
 
     public function __construct()
     {
@@ -53,6 +59,7 @@ class ExpenseControl
 
         $this->created_at = new \DateTime();
         $this->updated_at = new \DateTime();
+        $this->assignments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -140,6 +147,36 @@ class ExpenseControl
     public function removeYearAcademic(YearAcademic $yearAcademic): static
     {
         $this->yearAcademics->removeElement($yearAcademic);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Assignment>
+     */
+    public function getAssignments(): Collection
+    {
+        return $this->assignments;
+    }
+
+    public function addAssignment(Assignment $assignment): static
+    {
+        if (!$this->assignments->contains($assignment)) {
+            $this->assignments->add($assignment);
+            $assignment->setExpenseControl($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAssignment(Assignment $assignment): static
+    {
+        if ($this->assignments->removeElement($assignment)) {
+            // set the owning side to null (unless already changed)
+            if ($assignment->getExpenseControl() === $this) {
+                $assignment->setExpenseControl(null);
+            }
+        }
 
         return $this;
     }
