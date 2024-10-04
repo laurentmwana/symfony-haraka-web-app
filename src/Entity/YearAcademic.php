@@ -40,11 +40,18 @@ class YearAcademic
     #[ORM\OneToMany(targetEntity: Level::class, mappedBy: 'yearAcademic', orphanRemoval: true)]
     private Collection $levels;
 
+    /**
+     * @var Collection<int, ExpenseControl>
+     */
+    #[ORM\ManyToMany(targetEntity: ExpenseControl::class, mappedBy: 'yearAcademics')]
+    private Collection $expenseControls;
+
     public function __construct()
     {
         $this->created_at = new \DateTime();
         $this->amounts = new ArrayCollection();
         $this->levels = new ArrayCollection();
+        $this->expenseControls = new ArrayCollection();
     }
     public function getId(): ?int
     {
@@ -154,6 +161,33 @@ class YearAcademic
             if ($level->getYearAcademic() === $this) {
                 $level->setYearAcademic(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ExpenseControl>
+     */
+    public function getExpenseControls(): Collection
+    {
+        return $this->expenseControls;
+    }
+
+    public function addExpenseControl(ExpenseControl $expenseControl): static
+    {
+        if (!$this->expenseControls->contains($expenseControl)) {
+            $this->expenseControls->add($expenseControl);
+            $expenseControl->addYearAcademic($this);
+        }
+
+        return $this;
+    }
+
+    public function removeExpenseControl(ExpenseControl $expenseControl): static
+    {
+        if ($this->expenseControls->removeElement($expenseControl)) {
+            $expenseControl->removeYearAcademic($this);
         }
 
         return $this;
