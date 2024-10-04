@@ -5,8 +5,10 @@ namespace App\DataFixtures;
 use App\Entity\Level;
 use App\Entity\Amount;
 use App\Entity\Sector;
+use App\Entity\Checker;
 use App\Entity\Faculty;
 use App\Helpers\Number;
+use App\Enum\GenderEnum;
 use App\Entity\Programme;
 use App\Entity\Department;
 use App\Entity\YearAcademic;
@@ -135,6 +137,21 @@ class BaseFixture extends Fixture
             $amounts[] = $amount;
         }
 
+
+        $checkers = [];
+
+
+        for ($index = 0; $index < 100; $index++) {
+
+            $c = (new Checker())
+                ->setName($faker->text(100))
+                ->setFirstname($faker->text())
+                ->setGender(GenderEnum::from('F'))
+                ->setNumberPhone($faker->phoneNumber());
+
+
+            $manager->persist($c);
+        }
 
 
         $manager->flush();
