@@ -10,6 +10,13 @@ use Twig\TwigFunction;
 class HelpersExtension extends AbstractExtension
 {
 
+    public function getFilters(): array
+    {
+        return [
+            new TwigFilter('isAdmin', [HelpersRuntime::class, 'isAdmin']),
+        ];
+    }
+
     public function getFunctions(): array
     {
         return [

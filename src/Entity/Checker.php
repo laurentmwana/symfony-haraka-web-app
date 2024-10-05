@@ -53,6 +53,9 @@ class Checker
     #[ORM\ManyToMany(targetEntity: Assignment::class, mappedBy: 'checkers')]
     private Collection $assignments;
 
+    #[ORM\OneToOne(mappedBy: 'checker', cascade: ['persist', 'remove'])]
+    private ?User $user = null;
+
     public function __construct()
     {
         $this->created_at = new \DateTime();
@@ -160,6 +163,28 @@ class Checker
         if ($this->assignments->removeElement($assignment)) {
             $assignment->removeChecker($this);
         }
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        // unset the owning side of the relation if necessary
+        if ($user === null && $this->user !== null) {
+            $this->user->setChecker(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($user !== null && $user->getChecker() !== $this) {
+            $user->setChecker($this);
+        }
+
+        $this->user = $user;
 
         return $this;
     }

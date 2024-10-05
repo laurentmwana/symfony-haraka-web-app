@@ -2,6 +2,7 @@
 
 namespace App\Twig\Runtime;
 
+use App\Enum\RoleEnum;
 use Twig\Extension\RuntimeExtensionInterface;
 
 class HelpersRuntime implements RuntimeExtensionInterface
@@ -11,5 +12,10 @@ class HelpersRuntime implements RuntimeExtensionInterface
     public function cn(string $className, string ...$classNames): string
     {
         return implode(' ', array_merge([$className], $classNames));
+    }
+
+    public function isAdmin(array $roles): bool
+    {
+        return in_array(RoleEnum::ROLE_ADMIN->value, $roles);
     }
 }

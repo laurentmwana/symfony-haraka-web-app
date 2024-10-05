@@ -2,11 +2,14 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\User;
 use App\Entity\Level;
 use App\Entity\Amount;
 use App\Entity\Sector;
+use App\Enum\RoleEnum;
 use App\Entity\Checker;
 use App\Entity\Faculty;
+use App\Entity\Student;
 use App\Helpers\Number;
 use App\Enum\GenderEnum;
 use App\Entity\Programme;
@@ -122,7 +125,6 @@ class BaseFixture extends Fixture
 
             $manager->persist($amount);
 
-
             $sector = $sectors[random_int(0, count($sectors) - 1)];
 
             $l = (new Level())
@@ -135,6 +137,26 @@ class BaseFixture extends Fixture
 
 
             $amounts[] = $amount;
+        }
+
+
+        $students = [];
+
+        for ($index = 0; $index < 100; $index++) {
+
+            $s = (new Student())
+                ->setName($faker->name())
+                ->setFirstname($faker->firstName())
+                ->setLastname($faker->lastName())
+                ->setHappy($faker->dateTimeBetween())
+                ->setGender(GenderEnum::from('F'))
+                ->setNumberPhone($faker->phoneNumber());
+
+
+            $manager->persist($s);
+
+
+            $students[] = $s;
         }
 
 
@@ -155,8 +177,38 @@ class BaseFixture extends Fixture
             $checkers[] = $c;
         }
 
-        foreach ($years as $year) {
+
+
+        $admin =  (new User())
+            ->setRoles([RoleEnum::ROLE_ADMIN->value])
+            ->setEmail('admin@gmail.com')
+            ->setPassword('$2y$13$A4SPgHvZ5jWVqNkvFErFcuw6/ceNhxOBIYQK4nIoIBWbunkdBjN/O');
+
+
+        $manager->persist($admin);
+
+        foreach ($checkers as $checker) {
+
+            $user =  (new User())
+                ->setRoles([RoleEnum::ROLE_CHECKER->value])
+                ->setEmail($faker->email)
+                ->setPassword('$2y$13$A4SPgHvZ5jWVqNkvFErFcuw6/ceNhxOBIYQK4nIoIBWbunkdBjN/O')
+                ->setChecker($checker);
+            $manager->persist($user);
         }
+
+
+        foreach ($students as $student) {
+
+            $user =  (new User())
+                ->setRoles([RoleEnum::ROLE_STUDENT->value])
+                ->setEmail($faker->email)
+                ->setPassword('$2y$13$A4SPgHvZ5jWVqNkvFErFcuw6/ceNhxOBIYQK4nIoIBWbunkdBjN/O')
+                ->setStudent($student);
+            $manager->persist($user);
+        }
+
+
 
 
         $manager->flush();
