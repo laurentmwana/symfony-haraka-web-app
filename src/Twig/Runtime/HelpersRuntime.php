@@ -14,16 +14,29 @@ class HelpersRuntime implements RuntimeExtensionInterface
         return implode(' ', array_merge([$className], $classNames));
     }
 
+    /**
+     * @param array<int, string> $roles
+     * @return bool
+     */
     public function isAdmin(array $roles): bool
     {
         return in_array(RoleEnum::ROLE_ADMIN->value, $roles);
     }
 
+
+    /**
+     * @param array<int, string> $roles
+     * @return bool
+     */
     public function isStudent(array $roles): bool
     {
         return in_array(RoleEnum::ROLE_STUDENT->value, $roles);
     }
 
+    /**
+     * @param array<int, string> $roles
+     * @return bool
+     */
     public function isChecker(array $roles): bool
     {
         return in_array(RoleEnum::ROLE_CHECKER->value, $roles);

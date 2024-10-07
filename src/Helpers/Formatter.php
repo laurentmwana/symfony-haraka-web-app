@@ -47,7 +47,7 @@ final class Formatter
       ) : null;
   }
 
-  public static function levelWithStudent(Level $level): ?string
+  public static function levelWithStudent(?Level $level): ?string
   {
     return $level instanceof Level
       ? sprintf(

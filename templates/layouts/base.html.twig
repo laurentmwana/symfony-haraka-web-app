@@ -1,79 +1,94 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %} Welcome {% endblock %} - Haraka</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
-        {% block stylesheets %}
-            {{ encore_entry_link_tags('app') }}
-        {% endblock %}
 
-        {% block javascripts %}
-            {{ encore_entry_script_tags('app') }}
-        {% endblock %}
-    </head>
-    <body>
-         <div class="h-full relative">
-      <header class="bg-background/75 backdrop-blur border-b border-gray-200 dark:border-gray-800 -mb-px sticky top-0 z-50 lg:mb-0 lg:border-0">
-        <div class="container flex h-14 max-w-screen-2xl items-center">
-          <div class="mr-4 hidden md:flex">
+<head>
+  <meta charset="UTF-8">
+  <title>{% block title %} Welcome {% endblock %} - Haraka</title>
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
+  {% block stylesheets %}
+  {{ encore_entry_link_tags('app') }}
+  {% endblock %}
 
-            <div class="mr-4">
-              {% include 'shared/logo.html.twig' with {homeUrl: path('dashboard.index')} %}
-            </div>
+  {% block javascripts %}
+  {{ encore_entry_script_tags('app') }}
+  {% endblock %}
+</head>
 
-            <nav class="flex items-center gap-4 text-sm lg:gap-6">
-            <twig:Navigation href="{{ path('welcome') }}">Acceuil</twig:Navigation>
-              <twig:Navigation href="{{ path('page.about') }}">A propos</twig:Navigation>
-              <twig:Navigation href="{{ path('doc.index') }}">Documentation</twig:Navigation>
-              {% if app.user is not null and app.user.roles|isStudent %}
-               <twig:Navigation href="{{ path('payment.index') }}">Paiement</twig:Navigation>
-              {% endif %}
-              <twig:Navigation href="{{ path('contact.index') }}">Contact</twig:Navigation>
-            </nav>
+<body>
+  <div class="h-full relative">
+    <header
+      class="bg-background/75 backdrop-blur border-b border-gray-200 dark:border-gray-800 -mb-px sticky top-0 z-50 lg:mb-0 lg:border-0">
+      <div class="container flex h-14 max-w-screen-2xl items-center">
+        <div class="mr-4 hidden md:flex">
+
+          <div class="mr-4">
+            {% include 'shared/logo.html.twig' with {homeUrl: path('dashboard.index')} %}
           </div>
 
-          <div class="flex flex-1 items-center justify-between space-x-2 md:justify-end">
-            <nav class="flex items-center gap-x-4">
+          <nav class="flex items-center gap-4 text-sm lg:gap-6">
+            <twig:Navigation href="{{ path('welcome') }}">Acceuil</twig:Navigation>
+            <twig:Navigation href="{{ path('page.about') }}">A propos</twig:Navigation>
+            <twig:Navigation href="{{ path('doc.index') }}">Documentation</twig:Navigation>
+
+            <twig:Navigation href="{{ path('contact.index') }}">Contact</twig:Navigation>
+          </nav>
+        </div>
+
+        <div class="flex flex-1 items-center justify-between space-x-2 md:justify-end">
+          <nav class="flex items-center gap-x-4">
 
             {% if app.user %}
 
-              {% set user = app.user %}
-              
-              <div class="relative" id="dropdown-menu">
-                    <button id="dropdown-trigger" class="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="10" r="3"></circle><path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662"></path></svg>
-                    </button>
-                    <div id="dropdown-content" class="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 hidden">
-                        <div class="py-1" role="menu" aria-orientation="vertical">
-                            <div class="px-4 py-2 text-sm text-gray-700 font-medium">Mon compte</div>
-                            <hr class="my-1">
-                            {% if user.roles|isAdmin %}
-                            <a href="{{ path('dashboard.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Tableau de bord</a>
-                              
-                            {% endif %}
-                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Support</a>
-                            <hr class="my-1">
-                            <a href="{{ path('app_logout') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Se déconnecter</a>
-                        </div>
-                    </div>
+            {% set user = app.user %}
+
+            <div class="relative" id="dropdown-menu">
+              <button id="dropdown-trigger" class="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <circle cx="12" cy="10" r="3"></circle>
+                  <path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662"></path>
+                </svg>
+              </button>
+              <div id="dropdown-content"
+                class="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 hidden">
+                <div class="py-1" role="menu" aria-orientation="vertical">
+                  <div class="px-4 py-2 text-sm text-gray-700 font-medium">Mon compte</div>
+                  <hr class="my-1">
+                  {% if user.roles|isAdmin %}
+                  <a href="{{ path('dashboard.index') }}"
+                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Tableau de bord</a>
+                  {% endif %}
+                  {% if app.user is not null and app.user.roles|isStudent %}
+                  <a href="{{ path('#dashboard') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    role="menuitem">Tableau de bord</a>
+                  {% endif %}
+                  <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    role="menuitem">Support</a>
+                  <hr class="my-1">
+                  <a href="{{ path('app_logout') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    role="menuitem">Se déconnecter</a>
                 </div>
-              {% else %}
-                <twig:Button href="{{ path('app_login') }}" variant="outline">
+              </div>
+            </div>
+            {% else %}
+            <twig:Button href="{{ path('app_login') }}" variant="outline">
               Se connecter
             </twig:Button>
             {% endif %}
-            
 
-         
-            </nav>
-          </div>
+
+
+          </nav>
         </div>
-      </header>
-      <main>
-        {% block body %}{% endblock %}
-      </main>
-      <footer></footer>
-    </div>
-    </body>
+      </div>
+    </header>
+    <main>
+      {% block body %}{% endblock %}
+    </main>
+    <footer></footer>
+  </div>
+</body>
+
 </html>

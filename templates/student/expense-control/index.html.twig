@@ -1,0 +1,69 @@
+{% extends 'layouts/student.html.twig' %} {% block title "Tableau de bord" %} {%
+block body %}
+<twig:Card>
+  <div class="max-w-lg mb-4">
+    <h1 class="mb-3 text-base font-semibold text-slate-700 dark:text-gray-300">
+      Gestion de condition de vérification
+    </h1>
+  </div>
+
+  <div class="flex items-center justify-between gap-x-3 mb-4">
+    <twig:Search placeholder="Rechercher une condition de vérification" />
+    <twig:Button size="default" href="{{ path('~expense-control.create') }}">
+      <i class="bi bi-plus"></i>
+    </twig:Button>
+  </div>
+
+  <twig:Table>
+    <twig:TableHeader>
+      <twig:TableRow>
+        <twig:TableHead> Début </twig:TableHead>
+        <twig:TableHead> Fin </twig:TableHead>
+        <twig:TableHead> Année académique </twig:TableHead>
+        <twig:TableHead> Créer </twig:TableHead>
+        <twig:TableHead> ... </twig:TableHead>
+      </twig:TableRow>
+    </twig:TableHeader>
+
+    <twig:TableBody>
+      {% for expenseControl in expenseControls %}
+      <twig:TableRow>
+        <twig:TableCell>
+          <a class="hover:underline" href="{{ path('~expense-control.show', {id: expenseControl.id}) }}">
+            {{ expenseControl.startAt.format('d-m-Y')}}
+          </a>
+        </twig:TableCell>
+        <twig:TableCell>
+          <a class="hover:underline" href="{{ path('~expense-control.show', {id: expenseControl.id}) }}">
+            {{ expenseControl.endAt.format('d-m-Y')}}
+          </a>
+        </twig:TableCell>
+        <twig:TableCell>
+          <div class="flex items-center justify-start flex-wrap gap-1">
+            {% for year in expenseControl.yearAcademics %}
+            <twig:Badge type="{{ year.closed ? 'secondary' : 'outline' }}">
+              <a class="" href="{{ path('~expense-control.show', {id: expenseControl.id}) }}">
+                {{ year.name }}
+              </a>
+            </twig:Badge>
+
+            {% endfor %}
+          </div>
+        </twig:TableCell>
+        <twig:TableCell>
+          {{ expenseControl.createdAt | ago }}
+        </twig:TableCell>
+        <twig:TableCell>
+          {% include 'shared/action.html.twig' with {routeDelete: path('~expense-control.delete', {id:
+          expenseControl.id}), routeEdit: path('~expense-control.edit', {id: expenseControl.id})} %}
+        </twig:TableCell>
+      </twig:TableRow>
+      {% endfor %}
+    </twig:TableBody>
+  </twig:Table>
+
+  <div>
+    {{ knp_pagination_render(expenseControls) }}
+  </div>
+</twig:Card>
+{% endblock %}

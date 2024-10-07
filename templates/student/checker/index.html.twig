@@ -1,0 +1,71 @@
+{% extends 'layouts/student.html.twig' %}
+{% block title "Tableau de bord" %}
+{% block body %}
+<twig:Card>
+  <div class="max-w-lg mb-4">
+    <h1 class="mb-3 text-base font-semibold text-slate-700 dark:text-gray-300">
+      Gestion des vérificateur
+    </h1>
+  </div>
+
+  <div class="flex items-center justify-between gap-x-3 mb-4">
+    <twig:Search placeholder="Rechercher un vérificateur" />
+    <twig:Button size="default" href="{{ path('~checker.create') }}">
+      <i class="bi bi-plus"></i>
+    </twig:Button>
+  </div>
+
+  <twig:Table>
+    <twig:TableHeader>
+      <twig:TableRow>
+        <twig:TableHead> Nom </twig:TableHead>
+        <twig:TableHead> Postnom </twig:TableHead>
+        <twig:TableHead> Numéro de téléphone </twig:TableHead>
+        <twig:TableHead> Sexe </twig:TableHead>
+        <twig:TableHead> Créer </twig:TableHead>
+        <twig:TableHead> ... </twig:TableHead>
+      </twig:TableRow>
+    </twig:TableHeader>
+
+    <twig:TableBody>
+      {% for checker in checkers %}
+      <twig:TableRow>
+        <twig:TableCell>
+          <a class="hover:underline" href="{{ path('~checker.show', {id: checker.id}) }}">
+            {{ checker.name|u.truncate(40, '...', false)}}
+          </a>
+        </twig:TableCell>
+        <twig:TableCell>
+          <a class="hover:underline" href="{{ path('~checker.show', {id: checker.id}) }}">
+            {{ checker.firstname|u.truncate(20, '...', false)}}
+          </a>
+        </twig:TableCell>
+
+        <twig:TableCell>
+          <a class="hover:underline" href="{{ path('~checker.show', {id: checker.id}) }}">
+            {{ checker.numberPhone|u.truncate(20, '...', false)}}
+          </a>
+        </twig:TableCell>
+        <twig:TableCell>
+          <a class="hover:underline" href="{{ path('~checker.show', {id: checker.id}) }}">
+            {{ checker.gender.value}}
+          </a>
+        </twig:TableCell>
+
+        <twig:TableCell>
+          {{ checker.createdAt | ago }}
+        </twig:TableCell>
+        <twig:TableCell>
+          {% include 'shared/action.html.twig' with {routeDelete: path('~checker.delete', {id: checker.id}), routeEdit:
+          path('~checker.edit', {id: checker.id})} %}
+        </twig:TableCell>
+      </twig:TableRow>
+      {% endfor %}
+    </twig:TableBody>
+  </twig:Table>
+
+  <div>
+    {{ knp_pagination_render(checkers) }}
+  </div>
+</twig:Card>
+{% endblock %}
