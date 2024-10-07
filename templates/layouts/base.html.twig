@@ -64,8 +64,10 @@
                   <a href="{{ path('#dashboard') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                     role="menuitem">Tableau de bord</a>
                   {% endif %}
-                  <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                    role="menuitem">Support</a>
+                  {% if app.user is not null and app.user.roles|isChecker %}
+                  <a href="{{ path('^dashboard') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    role="menuitem">Tableau de bord</a>
+                  {% endif %}
                   <hr class="my-1">
                   <a href="{{ path('app_logout') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                     role="menuitem">Se déconnecter</a>

@@ -36,8 +36,11 @@ security:
   access_control:
     - { path: ^/admin, roles: ROLE_ADMIN }
     - { path: ^/dashboard, roles: ROLE_ADMIN }
-    - { path: ^/payment, roles: ROLE_STUDENT }
-    # - { path: ^/profile, roles: ROLE_USER }
+    - { path: ^/student, roles: ROLE_STUDENT }
+    - { path: ^/checker, roles: ROLE_CHECKER }
+    - { path: ^/profile/checker, roles: ROLE_CHECKER }
+    - { path: ^/profile/admin, roles: ROLE_ADMIN }
+    - { path: ^/profile/student, roles: ROLE_STUDENT }
 
 when@test:
   security:
