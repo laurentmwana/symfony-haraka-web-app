@@ -17,8 +17,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 #[Route('/admin', name: '~')]
 class YearAcademicController extends AbstractController
 {
-  // public function __construct(private EntityManagerInterface $em) {}
-
   #[Route('/year-academic', name: 'year-academic.index', methods: ['GET'])]
   public function index(
     YearAcademicRepository $repository,

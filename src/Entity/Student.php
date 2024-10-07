@@ -69,12 +69,26 @@ class Student
     #[ORM\OneToOne(mappedBy: 'student', cascade: ['persist', 'remove'])]
     private ?User $user = null;
 
+    /**
+     * @var Collection<int, Paid>
+     */
+    #[ORM\OneToMany(targetEntity: Paid::class, mappedBy: 'student', orphanRemoval: true)]
+    private Collection $paids;
+
+    /**
+     * @var Collection<int, Payment>
+     */
+    #[ORM\OneToMany(targetEntity: Payment::class, mappedBy: 'student', orphanRemoval: true)]
+    private Collection $payments;
+
     public function __construct()
     {
         $this->levels = new ArrayCollection();
 
         $this->created_at = new \DateTime();
         $this->updated_at = new \DateTime();
+        $this->paids = new ArrayCollection();
+        $this->payments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -237,6 +251,66 @@ class Student
         }
 
         $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Paid>
+     */
+    public function getPaids(): Collection
+    {
+        return $this->paids;
+    }
+
+    public function addPaid(Paid $paid): static
+    {
+        if (!$this->paids->contains($paid)) {
+            $this->paids->add($paid);
+            $paid->setStudent($this);
+        }
+
+        return $this;
+    }
+
+    public function removePaid(Paid $paid): static
+    {
+        if ($this->paids->removeElement($paid)) {
+            // set the owning side to null (unless already changed)
+            if ($paid->getStudent() === $this) {
+                $paid->setStudent(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Payment>
+     */
+    public function getPayments(): Collection
+    {
+        return $this->payments;
+    }
+
+    public function addPayment(Payment $payment): static
+    {
+        if (!$this->payments->contains($payment)) {
+            $this->payments->add($payment);
+            $payment->setStudent($this);
+        }
+
+        return $this;
+    }
+
+    public function removePayment(Payment $payment): static
+    {
+        if ($this->payments->removeElement($payment)) {
+            // set the owning side to null (unless already changed)
+            if ($payment->getStudent() === $this) {
+                $payment->setStudent(null);
+            }
+        }
 
         return $this;
     }

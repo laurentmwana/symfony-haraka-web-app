@@ -44,12 +44,26 @@ class Level
     #[ORM\OneToMany(targetEntity: ActualLevel::class, mappedBy: 'level', orphanRemoval: true)]
     private Collection $actualLevels;
 
+    /**
+     * @var Collection<int, Paid>
+     */
+    #[ORM\OneToMany(targetEntity: Paid::class, mappedBy: 'level', orphanRemoval: true)]
+    private Collection $paids;
+
+    /**
+     * @var Collection<int, Payment>
+     */
+    #[ORM\OneToMany(targetEntity: Payment::class, mappedBy: 'level', orphanRemoval: true)]
+    private Collection $payments;
+
     public function __construct()
     {
         $this->students = new ArrayCollection();
 
         $this->created_at = new \DateTime();
         $this->actualLevels = new ArrayCollection();
+        $this->paids = new ArrayCollection();
+        $this->payments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -156,6 +170,66 @@ class Level
             // set the owning side to null (unless already changed)
             if ($actualLevel->getLevel() === $this) {
                 $actualLevel->setLevel(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Paid>
+     */
+    public function getPaids(): Collection
+    {
+        return $this->paids;
+    }
+
+    public function addPaid(Paid $paid): static
+    {
+        if (!$this->paids->contains($paid)) {
+            $this->paids->add($paid);
+            $paid->setLevel($this);
+        }
+
+        return $this;
+    }
+
+    public function removePaid(Paid $paid): static
+    {
+        if ($this->paids->removeElement($paid)) {
+            // set the owning side to null (unless already changed)
+            if ($paid->getLevel() === $this) {
+                $paid->setLevel(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Payment>
+     */
+    public function getPayments(): Collection
+    {
+        return $this->payments;
+    }
+
+    public function addPayment(Payment $payment): static
+    {
+        if (!$this->payments->contains($payment)) {
+            $this->payments->add($payment);
+            $payment->setLevel($this);
+        }
+
+        return $this;
+    }
+
+    public function removePayment(Payment $payment): static
+    {
+        if ($this->payments->removeElement($payment)) {
+            // set the owning side to null (unless already changed)
+            if ($payment->getLevel() === $this) {
+                $payment->setLevel(null);
             }
         }
 

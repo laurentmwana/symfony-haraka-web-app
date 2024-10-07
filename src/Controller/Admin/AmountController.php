@@ -10,7 +10,6 @@ use App\Form\AmountFormType;
 use App\Repository\AmountRepository;
 use App\Repository\InstallmentRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Repository\YearAcademicRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

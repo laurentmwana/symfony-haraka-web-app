@@ -9,11 +9,12 @@ use Twig\TwigFunction;
 
 class HelpersExtension extends AbstractExtension
 {
-
     public function getFilters(): array
     {
         return [
             new TwigFilter('isAdmin', [HelpersRuntime::class, 'isAdmin']),
+            new TwigFilter('isStudent', [HelpersRuntime::class, 'isStudent']),
+            new TwigFilter('isChecker', [HelpersRuntime::class, 'isChecker']),
         ];
     }
 

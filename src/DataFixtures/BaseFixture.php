@@ -2,6 +2,8 @@
 
 namespace App\DataFixtures;
 
+use Faker\Factory;
+use App\Entity\Paid;
 use App\Entity\User;
 use App\Entity\Level;
 use App\Entity\Amount;
@@ -14,6 +16,8 @@ use App\Helpers\Number;
 use App\Enum\GenderEnum;
 use App\Entity\Programme;
 use App\Entity\Department;
+use App\Entity\ActualLevel;
+use App\Entity\Installment;
 use App\Entity\YearAcademic;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -66,12 +70,12 @@ class BaseFixture extends Fixture
             $programmes[] = $p;
         }
 
-        $faker = \Faker\Factory::create();
+        $faker = Factory::create();
 
         $faculties = [];
 
         for ($index = 0; $index < 12; $index++) {
-            $f = (new Faculty())->setName($faker->text(100));
+            $f = (new Faculty())->setName($faker->text(15));
             $manager->persist($f);
 
             $faculties[] = $f;
@@ -80,7 +84,7 @@ class BaseFixture extends Fixture
         $departments = [];
         foreach ($faculties as $faculty) {
             for ($index = 0; $index < 3; $index++) {
-                $name = $faker->text(100);
+                $name = $faker->text(20);
                 $d = (new Department())
                     ->setName($name)
                     ->setAlias(substr($name, 0, 8))
@@ -94,7 +98,7 @@ class BaseFixture extends Fixture
         $sectors = [];
         foreach ($departments as $department) {
             for ($index = 0; $index < 2; $index++) {
-                $name = $faker->text(100);
+                $name = $faker->text(10);
                 $s = (new Sector())
                     ->setName($name)
                     ->setAlias(substr($name, 0, 8))
@@ -123,6 +127,18 @@ class BaseFixture extends Fixture
                 ->setPrice($price)
                 ->setMaxNumberInstallment($numberInstallment);
 
+            $priceArray = Number::divideIntoInstallments(
+                $price,
+                $numberInstallment,
+            );
+
+            foreach ($priceArray as $key => $price) {
+                $installment = (new Installment())
+                    ->setPrice($price)
+                    ->setPrice($price)
+                    ->setPriority($key + 1);
+                $amount->addInstallment($installment);
+            }
             $manager->persist($amount);
 
             $sector = $sectors[random_int(0, count($sectors) - 1)];
@@ -197,6 +213,14 @@ class BaseFixture extends Fixture
             $manager->persist($user);
         }
 
+        $extractLevels = function () use ($levels, $faker) {
+            $maxStartIndex = count($levels) - 3;
+            $startIndex = $faker->numberBetween(0, $maxStartIndex);
+
+            return array_slice($levels, $startIndex, 3);
+        };
+
+
 
         foreach ($students as $student) {
 
@@ -205,11 +229,30 @@ class BaseFixture extends Fixture
                 ->setEmail($faker->email)
                 ->setPassword('$2y$13$A4SPgHvZ5jWVqNkvFErFcuw6/ceNhxOBIYQK4nIoIBWbunkdBjN/O')
                 ->setStudent($student);
+
+            $maxStartIndex = count($levels) - 3;
+            $startIndex = $faker->numberBetween(0, $maxStartIndex);
+
+            $randomLevels = array_slice($levels, $startIndex, 3);
+
+            $randomLevel = $randomLevels[count($randomLevels) - 1];
+
+            $actualLevel = (new ActualLevel())
+                ->setLevel($randomLevel);
+
+            foreach ($randomLevels as $l) {
+                $student->addLevel($l);
+                $paid = (new Paid())
+                    ->setStudent($student)
+                    ->setLevel($l);
+
+                $manager->persist($paid);
+            }
+            $student->setActualLevel($actualLevel);
+
+            $manager->persist($student);
             $manager->persist($user);
         }
-
-
-
 
         $manager->flush();
     }

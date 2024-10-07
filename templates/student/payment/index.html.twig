@@ -1,0 +1,74 @@
+{% extends 'layouts/base.html.twig' %}
+
+{% block title "Paiement" %}
+
+{% block body %}
+<div class="container py-12">
+  <h2>Paiement</h2>
+
+  <div class="flex  justify-start gap-5">
+    <div>
+      {% include "student/payment/_form.html.twig" %}
+    </div>
+
+    <div class="flex-1">
+
+      {% for payment in payments %}
+      <div class="mb-3">
+        <twig:Card class="border-red-200">
+          <div class=" flex items-center gap-4 justify-between mb-3">
+            <h2 class="text-sm text-gray-700 dark:text-gray-50">
+              Statut du paiement
+            </h2>
+            <twig:Badge variant="">
+
+            </twig:Badge>
+          </div>
+
+        </twig:Card>
+      </div>
+
+      <twig:Table>
+        <twig:TableHeader>
+          <twig:TableRow>
+            <twig:TableHead> Montant </twig:TableHead>
+            <twig:TableHead> Tranche </twig:TableHead>
+            <twig:TableHead> Promotion </twig:TableHead>
+            <twig:TableHead> Payer </twig:TableHead>
+            <twig:TableHead> ... </twig:TableHead>
+          </twig:TableRow>
+        </twig:TableHeader>
+
+        <twig:TableBody>
+
+          <twig:TableRow>
+            <twig:TableCell>
+              {{ payment.amount.price }} Fc
+            </twig:TableCell>
+
+            <twig:TableCell>
+              {{ payment.installment.price }} Fc
+            </twig:TableCell>
+
+            <twig:TableCell>
+              <twig:Badge type="secondary">
+
+              </twig:Badge>
+
+            </twig:TableCell>
+
+            <twig:TableCell>
+              {{ payment.paymentAt|ago }}
+            </twig:TableCell>
+          </twig:TableRow>
+        </twig:TableBody>
+      </twig:Table>
+      {% endfor %}
+
+    </div>
+
+
+  </div>
+
+</div>
+{% endblock %}

@@ -31,31 +31,32 @@ block body %}
       <twig:TableRow>
         <twig:TableCell>
           <a class="hover:underline" href="{{ path('~checker.show', {id: checker.id}) }}">
-          {{ checker.name|u.truncate(40, '...', false)}}
+            {{ checker.name|u.truncate(40, '...', false)}}
           </a>
         </twig:TableCell>
         <twig:TableCell>
           <a class="hover:underline" href="{{ path('~checker.show', {id: checker.id}) }}">
-          {{ checker.firstname|u.truncate(20, '...', false)}}
+            {{ checker.firstname|u.truncate(20, '...', false)}}
           </a>
         </twig:TableCell>
 
         <twig:TableCell>
           <a class="hover:underline" href="{{ path('~checker.show', {id: checker.id}) }}">
-          {{ checker.numberPhone|u.truncate(20, '...', false)}}
+            {{ checker.numberPhone|u.truncate(20, '...', false)}}
           </a>
         </twig:TableCell>
         <twig:TableCell>
           <a class="hover:underline" href="{{ path('~checker.show', {id: checker.id}) }}">
-          {{ checker.gender.value}}
+            {{ checker.gender.value}}
           </a>
         </twig:TableCell>
-    
+
         <twig:TableCell>
           {{ checker.createdAt | ago }}
         </twig:TableCell>
         <twig:TableCell>
-          {% include 'shared/action.html.twig' with {routeDelete: path('~checker.delete', {id: checker.id}), routeEdit: path('~checker.edit', {id: checker.id})} %}
+          {% include 'shared/action.html.twig' with {routeDelete: path('~checker.delete', {id: checker.id}), routeEdit:
+          path('~checker.edit', {id: checker.id})} %}
         </twig:TableCell>
       </twig:TableRow>
       {% endfor %}

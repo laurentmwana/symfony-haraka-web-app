@@ -26,6 +26,9 @@
             <twig:Navigation href="{{ path('welcome') }}">Acceuil</twig:Navigation>
               <twig:Navigation href="{{ path('page.about') }}">A propos</twig:Navigation>
               <twig:Navigation href="{{ path('doc.index') }}">Documentation</twig:Navigation>
+              {% if app.user is not null and app.user.roles|isStudent %}
+               <twig:Navigation href="{{ path('payment.index') }}">Paiement</twig:Navigation>
+              {% endif %}
               <twig:Navigation href="{{ path('contact.index') }}">Contact</twig:Navigation>
             </nav>
           </div>

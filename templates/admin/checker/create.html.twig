@@ -3,14 +3,14 @@
 {% block title "Ajouter un vérificateur" %}
 
 {% block body %}
-  <twig:Card >
-    <div class="max-w-lg mb-4">
-      <h1 class="mb-3 text-base font-semibold text-slate-700 dark:text-gray-300">
-        Ajouter un vérificateur
-      </h1>
-    </div>
+<twig:Card>
+  <div class="max-w-lg mb-4">
+    <h1 class="mb-3 text-base font-semibold text-slate-700 dark:text-gray-300">
+      Ajouter un vérificateur
+    </h1>
+  </div>
 
-    {% include "admin/checker/_form.html.twig" with {form: form} %}
-  
-  </twig:Card>
+  {% include "admin/checker/_form.html.twig" with {form: form} %}
+
+</twig:Card>
 {% endblock %}

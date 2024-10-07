@@ -57,11 +57,18 @@ class Amount
     #[ORM\Column]
     private ?bool $generate = false;
 
+    /**
+     * @var Collection<int, Payment>
+     */
+    #[ORM\OneToMany(targetEntity: Payment::class, mappedBy: 'amount', orphanRemoval: true)]
+    private Collection $payments;
+
     public function __construct()
     {
         $this->installments = new ArrayCollection();
         $this->created_at = new \DateTime();
         $this->updated_at = new \DateTime();
+        $this->payments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -179,6 +186,36 @@ class Amount
     public function setGenerate(bool $generate): static
     {
         $this->generate = $generate;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Payment>
+     */
+    public function getPayments(): Collection
+    {
+        return $this->payments;
+    }
+
+    public function addPayment(Payment $payment): static
+    {
+        if (!$this->payments->contains($payment)) {
+            $this->payments->add($payment);
+            $payment->setAmount($this);
+        }
+
+        return $this;
+    }
+
+    public function removePayment(Payment $payment): static
+    {
+        if ($this->payments->removeElement($payment)) {
+            // set the owning side to null (unless already changed)
+            if ($payment->getAmount() === $this) {
+                $payment->setAmount(null);
+            }
+        }
 
         return $this;
     }

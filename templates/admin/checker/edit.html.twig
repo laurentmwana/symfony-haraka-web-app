@@ -1,18 +1,18 @@
 {% extends 'layouts/admin.html.twig' %}
 
 {% block title %}
-    Editer le véririfcateur #{{ checker.id }}
+Editer le véririfcateur #{{ checker.id }}
 {% endblock %}
 
 {% block body %}
-  <twig:Card >
+<twig:Card>
   <div class="max-w-lg mb-4">
-      <h1 class="mb-3 text-base font-semibold text-slate-700 dark:text-gray-300">
-       Editer le véririfcateur #{{ checker.id }}
-      </h1>
-    </div>
+    <h1 class="mb-3 text-base font-semibold text-slate-700 dark:text-gray-300">
+      Editer le véririfcateur #{{ checker.id }}
+    </h1>
+  </div>
 
-    {% include "admin/checker/_form.html.twig" with {form: form} %}
+  {% include "admin/checker/_form.html.twig" with {form: form} %}
 
-    </twig:Card>
+</twig:Card>
 {% endblock %}

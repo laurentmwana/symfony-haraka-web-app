@@ -52,6 +52,27 @@ class LevelRepository extends ServiceEntityRepository
     }
 
 
+    /**
+     * @return Level[]
+     */
+    public function findAllWithAllRelation(int $studentId): array
+    {
+        $qb = $this->createQueryBuilder('l')
+            ->leftJoin('l.students', 's')
+            ->innerJoin('l.programme', 'p')
+            ->innerJoin('l.yearAcademic', 'y')
+            ->innerJoin('l.sector', 'se')
+            ->addSelect('s', 'se', 'y', 'p');
+
+
+        $qb->andWhere('s.id = :studentId')
+            ->setParameter('studentId', $studentId);
+
+        return $qb->orderBy('l.created_at', 'DESC')
+            ->getQuery()->getResult();
+    }
+
+
     public function findSearchWithStudentQuery(HydrateLevel $hydrateLevel): Query
     {
         $qb = $this->createQueryBuilder('l')
