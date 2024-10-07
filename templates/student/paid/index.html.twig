@@ -1,12 +1,85 @@
 {% extends 'layouts/student.html.twig' %}
-{% block title "Effectuer un paiement" %}
+{% block title "Tableau de bord" %}
 {% block body %}
-
 <twig:Card>
   <div class="max-w-lg mb-4">
     <h1 class="mb-3 text-base font-semibold text-slate-700 dark:text-gray-300">
-      Effectuer un paiement
+      Paiement
     </h1>
+  </div>
+
+  <div class="flex items-center justify-between gap-x-3 mb-4">
+    <twig:Search placeholder="Rechercher un frais académique" />
+    <twig:Button size="default">
+      <i class="bi bi-plus"></i>
+    </twig:Button>
+  </div>
+
+  {% for paid in paids %}
+
+  {% set state = statePaid(paid.state) %}
+
+  <div class="mb-3">
+    <twig:Card class="{{ state.card }}">
+      <div class=" flex items-center gap-4 justify-between mb-3">
+        <h2 class="text-sm text-gray-700 dark:text-gray-50 font-bold">
+          Statut du paiement
+        </h2>
+        <twig:Badge type="{{ state.variant }}">
+          {{ state.name }}
+        </twig:Badge>
+      </div>
+
+      <p class="max-w-lg text-sm text-muted-foreground mb-3">
+        {% if paid.state|isTotality %}
+        Vous avez payé l'intégralité du montant. Merci pour votre promptitude !
+
+        {% elseif paid.state|isPaidNoTotality %}
+        Vous avez effectué un paiement partiel. Il reste un montant à régler pour compléter frais académique.
+
+        {% else %}
+        Vous n'avez pas encore effectué de paiement. Veuillez procéder au règlement pour finaliser votre inscription.
+        {% endif %}
+      </p>
+
+      <p class="max-w-lg text-sm text-muted-foreground mb-2">
+        <span class="font-medium">Promotion : </span> <span> {{ paid.level.programme.name }} </span>
+      </p>
+
+      <p class="max-w-lg text-sm text-muted-foreground mb-2">
+        <span class="font-medium">Option : </span> <span> {{ paid.level.sector.alias }} </span>
+      </p>
+
+      <p class="max-w-lg text-sm text-muted-foreground mb-2">
+        <span class="font-medium">Année académique : </span> <span> {{ paid.level.yearAcademic.name }} </span>
+      </p>
+
+      {% if paid.state|isPaidNoTotality %}
+      <twig:Button variant="outline" href="{{ path('#enum.index', {id: paid.id}) }}">
+        Payer les tranches restantes
+      </twig:Button>
+      {% elseif paid.state|isNoPaid %}
+      <twig:Button href="{{ path('#enum.index', {id: paid.id}) }}">
+        Payer
+      </twig:Button>
+      {% endif %}
+
+
+
+
+
+
+
+
+
+    </twig:Card>
+  </div>
+
+
+  {% endfor %}
+
+  <div>
+    {{ knp_pagination_render(paids) }}
   </div>
 </twig:Card>
 {% endblock %}

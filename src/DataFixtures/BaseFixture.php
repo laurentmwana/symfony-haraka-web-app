@@ -156,25 +156,6 @@ class BaseFixture extends Fixture
         }
 
 
-        $students = [];
-
-        for ($index = 0; $index < 100; $index++) {
-
-            $s = (new Student())
-                ->setName($faker->name())
-                ->setFirstname($faker->firstName())
-                ->setLastname($faker->lastName())
-                ->setHappy($faker->dateTimeBetween())
-                ->setGender(GenderEnum::from('F'))
-                ->setNumberPhone($faker->phoneNumber());
-
-
-            $manager->persist($s);
-
-
-            $students[] = $s;
-        }
-
 
         $checkers = [];
 
@@ -207,7 +188,7 @@ class BaseFixture extends Fixture
 
             $user =  (new User())
                 ->setRoles([RoleEnum::ROLE_CHECKER->value])
-                ->setEmail($faker->email)
+                ->setEmail($faker->email())
                 ->setPassword('$2y$13$A4SPgHvZ5jWVqNkvFErFcuw6/ceNhxOBIYQK4nIoIBWbunkdBjN/O')
                 ->setChecker($checker);
             $manager->persist($user);
@@ -222,13 +203,24 @@ class BaseFixture extends Fixture
 
 
 
-        foreach ($students as $student) {
+        $students = [];
+
+        for ($index = 0; $index < 100; $index++) {
+
+            $s = (new Student())
+                ->setName($faker->name())
+                ->setFirstname($faker->firstName())
+                ->setLastname($faker->lastName())
+                ->setHappy($faker->dateTimeBetween())
+                ->setGender(GenderEnum::from('F'))
+                ->setNumberPhone($faker->phoneNumber());
+
 
             $user =  (new User())
                 ->setRoles([RoleEnum::ROLE_STUDENT->value])
-                ->setEmail($faker->email)
+                ->setEmail($faker->email())
                 ->setPassword('$2y$13$A4SPgHvZ5jWVqNkvFErFcuw6/ceNhxOBIYQK4nIoIBWbunkdBjN/O')
-                ->setStudent($student);
+                ->setStudent($s);
 
             $maxStartIndex = count($levels) - 3;
             $startIndex = $faker->numberBetween(0, $maxStartIndex);
@@ -240,20 +232,18 @@ class BaseFixture extends Fixture
             $actualLevel = (new ActualLevel())
                 ->setLevel($randomLevel);
 
+            $s->setActualLevel($actualLevel);
+
             foreach ($randomLevels as $l) {
-                $student->addLevel($l);
-                $paid = (new Paid())
-                    ->setStudent($student)
-                    ->setLevel($l);
+                $l->addStudent($s);
 
-                $manager->persist($paid);
+                $manager->persist($l);
             }
-            $student->setActualLevel($actualLevel);
-
-            $manager->persist($student);
+            $manager->persist($s);
             $manager->persist($user);
-        }
 
+            $students[] = $s;
+        }
         $manager->flush();
     }
 }

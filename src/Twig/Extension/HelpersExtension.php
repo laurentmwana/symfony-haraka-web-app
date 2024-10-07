@@ -15,6 +15,9 @@ class HelpersExtension extends AbstractExtension
             new TwigFilter('isAdmin', [HelpersRuntime::class, 'isAdmin']),
             new TwigFilter('isStudent', [HelpersRuntime::class, 'isStudent']),
             new TwigFilter('isChecker', [HelpersRuntime::class, 'isChecker']),
+            new TwigFilter('isTotality', [HelpersRuntime::class, 'isTotality']),
+            new TwigFilter('isPaidNoTotality', [HelpersRuntime::class, 'isPaidNoTotality']),
+            new TwigFilter('isNoPaid', [HelpersRuntime::class, 'isNoPaid']),
         ];
     }
 
@@ -22,6 +25,7 @@ class HelpersExtension extends AbstractExtension
     {
         return [
             new TwigFunction('cn', [HelpersRuntime::class, 'cn']),
+            new TwigFunction('statePaid', [HelpersRuntime::class, 'statePaid']),
         ];
     }
 }

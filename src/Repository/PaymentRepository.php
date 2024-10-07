@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Paid;
 use App\Entity\Payment;
 use Doctrine\ORM\Query;
 use App\Hydrate\HydratePayment;
@@ -18,7 +19,7 @@ class PaymentRepository extends ServiceEntityRepository
         parent::__construct($registry, Payment::class);
     }
 
-    public function findSearchQuery(HydratePayment $hydrate): Query
+    public function findAllPaid(Paid $paid): array
     {
         $qb = $this->createQueryBuilder('p')
             ->innerJoin('p.student', 's')
@@ -28,16 +29,24 @@ class PaymentRepository extends ServiceEntityRepository
             ->innerJoin('p.installment', 'i')
             ->addSelect('s', 'l', 'ci', 'i', 'a');
 
-        // if ($hydrateLevel->getSector() instanceof Sector) {
-        //     $qb->andWhere('l.sector = :sector')
-        //         ->setParameter('sector', $hydrateLevel->getSector());
-        // }
+        $qb->where('p.student = :student')
+            ->andWhere('p.level = :level');
+        $qb->setParameter('student', $paid->getStudent())
+            ->setParameter('level', $paid->getLevel());
 
-        // if ($hydrateLevel->getYearAcademic() instanceof YearAcademic) {
-        //     $qb->andWhere('l.yearAcademic = :yearAcademic')
-        //         ->setParameter('yearAcademic', $hydrateLevel->getYearAcademic());
-        // }
+        return $qb->orderBy('p.payment_at', 'DESC')
+            ->getQuery()->getResult();
+    }
 
+    public function findSearchQuery(HydratePayment $hydrate): Query
+    {
+        $qb = $this->createQueryBuilder('p')
+            ->innerJoin('p.student', 's')
+            ->innerJoin('p.level', 'l')
+            ->innerJoin('p.amount', 'a')
+            ->innerJoin('a.installments', 'ci')
+            ->innerJoin('p.installment', 'i')
+            ->addSelect('s', 'l', 'ci', 'i', 'a');
 
         return $qb->orderBy('p.payment_at', 'DESC')->getQuery();
     }
