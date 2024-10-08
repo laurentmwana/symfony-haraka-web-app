@@ -1,16 +1,16 @@
 {% extends 'layouts/admin.html.twig' %}
-{% block title "Gestion des utilisateurs" %}
+{% block title "Gestion des utilisateurs de vérificateur" %}
 {% block body %}
 <twig:Card>
   <div class="max-w-lg mb-4">
     <h1 class="mb-3 text-base font-semibold text-slate-700 dark:text-gray-300">
-      Gestion des utilisateurs
+      Gestion des utilisateurs de vérificateur
     </h1>
   </div>
 
   <div class="flex items-center justify-between gap-x-3 mb-4">
     <twig:Search placeholder="Rechercher un frais académique" />
-    <twig:Button size="default" href="{{ path('~user.create') }}">
+    <twig:Button size="default" href="{{ path('~user.checker.create') }}">
       <i class="bi bi-plus"></i>
     </twig:Button>
   </div>
@@ -21,7 +21,6 @@
         <twig:TableHead> Nom d'utilisateur </twig:TableHead>
         <twig:TableHead> Adresse e-mail </twig:TableHead>
         <twig:TableHead> Adresse e-mail vérifié </twig:TableHead>
-        <twig:TableHead> Type </twig:TableHead>
         <twig:TableHead> Créer </twig:TableHead>
         <twig:TableHead> ... </twig:TableHead>
       </twig:TableRow>
@@ -31,12 +30,12 @@
       {% for user in users %}
       <twig:TableRow>
         <twig:TableCell>
-          <a class="hover:underline" href="{{ path('~user.show', {id: user.id}) }}">
+          <a class="hover:underline" href="{{ path('~user.checker.show', {id: user.id}) }}">
             {{ user.username }} FC
           </a>
         </twig:TableCell>
         <twig:TableCell>
-          <a class="hover:underline" href="{{ path('~user.show', {id: user.id}) }}">
+          <a class="hover:underline" href="{{ path('~user.checker.show', {id: user.id}) }}">
             {{ user.email }}
           </a>
         </twig:TableCell>
@@ -47,26 +46,12 @@
         </twig:TableCell>
 
         <twig:TableCell>
-
-
-          <twig:Badge type="outline">
-            {{ user.roles|isStudent ? 'étudiant' : '' }}
-            {{ user.roles|isChecker ? 'vérificateur' : '' }}
-          </twig:Badge>
-        </twig:TableCell>
-
-
-        <twig:TableCell>
           {{ user.createdAt | ago }}
         </twig:TableCell>
         <twig:TableCell>
-          <div class="flex items-center justify-end gap-x-1">
-            {% include 'shared/action.html.twig' with {routeDelete: path('~user.delete', {id: user.id}), routeEdit:
-            path('~user.edit', {id: user.id})} %}
-            <twig:Button href="{{ path('~installment.manual', {id: user.id}) }}" variant="outline">
-              <i class="bi bi-gear"></i>
-
-            </twig:Button>
+          {% include 'shared/action.html.twig' with {routeDelete: path('~user.checker.delete', {id: user.id}),
+          routeEdit:
+          path('~user.checker.edit', {id: user.id})} %}
           </div>
         </twig:TableCell>
       </twig:TableRow>

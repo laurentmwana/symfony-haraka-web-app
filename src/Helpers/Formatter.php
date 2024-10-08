@@ -4,6 +4,7 @@ namespace App\Helpers;
 
 use App\Entity\Level;
 use App\Entity\Checker;
+use App\Entity\Student;
 use App\Entity\YearAcademic;
 use App\Entity\ExpenseControl;
 
@@ -23,6 +24,12 @@ final class Formatter
   {
     return $checker instanceof Checker
       ? sprintf('%s - %s', $checker->getName(), $checker->getFirstname()) : null;
+  }
+
+  public static function student(?Student $student): ?string
+  {
+    return $student instanceof Student
+      ? sprintf('%s - %s', $student->getName(), $student->getFirstname()) : null;
   }
 
   public static function expenseControl(?ExpenseControl $expenseControl): ?string

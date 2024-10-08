@@ -62,4 +62,54 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
         return $qb->orderBy('u.created_at', 'DESC')->getQuery();
     }
+
+
+    public function findSearchForStudentQuery(?string $query): Query
+    {
+        $qb = $this->createQueryBuilder('u');
+
+        if (null !== $query && !empty($query)) {
+            $qb->where($qb->expr()->orX(
+                $qb->expr()->like('u.id', ':val'),
+                $qb->expr()->like('u.username', ':val'),
+                $qb->expr()->like('u.email', ':val'),
+                $qb->expr()->like('u.roles', ':val'),
+                $qb->expr()->like('u.created_at', ':val')
+            ))
+                ->setParameter('val', "%$query%");
+        }
+
+        $qb->where($qb->expr()->orX(
+            $qb->expr()->like('u.roles', ':student'),
+        ));
+
+        $qb->setParameter('student', '%' . RoleEnum::ROLE_STUDENT->value  . '%');
+
+        return $qb->orderBy('u.created_at', 'DESC')->getQuery();
+    }
+
+
+    public function findSearchForCheckerQuery(?string $query): Query
+    {
+        $qb = $this->createQueryBuilder('u');
+
+        if (null !== $query && !empty($query)) {
+            $qb->where($qb->expr()->orX(
+                $qb->expr()->like('u.id', ':val'),
+                $qb->expr()->like('u.username', ':val'),
+                $qb->expr()->like('u.email', ':val'),
+                $qb->expr()->like('u.roles', ':val'),
+                $qb->expr()->like('u.created_at', ':val')
+            ))
+                ->setParameter('val', "%$query%");
+        }
+
+        $qb->where($qb->expr()->orX(
+            $qb->expr()->like('u.roles', ':checker'),
+        ));
+
+        $qb->setParameter('checker', '%' . RoleEnum::ROLE_CHECKER->value  . '%');
+
+        return $qb->orderBy('u.created_at', 'DESC')->getQuery();
+    }
 }

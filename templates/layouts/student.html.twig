@@ -110,7 +110,8 @@
                             class="pointer-events-none block h-5 w-5 rounded-full bg-background shadow-lg ring-0 transition-transform data-[state=checked]:translate-x-5 data-[state=unchecked]:translate-x-0"></span></button>
                 </div>
                 <div class="relative" id="dropdown-menu">
-                    <button id="menuToggle" class="h-8 w-8 rounded-md border border-gray-300 md:hidden">
+                    <button id="dropdown-trigger"
+                        class="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center">
                         {% include "shared/profiler-trigger.html.twig" with {user: app.user} %}
                     </button>
                     <div id="dropdown-content"
@@ -127,8 +128,7 @@
                                 class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Mon
                                 profile</a>
                             <hr class="my-1">
-                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                role="menuitem">Se déconnecter</a>
+                            {% include "shared/action-logout.html.twig" %}
                         </div>
                     </div>
                 </div>

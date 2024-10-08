@@ -16,7 +16,8 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Validator\Constraints as Validator;
 
-class ProfileUserFormType extends AbstractType
+
+class UserCheckerFormType extends AbstractType
 {
     public function __construct(private CheckerRepository $checkerRepository) {}
 
@@ -33,6 +34,10 @@ class ProfileUserFormType extends AbstractType
                 ]
             ])
             ->add('username')
+            ->add('checker', ChoiceType::class, [
+                'choice_label' => fn(?Checker $checker) => Formatter::checker($checker),
+                'choices' => $this->checkerRepository->findAll(),
+            ])
         ;
     }
 

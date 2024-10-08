@@ -7,17 +7,23 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Validator;
+
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
+#[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_USERNAME', fields: ['username'])]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+
     private ?int $id = null;
 
     #[ORM\Column(length: 180)]
+    #[Validator\NotBlank()]
+    #[Validator\Length(min: 5, max: 255)]
     private ?string $email = null;
 
     /**
@@ -39,6 +45,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?Checker $checker = null;
 
     #[ORM\Column(length: 255, unique: true)]
+    #[Validator\NotBlank()]
+    #[Validator\Length(min: 6, max: 12)]
     private ?string $username = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]

@@ -1,0 +1,65 @@
+{% extends 'layouts/admin.html.twig' %}
+{% block title "Gestion des comptes utilisateurs des étudiants" %}
+{% block body %}
+<twig:Card>
+  <div class="max-w-lg mb-4">
+    <h1 class="mb-3 text-base font-semibold text-slate-700 dark:text-gray-300">
+      Gestion des comptes utilisateurs des étudiants
+    </h1>
+  </div>
+
+  <div class="flex items-center justify-between gap-x-3 mb-4">
+    <twig:Search placeholder="Rechercher un frais académique" />
+    <twig:Button size="default" href="{{ path('~user.student.create') }}">
+      <i class="bi bi-plus"></i>
+    </twig:Button>
+  </div>
+
+  <twig:Table>
+    <twig:TableHeader>
+      <twig:TableRow>
+        <twig:TableHead> Nom d'utilisateur </twig:TableHead>
+        <twig:TableHead> Adresse e-mail </twig:TableHead>
+        <twig:TableHead> Adresse e-mail vérifié </twig:TableHead>
+        <twig:TableHead> Créer </twig:TableHead>
+        <twig:TableHead> ... </twig:TableHead>
+      </twig:TableRow>
+    </twig:TableHeader>
+
+    <twig:TableBody>
+      {% for user in users %}
+      <twig:TableRow>
+        <twig:TableCell>
+          <a class="hover:underline" href="{{ path('~user.student.show', {id: user.id}) }}">
+            {{ user.username }} FC
+          </a>
+        </twig:TableCell>
+        <twig:TableCell>
+          <a class="hover:underline" href="{{ path('~user.student.show', {id: user.id}) }}">
+            {{ user.email }}
+          </a>
+        </twig:TableCell>
+        <twig:TableCell>
+          <twig:Badge type="outline">
+            Oui
+          </twig:Badge>
+        </twig:TableCell>
+
+        <twig:TableCell>
+          {{ user.createdAt | ago }}
+        </twig:TableCell>
+        <twig:TableCell>
+          {% include 'shared/action.html.twig' with {routeDelete: path('~user.student.delete', {id: user.id}),
+          routeEdit:
+          path('~user.student.edit', {id: user.id})} %}
+        </twig:TableCell>
+      </twig:TableRow>
+      {% endfor %}
+    </twig:TableBody>
+  </twig:Table>
+
+  <div>
+    {{ knp_pagination_render(users) }}
+  </div>
+</twig:Card>
+{% endblock %}

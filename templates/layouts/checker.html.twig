@@ -68,7 +68,7 @@
         <div class="flex flex-col">
             <!-- Responsive Menu -->
             <header class="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6">
-                <button id="menuToggle" class="h-8 w-8 rounded-md border border-gray-300 md:hidden">
+                <button id="dropdown-trigger" class="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center">
                     {% include "shared/profiler-trigger.html.twig" with {user: app.user} %}
                 </button>
                 <div class="flex-1"></div>
@@ -91,8 +91,7 @@
                                 class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Mon
                                 profile</a>
                             <hr class="my-1">
-                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                role="menuitem">Se déconnecter</a>
+                            {% include "shared/action-logout.html.twig" %}
                         </div>
                     </div>
                 </div>

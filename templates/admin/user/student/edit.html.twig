@@ -1,18 +1,18 @@
 {% extends 'layouts/admin.html.twig' %}
 
 {% block title %}
-Editer l'utilisateur #{{ user.id }}
+Editer le compte d'utilisateur #{{ user.id }}
 {% endblock %}
 
 {% block body %}
 <twig:Card>
   <div class="max-w-lg mb-4">
     <h1 class="mb-3 text-base font-semibold text-slate-700 dark:text-gray-300">
-      Editer l'utilisateur #{{ user.id }}
+      Editer le compte d'utilisateur #{{ user.id }}
     </h1>
   </div>
 
-  {% include "admin/user/_form.html.twig" with {form: form} %}
+  {% include "admin/user/student/_form.html.twig" with {form: form} %}
 
 </twig:Card>
 {% endblock %}
