@@ -152,6 +152,13 @@
                         <i class="bi bi-arrow-repeat"></i>
                         Affectation
                     </a>
+
+
+                    <a href="{{ path('~user.index') }}"
+                        class="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900">
+                        <i class="bi bi-person"></i>
+                        Utilisateur
+                    </a>
                 </nav>
             </div>
         </div>
@@ -161,7 +168,7 @@
             <!-- Responsive Menu -->
             <header class="flex h-14 items-center gap-4 border-b bg-white px-4 lg:h-[60px] lg:px-6">
                 <button id="menuToggle" class="h-8 w-8 rounded-md border border-gray-300 md:hidden">
-                    {% include "shared/profiler-trigger.html.twig" with {user: user} %}
+                    {% include "shared/profiler-trigger.html.twig" with {user: app.user} %}
                 </button>
                 <div class="flex-1"></div>
                 <div class="relative" id="dropdown-menu">

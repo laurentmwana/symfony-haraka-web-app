@@ -1,0 +1,14 @@
+<div class="max-w-xl">
+  {{ form_start(form) }}
+  {{ form_row(form.username) }}
+  {{ form_row(form.email) }}
+  {{ form_row(form.password) }}
+  {{ form_row(form.student) }}
+  {{ form_row(form.checker) }}
+  {{ form_row(form.roles) }}
+
+  <twig:Button type="submit">
+    Sauvegarder
+  </twig:Button>
+  {{ form_end(form) }}
+</div>

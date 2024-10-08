@@ -3,11 +3,13 @@
 namespace App\Repository;
 
 use App\Entity\User;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use App\Enum\RoleEnum;
+use Doctrine\ORM\Query;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
-use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 
 /**
  * @extends ServiceEntityRepository<User>
@@ -33,28 +35,31 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->getEntityManager()->flush();
     }
 
-    //    /**
-    //     * @return User[] Returns an array of User objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('u')
-    //            ->andWhere('u.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('u.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
 
-    //    public function findOneBySomeField($value): ?User
-    //    {
-    //        return $this->createQueryBuilder('u')
-    //            ->andWhere('u.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+
+    public function findSearchQuery(?string $query): Query
+    {
+        $qb = $this->createQueryBuilder('u');
+
+        if (null !== $query && !empty($query)) {
+            $qb->where($qb->expr()->orX(
+                $qb->expr()->like('u.id', ':val'),
+                $qb->expr()->like('u.username', ':val'),
+                $qb->expr()->like('u.email', ':val'),
+                $qb->expr()->like('u.roles', ':val'),
+                $qb->expr()->like('u.created_at', ':val')
+            ))
+                ->setParameter('val', "%$query%");
+        }
+
+        $qb->where($qb->expr()->orX(
+            $qb->expr()->like('u.roles', ':student'),
+            $qb->expr()->like('u.roles', ':checker'),
+        ));
+
+        $qb->setParameter('student', '%' . RoleEnum::ROLE_STUDENT->value  . '%');
+        $qb->setParameter('checker', '%' . RoleEnum::ROLE_CHECKER->value  . '%');
+
+        return $qb->orderBy('u.created_at', 'DESC')->getQuery();
+    }
 }
