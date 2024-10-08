@@ -26,16 +26,18 @@ class EnumeratePaidController extends AbstractController
         PaymentRepository $paymentRepository,
         AmountRepository $amountRepository
     ): Response {
-        /** @var User */
-        $user = $this->getUser();
 
+        $amount = $amountRepository->findAllForLevel($paid->getLevel());
 
-        $payments = $paymentRepository->findAllPaid($paid);
-
-        dd($payments);
+        $payments = $paymentRepository->findAllForStudent(
+            $amount,
+            $paid->getStudent(),
+            $paid->getLevel()
+        );
 
         return $this->render('student/enumerate/index.html.twig', [
-            'payments' => $payments,
+            'amount' => $amount,
+            'payments' => $payments
         ]);
     }
 }

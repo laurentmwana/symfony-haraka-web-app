@@ -161,13 +161,7 @@
             <!-- Responsive Menu -->
             <header class="flex h-14 items-center gap-4 border-b bg-white px-4 lg:h-[60px] lg:px-6">
                 <button id="menuToggle" class="h-8 w-8 rounded-md border border-gray-300 md:hidden">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                        class="h-4 w-4 mx-auto">
-                        <line x1="4" x2="20" y1="12" y2="12"></line>
-                        <line x1="4" x2="20" y1="6" y2="6"></line>
-                        <line x1="4" x2="20" y1="18" y2="18"></line>
-                    </svg>
+                    {% include "shared/profiler-trigger.html.twig" with {user: user} %}
                 </button>
                 <div class="flex-1"></div>
                 <div class="relative" id="dropdown-menu">

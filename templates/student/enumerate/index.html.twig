@@ -8,5 +8,16 @@
     </h1>
   </div>
 
+  <div class="">
+    <h2 class="text-sm font-semibold text-muted-foreground">{{ amount.price|number_format(2, '.', ',') }}Fc</h2>
+    <ul class="text-sm text-muted-foreground">
+      {% for installment in amount.installments %}
+      <li>
+        {{ installment.price|number_format(2, '.', ',') }}Fc
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+
 </twig:Card>
 {% endblock %}

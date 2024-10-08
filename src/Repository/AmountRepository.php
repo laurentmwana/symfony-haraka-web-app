@@ -2,6 +2,8 @@
 
 namespace App\Repository;
 
+use App\Entity\Paid;
+use App\Entity\Level;
 use App\Entity\Amount;
 use Doctrine\ORM\Query;
 use Doctrine\Persistence\ManagerRegistry;
@@ -37,13 +39,21 @@ class AmountRepository extends ServiceEntityRepository
         return $qb->orderBy('a.updated_at', 'DESC')->getQuery();
     }
 
-    //    public function findOneBySomeField($value): ?Amount
-    //    {
-    //        return $this->createQueryBuilder('a')
-    //            ->andWhere('a.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+
+    public function findAllForLevel(Level $level): ?Amount
+    {
+        $qb = $this->createQueryBuilder('a')
+            ->innerJoin('a.installments', 'ci')
+            ->innerJoin('a.programme', 'p')
+            ->innerJoin('p.levels', 'cl')
+            ->addSelect('cl', 'ci', 'p');
+
+
+        $qb->where('cl.id = :level');
+
+
+        $qb->setParameter('level', $level);
+
+        return $qb->getQuery()->getOneOrNullResult();
+    }
 }

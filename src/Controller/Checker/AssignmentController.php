@@ -3,6 +3,7 @@
 
 namespace App\Controller\Checker;
 
+use App\Entity\User;
 use App\Entity\Assignment;
 use App\Hydrate\HydrateAssignment;
 use App\Form\FilterAssignmentFormType;
@@ -23,17 +24,22 @@ class  AssignmentController extends AbstractController
     Request $request
   ): Response {
 
+    /**
+     * @var User
+     */
+    $user = $this->getUser();
+
     $hydrate = new HydrateAssignment();
 
     $form = $this->createForm(FilterAssignmentFormType::class, $hydrate);
     $form->handleRequest($request);
 
+
     $assignments = $paginator->paginate(
-      $repository->findSearchQuery($hydrate),
-      $request->get('page', 1)
+      $repository->findSearchQueryForChecker($user->getChecker(), $hydrate),
     );
 
-    return $this->render('student/assignment/index.html.twig', [
+    return $this->render('checker/assignment/index.html.twig', [
       'assignments' => $assignments,
       'form' => $form
     ]);
@@ -42,6 +48,6 @@ class  AssignmentController extends AbstractController
   #[Route('/assignment/{id}', name: 'assignment.show', methods: ['GET'], requirements: ['id' => REGEX_ID])]
   public function show(Assignment $assignment): Response
   {
-    return $this->render('student/assignment/show.html.twig', compact('assignment'));
+    return $this->render('checker/assignment/show.html.twig', compact('assignment'));
   }
 }

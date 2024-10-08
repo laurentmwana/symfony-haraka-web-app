@@ -4,6 +4,20 @@
 
 {% block body %}
 <div class="container py-12">
-  <h2>Nous contacter</h2>
+  <twig:PageHeader class="mb-3" title="Nous contacter">
+    Vous avez un problème technique ? Vous souhaitez envoyer des
+    commentaires sur une fonctionnalité bêta ? Besoin de détails sur notre
+    plan Business ? Faites le nous savoir.
+  </twig:PageHeader>
+
+  <div class="grid grid-cols-3 gap-5">
+    <div>
+      {% include "contact/_contact-use-info.html.twig" %}
+    </div>
+    <div>
+      {% include "contact/_form-contact.html.twig" with {form: form} %}
+    </div>
+  </div>
+
 </div>
 {% endblock %}

@@ -1,0 +1,12 @@
+<twig:Card>
+  {{ form_start(form) }}
+  {{ form_row(form.name) }}
+  {{ form_row(form.email) }}
+  {{ form_row(form.subject) }}
+  {{ form_row(form.message) }}
+
+  <twig:Button type="submit">
+    Envoyer
+  </twig:Button>
+  {{ form_end(form) }}
+</twig:Card>

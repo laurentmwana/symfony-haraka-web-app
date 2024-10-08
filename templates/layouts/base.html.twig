@@ -44,12 +44,7 @@
 
             <div class="relative" id="dropdown-menu">
               <button id="dropdown-trigger" class="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5">
-                  <circle cx="12" cy="12" r="10"></circle>
-                  <circle cx="12" cy="10" r="3"></circle>
-                  <path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662"></path>
-                </svg>
+                {% include "shared/profiler-trigger.html.twig" with {user: user} %}
               </button>
               <div id="dropdown-content"
                 class="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 hidden">

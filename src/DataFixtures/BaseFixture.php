@@ -177,6 +177,7 @@ class BaseFixture extends Fixture
 
 
         $admin =  (new User())
+            ->setUsername('padoda')
             ->setRoles([RoleEnum::ROLE_ADMIN->value])
             ->setEmail('admin@gmail.com')
             ->setPassword('$2y$13$A4SPgHvZ5jWVqNkvFErFcuw6/ceNhxOBIYQK4nIoIBWbunkdBjN/O');
@@ -187,6 +188,8 @@ class BaseFixture extends Fixture
         foreach ($checkers as $checker) {
 
             $user =  (new User())
+                ->setUsername($faker->unique()->userName())
+
                 ->setRoles([RoleEnum::ROLE_CHECKER->value])
                 ->setEmail($faker->email())
                 ->setPassword('$2y$13$A4SPgHvZ5jWVqNkvFErFcuw6/ceNhxOBIYQK4nIoIBWbunkdBjN/O')
@@ -217,6 +220,8 @@ class BaseFixture extends Fixture
 
 
             $user =  (new User())
+                ->setUsername($faker->unique()->userName())
+
                 ->setRoles([RoleEnum::ROLE_STUDENT->value])
                 ->setEmail($faker->email())
                 ->setPassword('$2y$13$A4SPgHvZ5jWVqNkvFErFcuw6/ceNhxOBIYQK4nIoIBWbunkdBjN/O')

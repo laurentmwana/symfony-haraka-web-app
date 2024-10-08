@@ -3,7 +3,10 @@
 namespace App\Repository;
 
 use App\Entity\Paid;
+use App\Entity\Level;
+use App\Entity\Amount;
 use App\Entity\Payment;
+use App\Entity\Student;
 use Doctrine\ORM\Query;
 use App\Hydrate\HydratePayment;
 use Doctrine\Persistence\ManagerRegistry;
@@ -19,8 +22,11 @@ class PaymentRepository extends ServiceEntityRepository
         parent::__construct($registry, Payment::class);
     }
 
-    public function findAllPaid(Paid $paid): array
-    {
+    public function findAllForStudent(
+        Amount $amount,
+        Student $student,
+        Level $level
+    ): array {
         $qb = $this->createQueryBuilder('p')
             ->innerJoin('p.student', 's')
             ->innerJoin('p.level', 'l')
@@ -29,10 +35,15 @@ class PaymentRepository extends ServiceEntityRepository
             ->innerJoin('p.installment', 'i')
             ->addSelect('s', 'l', 'ci', 'i', 'a');
 
-        $qb->where('p.student = :student')
-            ->andWhere('p.level = :level');
-        $qb->setParameter('student', $paid->getStudent())
-            ->setParameter('level', $paid->getLevel());
+        $qb
+            ->andWhere('s.id = :student')
+            ->andWhere('a.id = :amount')
+            ->andWhere('l.id = :level');
+
+        $qb
+            ->setParameter('student', $student)
+            ->setParameter('level', $level)
+            ->setParameter('amount', $amount);
 
         return $qb->orderBy('p.payment_at', 'DESC')
             ->getQuery()->getResult();

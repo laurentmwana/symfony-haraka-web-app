@@ -22,6 +22,52 @@ class AssignmentRepository extends ServiceEntityRepository
         parent::__construct($registry, Assignment::class);
     }
 
+    public function findSearchQueryForChecker(
+        Checker $checker,
+        HydrateAssignment $hydrateAssignment
+    ): Query {
+        $qb = $this->createQueryBuilder('a')
+            ->leftJoin('a.expenseControl', 'e')
+            ->innerJoin('e.yearAcademics', 'y')
+            ->leftJoin('a.faculty', 'f')
+            ->innerJoin('a.checkers', 'c')
+            ->addSelect('e', 'f', 'c', 'y');
+
+        $qb->where('c.id = :checker');
+
+        $qb->setParameter('checker', $checker);
+
+        if ($hydrateAssignment->getExpenseControl() instanceof ExpenseControl) {
+            $qb->andWhere('a.expenseControl = :expenseControl')
+                ->setParameter('expenseControl', $hydrateAssignment->getExpenseControl());
+        }
+
+        if ($hydrateAssignment->getYearAcademic() instanceof YearAcademic) {
+            $qb->andWhere('y.id = :yearAcademic')
+                ->setParameter(
+                    'yearAcademic',
+                    $hydrateAssignment->getYearAcademic()->getId()
+                );
+        }
+
+        if ($hydrateAssignment->getQuery() !== null && !empty($hydrateAssignment->getQuery())) {
+            $query = $hydrateAssignment->getQuery();
+
+            $qb->andWhere($qb->expr()->orX(
+                $qb->expr()->like('y.id', ':q'),
+                $qb->expr()->like('y.name', ':q'),
+                $qb->expr()->like('y.closed', ':q'),
+                $qb->expr()->like('f.id', ':q'),
+                $qb->expr()->like('f.name', ':q'),
+                $qb->expr()->like('y.created_at', ':q'),
+            ))
+                ->setParameter('q', "%$query%");
+        }
+
+
+        return $qb->orderBy('a.updated_at', 'DESC')->getQuery();
+    }
+
 
     public function findSearchQuery(HydrateAssignment $hydrateAssignment): Query
     {

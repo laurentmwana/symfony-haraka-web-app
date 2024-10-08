@@ -1,9 +1,64 @@
-{% extends 'layouts/student.html.twig' %}
-
+{% extends 'layouts/checker.html.twig' %}
 {% block title "Mon profil" %}
+{%block body %}
 
-{% block body %}
-<div class="container py-12">
-  <h2>Mon profil</h2>
-</div>
+{{ form_start(form) }}
+
+<twig:Card>
+  <div class="max-w-xl mb-4">
+    <h1 class="mb-3 text-base font-semibold text-slate-700 dark:text-gray-300">
+      Information du profil
+    </h1>
+  </div>
+  <div class="max-w-xl ">
+    {{ form_row(form.username) }}
+    {{ form_row(form.email) }}
+  </div>
+</twig:Card>
+
+<twig:Card>
+  <div class="max-w-xl mb-4">
+    <h1 class="mb-3 text-base font-semibold text-slate-700 dark:text-gray-300">
+      Mot de passe
+    </h1>
+    <p class="text-sm text-muted-foreground">
+      Lorem ipsum dolor sit amet consectetur adipos quaerat iure
+      quibusdam molestias voluptatibus non sit dolor.
+    </p>
+  </div>
+  <div class="max-w-xl ">
+    {{ form_row(form.password) }}
+    {{ form_row(form.confirmation_password) }}
+  </div>
+  <twig:Button type="submit">
+    Sauvegarder
+  </twig:Button>
+
+</twig:Card>
+
+
+<twig:Card>
+  <div class="max-w-xl mb-4">
+    <h1 class="mb-3 text-base font-semibold text-slate-700 dark:text-gray-300">
+      Suppression du compte
+    </h1>
+    <p class="text-sm text-muted-foreground mb-2">
+      Si vous envisagez de supprimer votre compte, nous vous encourageons à contacter l'administrateur principal. Il
+      sera en mesure de vous fournir des informations supplémentaires sur les implications de cette décision et de vous
+      guider dans le processus. Veuillez garder à l'esprit que la suppression de votre compte est une action
+      irréversible, et toutes les données associées seront définitivement perdues.
+    </p>
+  </div>
+</twig:Card>
+
+
+
+
+
+
+
+{{ form_end(form) }}
+
+
+
 {% endblock %}

@@ -2,6 +2,7 @@
 
 namespace App\Controller\Checker;
 
+use App\Entity\User;
 use App\Entity\ExpenseControl;
 use Knp\Component\Pager\PaginatorInterface;
 use App\Repository\ExpenseControlRepository;
@@ -19,12 +20,13 @@ class  ExpenseControlController extends AbstractController
     PaginatorInterface $paginator,
     Request $request
   ): Response {
+
     $expenseControls = $paginator->paginate(
       $repository->findSearchQuery($request->get('query')),
       $request->get('page', 1)
     );
 
-    return $this->render('student/expense-control/index.html.twig', [
+    return $this->render('checker/expense-control/index.html.twig', [
       'expenseControls' => $expenseControls
     ]);
   }
@@ -32,6 +34,6 @@ class  ExpenseControlController extends AbstractController
   #[Route('/expense-control/{id}', name: 'expense-control.show', methods: ['GET'], requirements: ['id' => REGEX_ID])]
   public function show(ExpenseControl $expenseControl): Response
   {
-    return $this->render('student/expense-control/show.html.twig', compact('expenseControl'));
+    return $this->render('checker/expense-control/show.html.twig', compact('expenseControl'));
   }
 }

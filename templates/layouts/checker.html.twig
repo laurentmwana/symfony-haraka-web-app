@@ -21,7 +21,7 @@
         <div id="sidebarMenu" class="hidden border-r bg-muted/40 md:block">
             <div class="flex h-full max-h-screen flex-col gap-2">
                 <div class="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
-                    {% include 'shared/logo.html.twig' with {homeUrl: path('dashboard.index')} %}
+                    {% include 'shared/logo.html.twig' with {homeUrl: path('^dashboard')} %}
                     <button class="ml-auto h-8 w-8 rounded-md border border-gray-300">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -32,7 +32,7 @@
                     </button>
                 </div>
                 <nav class="grid items-start px-4 text-sm font-medium">
-                    <a href="{{ path('#dashboard') }}"
+                    <a href="{{ path('^dashboard') }}"
                         class="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -42,46 +42,20 @@
                         </svg>
                         Tableau de bord
                     </a>
-                    <div class="relative" id="dropdown-menu">
-                        <button id="dropdown-trigger"
-                            class="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900">
-                            <i class="bi bi-backpack4"></i>
-                            Paiement
-                        </button>
-                        <div id="dropdown-content"
-                            class="absolute z-30 left-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 hidden">
-                            <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="dropdown-menu">
-                                <a href="{{ path('#paid.index') }}"
-                                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                    role="menuitem">Voir</a>
-                                <a href="{{ path('#paid.index') }}"
-                                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                    role="menuitem">Effectuer un paiement</a>
-                            </div>
-                        </div>
-                    </div>
 
-                    <div class="relative" id="dropdown-menu">
-                        <button id="dropdown-trigger"
-                            class="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900">
-                            <i class="bi bi-toggles2"></i>
-                            Contrôle
-                        </button>
-                        <div id="dropdown-content"
-                            class="absolute z-30 left-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 hidden">
-                            <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="dropdown-menu">
-                                <a href="{{ path('#checker.index') }}"
-                                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                    role="menuitem">Vérificateur</a>
-                                <a href="{{ path('#expense-control.index') }}"
-                                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">
-                                    Condition de vérification
-                                </a>
-                            </div>
-                        </div>
-                    </div>
+                    <a href="{{ path('^amount.index') }}"
+                        class="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900">
+                        <i class="bi bi-cash"></i>
+                        Montant
+                    </a>
 
-                    <a href="{{ path('#assignment.index') }}"
+                    <a href="{{ path('^expense-control.index') }}"
+                        class="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900">
+                        <i class="bi bi-toggles2"></i>
+                        Condition de vérification
+                    </a>
+
+                    <a href="{{ path('^assignment.index') }}"
                         class="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900">
                         <i class="bi bi-arrow-repeat"></i>
                         Affectation
@@ -95,25 +69,13 @@
             <!-- Responsive Menu -->
             <header class="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6">
                 <button id="menuToggle" class="h-8 w-8 rounded-md border border-gray-300 md:hidden">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                        class="h-4 w-4 mx-auto">
-                        <line x1="4" x2="20" y1="12" y2="12"></line>
-                        <line x1="4" x2="20" y1="6" y2="6"></line>
-                        <line x1="4" x2="20" y1="18" y2="18"></line>
-                    </svg>
+                    {% include "shared/profiler-trigger.html.twig" with {user: app.user} %}
                 </button>
                 <div class="flex-1"></div>
                 <div class="relative" id="dropdown-menu">
                     <button id="dropdown-trigger"
                         class="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                            class="h-5 w-5">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <circle cx="12" cy="10" r="3"></circle>
-                            <path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662"></path>
-                        </svg>
+                        {% include "shared/profiler-trigger.html.twig" with {user: app.user} %}
                     </button>
                     <div id="dropdown-content"
                         class="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 hidden">
