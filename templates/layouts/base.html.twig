@@ -64,16 +64,15 @@
                     role="menuitem">Tableau de bord</a>
                   {% endif %}
                   <hr class="my-1">
-                  <a href="{{ path('app_logout') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                    role="menuitem">Se déconnecter</a>
+                  {% include "shared/action-logout.html.twig" %}
+
                 </div>
               </div>
-            </div>
-            {% else %}
-            <twig:Button href="{{ path('app_login') }}" variant="outline">
-              Se connecter
-            </twig:Button>
-            {% endif %}
+              {% else %}
+              <twig:Button href="{{ path('app_login') }}" variant="outline">
+                Se connecter
+              </twig:Button>
+              {% endif %}
 
 
 

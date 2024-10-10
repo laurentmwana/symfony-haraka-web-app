@@ -1,0 +1,51 @@
+{% extends 'layouts/auth.html.twig' %}
+
+{% block title %}Reset your password{% endblock %}
+
+
+
+{% block body %}
+{% if app.flashes('reset_password_error') %}
+
+<div role="alert"
+    class="relative mb-2 w-full rounded-lg border p-4 [&amp;>svg~*]:pl-7 [&amp;>svg+div]:translate-y-[-3px] [&amp;>svg]:absolute [&amp;>svg]:left-4 [&amp;>svg]:top-4 border-destructive/50 text-destructive dark:border-destructive [&amp;>svg]:text-destructive">
+    {% for flash_error in app.flashes('reset_password_error') %}
+    <p class="text-sm font-medium mb-1">
+        {{ flash_error }}
+    </p>
+    {% endfor %}
+</div>
+
+{% endif %}
+
+<div class="mb-3">
+    <twig:Card>
+        <h1 class="text-base mb-2 font-semibold text-gray-800 dark:text-gray-50">
+            Réinitialisez votre mot de passe
+        </h1>
+        <p class="text-sm text-muted-foreground">
+            Vous avez oublié votre mot de passe ? Aucun problème. Laissez-nous simplement votre adresse e-mail et nous
+            vous
+            enverrons un mot de passe
+            lien de réinitialisation qui vous permettra d’en choisir un nouveau.
+        </p>
+
+        <div class="mt-2">
+            {{ form_start(requestForm) }}
+            {{ form_row(requestForm.email) }}
+
+            <twig:Button>Envoyer</twig:Button>
+
+            {{ form_end(requestForm) }}
+        </div>
+
+    </twig:Card>
+</div>
+
+
+<twig:Card>
+    <p class="text-muted-foreground text-sm text-center">
+        Vous vous rappelez <a href="{{ path('forgot-password.request') }}" class="underline">de votre mot de passe ?</a>
+    </p>
+</twig:Card>
+{% endblock %}

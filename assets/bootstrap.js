@@ -17,7 +17,9 @@ document.querySelectorAll("#dropdown-menu").forEach((dropdownMenu) => {
 // Toggle Responsive Menu
 const menuToggle = document.getElementById("menuToggle");
 const sidebarMenu = document.getElementById("sidebarMenu");
-menuToggle.addEventListener("click", () => {
-  sidebarMenu.classList.toggle("hidden");
-  sidebarMenu.classList.toggle("block");
-});
+if (sidebarMenu && menuToggle) {
+  menuToggle.addEventListener("click", () => {
+    sidebarMenu.classList.toggle("hidden");
+    sidebarMenu.classList.toggle("block");
+  });
+}

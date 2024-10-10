@@ -1,0 +1,16 @@
+{% extends 'layouts/auth.html.twig' %}
+
+{% block title %}Reset your password{% endblock %}
+
+{% block body %}
+<twig:Card>
+  <h1 class="text-base mb-2 font-semibold text-gray-800 dark:text-gray-50">
+    Réinitialisez votre mot de passe
+  </h1>
+
+  {{ form_start(resetForm) }}
+  {{ form_row(resetForm.plainPassword) }}
+  <twig:Button variant="outline">Réinitialiser</twig:Button>
+  {{ form_end(resetForm) }}
+</twig:Card>
+{% endblock %}
