@@ -12,9 +12,10 @@ use App\Repository\StudentRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Validator\Constraints as Validator;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
-use Symfony\Component\Validator\Constraints as Validator;
 
 
 class UserCheckerFormType extends AbstractType
@@ -38,6 +39,10 @@ class UserCheckerFormType extends AbstractType
                 'choice_label' => fn(?Checker $checker) => Formatter::checker($checker),
                 'choices' => $this->checkerRepository->findAll(),
             ])
+            ->add('file', FileType::class, [
+                'required' => false,
+            ])
+
         ;
     }
 

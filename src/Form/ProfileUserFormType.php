@@ -18,8 +18,6 @@ use Symfony\Component\Validator\Constraints as Validator;
 
 class ProfileUserFormType extends AbstractType
 {
-    public function __construct(private CheckerRepository $checkerRepository) {}
-
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder

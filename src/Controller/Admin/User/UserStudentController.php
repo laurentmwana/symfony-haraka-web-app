@@ -59,6 +59,7 @@ class UserStudentController extends AbstractController
         $user->setPassword($hashPassword);
       }
 
+      $user->setUpdatedAt(new \DateTime());
       $user->setRoles([RoleEnum::ROLE_STUDENT->value]);
 
       $this->em->persist($user);

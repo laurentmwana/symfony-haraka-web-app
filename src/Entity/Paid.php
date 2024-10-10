@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Enum\PaidEnum;
 use App\Repository\PaidRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -32,11 +34,18 @@ class Paid
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $updated_at = null;
 
+    /**
+     * @var Collection<int, Qrcode>
+     */
+    #[ORM\OneToMany(targetEntity: Qrcode::class, mappedBy: 'paid', orphanRemoval: true)]
+    private Collection $qrcodes;
+
     public function __construct()
     {
         $this->created_at = new \DateTime();
         $this->updated_at = new \DateTime();
         $this->state = PaidEnum::NO_PAID;
+        $this->qrcodes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -100,6 +109,36 @@ class Paid
     public function setUpdatedAt(?\DateTimeInterface $updated_at): static
     {
         $this->updated_at = $updated_at;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Qrcode>
+     */
+    public function getQrcodes(): Collection
+    {
+        return $this->qrcodes;
+    }
+
+    public function addQrcode(Qrcode $qrcode): static
+    {
+        if (!$this->qrcodes->contains($qrcode)) {
+            $this->qrcodes->add($qrcode);
+            $qrcode->setPaid($this);
+        }
+
+        return $this;
+    }
+
+    public function removeQrcode(Qrcode $qrcode): static
+    {
+        if ($this->qrcodes->removeElement($qrcode)) {
+            // set the owning side to null (unless already changed)
+            if ($qrcode->getPaid() === $this) {
+                $qrcode->setPaid(null);
+            }
+        }
 
         return $this;
     }

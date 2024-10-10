@@ -1,9 +1,24 @@
-{% extends 'layouts/checker.html.twig' %}
+{% extends 'layouts/student.html.twig' %}
 {% block title "Mon profil" %}
 {%block body %}
 
 {{ form_start(form) }}
 <div class="flex flex-col gap-5">
+
+  <div class="max-x-md mx-auto">
+    <twig:Card class="flex items-center justify-center flex-col">
+      <div class="relative flex h-16 w-16 cursor-pointer mb-3 shrink-0 overflow-hidden rounded-full">
+        {% if app.user.filePath %}
+        <img src="{{ vich_uploader_asset(app.user, 'file') }}">
+        {% else %}
+        <img class="aspect-square h-full w-full" src="/images/default-user.png" alt="">
+        {% endif %}
+      </div>
+      <twig:Badge type="outline">
+        Etudiant
+      </twig:Badge>
+    </twig:Card>
+  </div>
 
   <twig:Card>
     <div class="max-w-xl mb-4">
@@ -29,7 +44,6 @@
     </div>
     <div class="max-w-xl ">
       {{ form_row(form.password) }}
-      {{ form_row(form.confirmation_password) }}
     </div>
     <twig:Button type="submit">
       Sauvegarder

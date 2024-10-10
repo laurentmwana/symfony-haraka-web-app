@@ -12,7 +12,7 @@ use Doctrine\ORM\Event\PrePersistEventArgs;
 
 final class YearClosedSubscriber
 {
-  public function prePersist(PrePersistEventArgs $args)
+  public function prePersist(PrePersistEventArgs $args): void
   {
     $model = $args->getObject();
 

@@ -22,6 +22,12 @@ class PaymentRepository extends ServiceEntityRepository
         parent::__construct($registry, Payment::class);
     }
 
+    /**
+     * @param \App\Entity\Amount $amount
+     * @param \App\Entity\Student $student
+     * @param \App\Entity\Level $level
+     * @return Payment[]
+     */
     public function findAllForStudent(
         Amount $amount,
         Student $student,

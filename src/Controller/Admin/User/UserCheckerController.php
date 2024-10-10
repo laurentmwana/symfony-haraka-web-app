@@ -58,7 +58,7 @@ class UserCheckerController extends AbstractController
 
         $user->setPassword($hashPassword);
       }
-
+      $user->setUpdatedAt(new \DateTime());
       $user->setRoles([RoleEnum::ROLE_CHECKER->value]);
 
       $this->em->persist($user);

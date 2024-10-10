@@ -69,17 +69,16 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $qb = $this->createQueryBuilder('u');
 
         if (null !== $query && !empty($query)) {
-            $qb->where($qb->expr()->orX(
+            $qb->andWhere($qb->expr()->orX(
                 $qb->expr()->like('u.id', ':val'),
                 $qb->expr()->like('u.username', ':val'),
                 $qb->expr()->like('u.email', ':val'),
-                $qb->expr()->like('u.roles', ':val'),
                 $qb->expr()->like('u.created_at', ':val')
             ))
                 ->setParameter('val', "%$query%");
         }
 
-        $qb->where($qb->expr()->orX(
+        $qb->andWhere($qb->expr()->orX(
             $qb->expr()->like('u.roles', ':student'),
         ));
 
