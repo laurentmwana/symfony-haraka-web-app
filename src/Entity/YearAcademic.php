@@ -7,31 +7,112 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Metadata as Metadata;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: YearAcademicRepository::class)]
+#[Metadata\ApiResource(
+    operations: [
+        new Metadata\Get(
+            uriTemplate: '/year-academics/{id}',
+            normalizationContext: [
+                'groups' => [
+                    'read:yearAcademic:item',
+                ]
+            ],
+        ),
+        new Metadata\GetCollection(
+            uriTemplate: '/year-academics',
+            normalizationContext: [
+                'groups' => [
+                    'read:yearAcademic:collection',
+                ]
+            ],
+        )
+    ],
+), Metadata\ApiFilter(
+    SearchFilter::class,
+    properties: [
+        'id' => 'partial',
+        'name' => 'partial',
+        'closed' => 'exact',
+        'created_at' => 'partial'
+    ]
+)]
 class YearAcademic
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(
+        [
+            'read:yearAcademic:collection',
+            'read:yearAcademic:item',
+            'read:level:collection',
+            'read:level:item',
+            'read:student:item',
+            'read:paid:collection',
+            'read:paid:item',
+        ]
+    )]
     private ?int $id = null;
 
     #[ORM\Column(length: 255, unique: true)]
+    #[Groups(
+        [
+            'read:yearAcademic:collection',
+            'read:yearAcademic:item',
+            'read:level:collection',
+            'read:level:item',
+            'read:student:item',
+            'read:paid:collection',
+            'read:paid:item',
+        ]
+    )]
     private ?string $name = null;
 
     #[ORM\Column]
+    #[Groups(
+        [
+            'read:yearAcademic:collection',
+            'read:yearAcademic:item',
+            'read:level:collection',
+            'read:level:item',
+            'read:student:item',
+        ]
+    )]
     private ?bool $closed = false;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups(
+        [
+            'read:yearAcademic:collection',
+            'read:yearAcademic:item',
+        ]
+    )]
     private ?\DateTimeInterface $created_at = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Groups(
+        [
+            'read:yearAcademic:collection',
+            'read:yearAcademic:item',
+
+        ]
+    )]
     private ?\DateTimeInterface $closed_at = null;
+
 
     /**
      * @var Collection<int, Amount>
      */
     #[ORM\OneToMany(targetEntity: Amount::class, mappedBy: 'yearAcademic', orphanRemoval: true)]
+    #[Groups(
+        [
+            'read:yearAcademic:item',
+        ]
+    )]
     private Collection $amounts;
 
     /**

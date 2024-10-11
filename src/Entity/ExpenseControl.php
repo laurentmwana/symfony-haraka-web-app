@@ -8,24 +8,68 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Validator;
+use ApiPlatform\Metadata as Metadata;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 
 #[ORM\Entity(repositoryClass: ExpenseControlRepository::class)]
+#[Metadata\ApiResource(
+    operations: [
+        new Metadata\Get(
+            normalizationContext: [
+                'groups' => [
+                    'read:expense-control:item',
+                ]
+            ],
+        ),
+        new Metadata\GetCollection(
+            normalizationContext: [
+                'groups' => [
+                    'read:expense-control:collection',
+                ]
+            ],
+        )
+    ],
+), Metadata\ApiFilter(
+    SearchFilter::class,
+    properties: [
+        'id' => 'partial',
+        'start_at' => 'partial',
+        'end_at' => 'partial',
+        'description' => 'partial',
+        'created_at' => 'partial'
+    ]
+)]
 class ExpenseControl
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups([
+        'read:expense-control:collection',
+        'read:expense-control:item',
+
+    ])]
     private ?int $id = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     #[Validator\NotBlank()]
+    #[Groups([
+        'read:expense-control:collection',
+        'read:expense-control:item',
+
+    ])]
 
     private ?\DateTimeInterface $start_at = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     #[Validator\NotBlank()]
+    #[Groups([
+        'read:expense-control:collection',
+        'read:expense-control:item',
 
+    ])]
     private ?\DateTimeInterface $end_at = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
@@ -33,9 +77,18 @@ class ExpenseControl
     private ?string $description = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups([
+        'read:expense-control:collection',
+        'read:expense-control:item',
+
+    ])]
     private ?\DateTimeInterface $created_at = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Groups([
+        'read:expense-control:item',
+
+    ])]
     private ?\DateTimeInterface $updated_at = null;
 
     /**
@@ -43,13 +96,20 @@ class ExpenseControl
      */
     #[ORM\ManyToMany(targetEntity: YearAcademic::class, inversedBy: 'expenseControls')]
     #[Validator\NotBlank()]
+    #[Groups([
+        'read:expense-control:item',
 
+    ])]
     private Collection $yearAcademics;
 
     /**
      * @var Collection<int, Assignment>
      */
     #[ORM\OneToMany(targetEntity: Assignment::class, mappedBy: 'expenseControl', orphanRemoval: true)]
+    #[Groups([
+        'read:expense-control:item',
+
+    ])]
     private Collection $assignments;
 
 

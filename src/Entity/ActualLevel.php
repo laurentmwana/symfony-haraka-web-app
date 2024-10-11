@@ -5,8 +5,8 @@ namespace App\Entity;
 use App\Repository\ActualLevelRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Validator\Constraints as Validator;
+use Symfony\Component\Serializer\Annotation\Groups;
+
 
 #[ORM\Entity(repositoryClass: ActualLevelRepository::class)]
 
@@ -15,14 +15,25 @@ class ActualLevel
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(
+        [
+            'read:student:item',
+        ]
+    )]
     private ?int $id = null;
 
     #[ORM\OneToOne(inversedBy: 'actualLevel', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
+
     private ?Student $student = null;
 
     #[ORM\ManyToOne(inversedBy: 'actualLevels')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(
+        [
+            'read:student:item',
+        ]
+    )]
     private ?Level $level = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]

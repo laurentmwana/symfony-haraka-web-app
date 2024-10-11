@@ -2,25 +2,34 @@
 
 namespace App\Subscriber;
 
-use App\Entity\Paid;
-use App\Entity\Level;
 use App\Entity\Contact;
-use App\Entity\Student;
 use Doctrine\ORM\Events;
-use App\Repository\PaidRepository;
-use Doctrine\ORM\PersistentCollection;
-use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Event\OnFlushEventArgs;
+use Symfony\Component\Mime\Address;
 use Doctrine\ORM\Event\PostPersistEventArgs;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\Mailer\MailerInterface;
+
 
 final class ContactMessageSubscriber
 {
+  public function __construct(private MailerInterface $mailer) {}
+
   public function postPersist(PostPersistEventArgs $args): void
   {
     $contact = $args->getObject();
 
+
     if ($contact instanceof Contact) {
-      // envoyer l'email
+      $email = (new TemplatedEmail())
+        ->from(new Address('contactus@haraka.com', 'Haraka'))
+        ->to((string) $contact->getEmail())
+        ->subject('Nous contacter')
+        ->htmlTemplate('emails/contact-us.html.twig')
+        ->context([
+          'contact' => $contact,
+        ]);
+
+      $this->mailer->send($email);
     }
   }
 

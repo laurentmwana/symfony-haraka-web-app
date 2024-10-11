@@ -9,37 +9,93 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Validator;
+use ApiPlatform\Metadata as Metadata;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: FacultyRepository::class)]
 #[UniqueEntity('name')]
+#[Metadata\ApiResource(
+    operations: [
+        new Metadata\Get(
+            normalizationContext: [
+                'groups' => [
+                    'read:faculty:item',
+                ]
+            ],
+        ),
+        new Metadata\GetCollection(
+            normalizationContext: [
+                'groups' => [
+                    'read:faculty:collection',
+                ]
+            ],
+        )
+    ],
+), Metadata\ApiFilter(
+    SearchFilter::class,
+    properties: [
+        'id' => 'partial',
+        'name' => 'partial',
+        'created_at' => 'partial'
+    ]
+)]
 class Faculty
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(
+        [
+            'read:faculty:collection',
+            'read:faculty:item',
+            'read:department:item',
+        ]
+    )]
     private ?int $id = null;
 
     #[ORM\Column(length: 255, unique: true)]
     #[Validator\NotBlank()]
     #[Validator\Length(min: 2, max: 255)]
+    #[Groups(
+        [
+            'read:faculty:collection',
+            'read:faculty:item',
+            'read:department:item',
+        ]
+    )]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups([
+        'read:faculty:collection',
+        'read:faculty:item',
+        'read:department:item',
+    ])]
     private ?\DateTimeInterface $created_at = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Groups([
+        'read:faculty:item',
+    ])]
     private ?\DateTimeInterface $updated_at = null;
 
     /**
      * @var Collection<int, Department>
      */
     #[ORM\OneToMany(targetEntity: Department::class, mappedBy: 'faculty', orphanRemoval: true)]
+    #[Groups([
+        'read:faculty:item',
+    ])]
     private Collection $departments;
 
     /**
      * @var Collection<int, Assignment>
      */
     #[ORM\OneToMany(targetEntity: Assignment::class, mappedBy: 'faculty', orphanRemoval: true)]
+    #[Groups([
+        'read:faculty:item',
+    ])]
     private Collection $assignments;
 
     public function __construct()

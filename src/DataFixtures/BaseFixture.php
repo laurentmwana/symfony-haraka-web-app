@@ -3,7 +3,6 @@
 namespace App\DataFixtures;
 
 use Faker\Factory;
-use App\Entity\Paid;
 use App\Entity\User;
 use App\Entity\Level;
 use App\Entity\Amount;
@@ -40,7 +39,6 @@ class BaseFixture extends Fixture
         ];
 
         $programmes = [];
-
 
         $years = [];
         for ($start = 2012; $start <= 2022; $start++) {
@@ -156,7 +154,6 @@ class BaseFixture extends Fixture
         }
 
 
-
         $checkers = [];
 
         for ($index = 0; $index < 100; $index++) {
@@ -173,6 +170,7 @@ class BaseFixture extends Fixture
 
             $checkers[] = $c;
         }
+        $manager->flush();
 
 
 
@@ -249,6 +247,5 @@ class BaseFixture extends Fixture
 
             $students[] = $s;
         }
-        $manager->flush();
     }
 }

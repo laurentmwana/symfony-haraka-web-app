@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Validator;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 
 #[ORM\Entity(repositoryClass: InstallmentRepository::class)]
@@ -16,6 +17,11 @@ class Installment
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups([
+        'read:yearAcademic:item',
+        'read:payment:collection',
+        'read:payment:item',
+    ])]
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'installments')]
@@ -26,15 +32,26 @@ class Installment
     #[ORM\Column]
     #[Validator\NotBlank()]
     #[Validator\Regex(REGEX_FLOAT)]
+    #[Groups([
+        'read:yearAcademic:item',
+        'read:payment:collection',
+        'read:payment:item',
+    ])]
     private ?float $price = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+
     private ?\DateTimeInterface $created_at = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $updated_at = null;
 
     #[ORM\Column]
+    #[Groups([
+        'read:yearAcademic:item',
+        'read:payment:collection',
+        'read:payment:item',
+    ])]
     private ?int $priority = null;
 
     /**

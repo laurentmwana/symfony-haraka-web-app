@@ -1,9 +1,17 @@
 {% extends 'layouts/student.html.twig' %}
-
 {% block title "Qrcode de paiement" %}
-
 {% block body %}
-<div class="bg-card p-5">
-  <h2>Qrcode de paiement</h2>
-</div>
+<twig:Card>
+  <div class="max-w-lg mb-4">
+    <h1 class="mb-3 text-base font-semibold text-slate-700 dark:text-gray-300">
+      Qrcode de paiement
+    </h1>
+  </div>
+
+  <div class="flex items-center justify-start gap-x-3 mb-4">
+    <twig:Search placeholder="Rechercher un frais académique" />
+
+  </div>
+
+</twig:Card>
 {% endblock %}

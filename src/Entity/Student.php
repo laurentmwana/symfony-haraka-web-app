@@ -3,7 +3,6 @@
 namespace App\Entity;
 
 use App\Enum\GenderEnum;
-use App\Hydrate\HydrateDefault;
 use App\Repository\StudentRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -12,58 +11,155 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Validator;
+use ApiPlatform\Metadata as Metadata;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 
 
 #[ORM\Entity(repositoryClass: StudentRepository::class)]
 #[UniqueEntity(['number_phone'])]
+#[Metadata\ApiResource(
+    operations: [
+        new Metadata\Get(
+            normalizationContext: [
+                'groups' => [
+                    'read:student:item',
+                ]
+            ],
+        ),
+        new Metadata\GetCollection(
+            normalizationContext: [
+                'groups' => [
+                    'read:student:collection',
+                ]
+            ],
+        )
+    ],
+), Metadata\ApiFilter(
+    SearchFilter::class,
+    properties: [
+        'id' => 'partial',
+        'name' => 'partial',
+        'firstname' => 'partial',
+        'gender' => 'partial',
+        'happy' => 'partial',
+        'number_phone' => 'partial',
+        'created_at' => 'partial'
+    ]
+)]
 class Student
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(
+        [
+            'read:student:collection',
+            'read:student:item',
+            'read:payment:collection',
+            'read:payment:item',
+        ]
+    )]
     private ?int $id = null;
 
     /**
      * @var Collection<int, Level>
      */
     #[ORM\ManyToMany(targetEntity: Level::class, inversedBy: 'students', cascade: ['persist'])]
+    #[Groups(
+        [
+            'read:student:item',
+        ]
+    )]
     private Collection $levels;
 
     #[ORM\Column(length: 255)]
     #[Validator\NotBlank()]
     #[Validator\Length(min: 3, max: 255)]
+    #[Groups(
+        [
+            'read:student:collection',
+            'read:student:item',
+            'read:payment:collection',
+            'read:payment:item',
+        ]
+    )]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
     #[Validator\NotBlank()]
     #[Validator\Length(min: 2, max: 255)]
+    #[Groups(
+        [
+            'read:student:collection',
+            'read:student:item',
+            'read:payment:collection',
+            'read:payment:item',
+        ]
+    )]
     private ?string $firstname = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Validator\Length(min: 2, max: 255)]
+    #[Groups(
+        [
+            'read:student:item',
+        ]
+    )]
     private ?string $lastname = null;
 
     #[ORM\Column(enumType: GenderEnum::class)]
     #[Validator\NotBlank()]
+    #[Groups(
+        [
+            'read:student:collection',
+            'read:student:item',
+            'read:payment:collection',
+            'read:payment:item',
+        ]
+    )]
     private ?GenderEnum $gender = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     #[Validator\NotBlank()]
+    #[Groups(
+        [
+            'read:student:item',
+        ]
+    )]
     private ?\DateTimeInterface $happy = null;
 
     #[ORM\Column(length: 255, unique: true)]
     #[Validator\NotBlank()]
     #[Validator\Length(min: 2, max: 255)]
+    #[Groups(
+        [
+            'read:student:item',
+        ]
+    )]
     private ?string $number_phone = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups(
+        [
+            'read:student:collection',
+            'read:student:item',
+        ]
+    )]
     private ?\DateTimeInterface $created_at = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Groups(
+        [
+            'read:student:item',
+        ]
+    )]
     private ?\DateTimeInterface $updated_at = null;
 
     #[ORM\OneToOne(mappedBy: 'student', cascade: ['persist', 'remove'])]
-    #[Groups(['student:validator:actual'])]
+    #[Groups([
+        'student:validator:actual',
+        'read:student:item'
+    ])]
     private ?ActualLevel $actualLevel = null;
 
     #[ORM\OneToOne(mappedBy: 'student', cascade: ['persist', 'remove'])]
@@ -73,13 +169,24 @@ class Student
      * @var Collection<int, Paid>
      */
     #[ORM\OneToMany(targetEntity: Paid::class, mappedBy: 'student', orphanRemoval: true)]
+    #[Groups(
+        [
+            'read:student:item',
+        ]
+    )]
     private Collection $paids;
 
     /**
      * @var Collection<int, Payment>
      */
     #[ORM\OneToMany(targetEntity: Payment::class, mappedBy: 'student', orphanRemoval: true)]
+    #[Groups(
+        [
+            'read:student:item',
+        ]
+    )]
     private Collection $payments;
+
 
     public function __construct()
     {

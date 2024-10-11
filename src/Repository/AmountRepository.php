@@ -40,6 +40,20 @@ class AmountRepository extends ServiceEntityRepository
     }
 
 
+    public function findOneForLevel(Level $level): ?Amount
+    {
+        $qb = $this->createQueryBuilder('a')
+            ->innerJoin('a.programme', 'p')
+            ->innerJoin('p.levels', 'cl')
+            ->addSelect('cl', 'p');
+
+        $qb->where('cl.id = :level');
+
+        $qb->setParameter('level', $level);
+
+        return $qb->getQuery()->getOneOrNullResult();
+    }
+
     public function findAllForLevel(Level $level): ?Amount
     {
         $qb = $this->createQueryBuilder('a')

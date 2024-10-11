@@ -10,30 +10,86 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Validator;
+use ApiPlatform\Metadata as Metadata;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 
 #[ORM\Entity(repositoryClass: AmountRepository::class)]
 #[UniqueEntity(['programme', 'yearAcademic'], errorPath: 'programme')]
 #[ChangedPriceAmount()]
+#[Metadata\ApiResource(
+    operations: [
+        new Metadata\Get(
+            normalizationContext: [
+                'groups' => [
+                    'read:amount:item',
+                ]
+            ],
+        ),
+        new Metadata\GetCollection(
+            normalizationContext: [
+                'groups' => [
+                    'read:amount:collection',
+                ]
+            ],
+        )
+    ],
+), Metadata\ApiFilter(
+    SearchFilter::class,
+    properties: [
+        'id' => 'partial',
+        'price' => 'partial',
+        'yearAcademic' => 'partial',
+        'max_number_installment' => 'partial',
+        'created_at' => 'partial'
+    ]
+)]
 class Amount
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups([
+        'read:amount:collection',
+        'read:amount:item',
+        'read:yearAcademic:item',
+        'read:payment:collection',
+        'read:payment:item',
+    ])]
     private ?int $id = null;
 
     #[ORM\Column]
     #[Validator\NotBlank()]
     #[Validator\Regex(REGEX_FLOAT)]
+    #[Groups([
+        'read:amount:collection',
+        'read:amount:item',
+        'read:yearAcademic:item',
+        'read:payment:collection',
+        'read:payment:item',
+
+    ])]
     private ?float $price = null;
 
     #[ORM\Column]
     #[Validator\NotBlank()]
     #[Validator\Range(min: 1, max: 5)]
+    #[Groups([
+        'read:amount:collection',
+        'read:amount:item',
+        'read:yearAcademic:item',
+
+    ])]
     private ?int $max_number_installment = null;
 
     #[ORM\ManyToOne(inversedBy: 'amounts')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups([
+        'read:amount:collection',
+        'read:amount:item',
+        'read:yearAcademic:item',
+    ])]
     private ?Programme $programme = null;
 
     #[ORM\ManyToOne(inversedBy: 'amounts')]
@@ -41,6 +97,12 @@ class Amount
     private ?YearAcademic $yearAcademic = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups([
+        'read:amount:collection',
+        'read:amount:item',
+        'read:yearAcademic:item',
+
+    ])]
     private ?\DateTimeInterface $created_at = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
@@ -51,6 +113,11 @@ class Amount
      */
     #[ORM\OneToMany(targetEntity: Installment::class, mappedBy: 'amount', orphanRemoval: true, cascade: ['persist'])]
     #[Validator\Valid()]
+    #[Groups([
+        'read:amount:collection',
+        'read:amount:item',
+        'read:yearAcademic:item',
+    ])]
     private Collection $installments;
 
     #[ORM\Column]

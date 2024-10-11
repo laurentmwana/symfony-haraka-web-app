@@ -8,36 +8,101 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Metadata as Metadata;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: PaidRepository::class)]
+#[Metadata\ApiResource(
+    operations: [
+        new Metadata\Get(
+            normalizationContext: [
+                'groups' => [
+                    'read:paid:item',
+                ]
+            ],
+        ),
+        new Metadata\GetCollection(
+            normalizationContext: [
+                'groups' => [
+                    'read:paid:collection',
+                ]
+            ],
+        )
+    ],
+), Metadata\ApiFilter(
+    SearchFilter::class,
+    properties: [
+        'id' => 'partial',
+        'name' => 'partial',
+        'alias' => 'partial',
+        'created_at' => 'partial'
+    ]
+)]
 class Paid
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(
+        [
+            'read:paid:collection',
+            'read:paid:item',
+        ]
+    )]
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'paids')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(
+        [
+            'read:paid:collection',
+            'read:paid:item',
+        ]
+    )]
     private ?Student $student = null;
 
     #[ORM\ManyToOne(inversedBy: 'paids')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(
+        [
+            'read:paid:collection',
+            'read:paid:item',
+        ]
+    )]
     private ?Level $level = null;
 
     #[ORM\Column(enumType: PaidEnum::class)]
+    #[Groups(
+        [
+            'read:paid:collection',
+            'read:paid:item',
+        ]
+    )]
     private ?PaidEnum $state = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups(
+        [
+            'read:paid:collection',
+            'read:paid:item',
+        ]
+    )]
     private ?\DateTimeInterface $created_at = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Groups(
+        [
+            'read:paid:item',
+        ]
+    )]
     private ?\DateTimeInterface $updated_at = null;
 
     /**
      * @var Collection<int, Qrcode>
      */
     #[ORM\OneToMany(targetEntity: Qrcode::class, mappedBy: 'paid', orphanRemoval: true)]
+
     private Collection $qrcodes;
 
     public function __construct()

@@ -10,47 +10,126 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Repository\CheckerRepository;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Validator;
-
+use ApiPlatform\Metadata as Metadata;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 
 #[ORM\Entity(repositoryClass: CheckerRepository::class)]
 #[UniqueEntity(['number_phone'])]
+#[Metadata\ApiResource(
+    operations: [
+        new Metadata\Get(
+            normalizationContext: [
+                'groups' => [
+                    'read:checker:item',
+                ]
+            ],
+        ),
+        new Metadata\GetCollection(
+            normalizationContext: [
+                'groups' => [
+                    'read:checker:collection',
+                ]
+            ],
+        )
+    ],
+), Metadata\ApiFilter(
+    SearchFilter::class,
+    properties: [
+        'id' => 'partial',
+        'name' => 'partial',
+        'firstname' => 'partial',
+        'gender' => 'partial',
+        'happy' => 'partial',
+        'number_phone' => 'partial',
+        'created_at' => 'partial'
+    ]
+)]
 
 class Checker
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(
+        [
+            'read:checker:collection',
+            'read:checker:item',
+        ]
+    )]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
     #[Validator\NotBlank()]
     #[Validator\Length(min: 3, max: 255)]
+    #[Groups(
+        [
+            'read:checker:collection',
+            'read:checker:item',
+        ]
+    )]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
     #[Validator\NotBlank()]
     #[Validator\Length(min: 3, max: 255)]
+    #[Groups(
+        [
+            'read:checker:collection',
+            'read:checker:item',
+        ]
+    )]
     private ?string $firstname = null;
 
     #[ORM\Column(enumType: GenderEnum::class)]
     #[Validator\NotBlank()]
+    #[Groups(
+        [
+            'read:checker:collection',
+            'read:checker:item',
+        ]
+    )]
     private ?GenderEnum $gender = null;
 
     #[ORM\Column(length: 255, unique: true)]
     #[Validator\NotBlank()]
+    #[Groups(
+        [
+            'read:checker:collection',
+            'read:checker:item',
+        ]
+    )]
     private ?string $number_phone = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups(
+        [
+            'read:checker:collection',
+            'read:checker:item',
+        ]
+    )]
     private ?\DateTimeInterface $created_at = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Groups(
+        [
+            'read:checker:collection',
+            'read:checker:item',
+        ]
+    )]
     private ?\DateTimeInterface $updated_at = null;
 
     /**
      * @var Collection<int, Assignment>
      */
     #[ORM\ManyToMany(targetEntity: Assignment::class, mappedBy: 'checkers')]
+    #[Groups(
+        [
+            'read:checker:collection',
+            'read:checker:item',
+        ]
+    )]
     private Collection $assignments;
 
     #[ORM\OneToOne(mappedBy: 'checker', cascade: ['persist', 'remove'])]

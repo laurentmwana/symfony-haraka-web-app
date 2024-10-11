@@ -6,35 +6,78 @@ use App\Repository\ContactRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Validator;
+use ApiPlatform\Metadata as Metadata;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 
 #[ORM\Entity(repositoryClass: ContactRepository::class)]
+#[Metadata\ApiResource(
+    denormalizationContext: [
+        'groups' => ['write:contact']
+    ],
+    normalizationContext: [
+        'groups' => ['read:contact:item']
+    ],
+    operations: [
+        new Metadata\Post(),
+    ],
+)]
+
 class Contact
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(
+        [
+            'read:contact:item',
+        ]
+    )]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
     #[Validator\NotBlank()]
     #[Validator\Length(min: 2, max: 255)]
+    #[Groups(
+        [
+            'read:contact:item',
+            'write:contact',
+        ]
+    )]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
     #[Validator\NotBlank()]
     #[Validator\Length(max: 255)]
     #[Validator\Email()]
+    #[Groups(
+        [
+            'read:contact:item',
+            'write:contact',
+        ]
+    )]
     private ?string $email = null;
 
     #[ORM\Column(type: Types::TEXT)]
     #[Validator\NotBlank()]
     #[Validator\Length(min: 5, max: 500)]
+    #[Groups(
+        [
+            'read:contact:item',
+            'write:contact',
+        ]
+    )]
     private ?string $subject = null;
 
     #[ORM\Column(type: Types::TEXT)]
     #[Validator\NotBlank()]
     #[Validator\Length(min: 20, max: 8000)]
+    #[Groups(
+        [
+            'read:contact:item',
+            'write:contact',
+        ]
+    )]
     private ?string $message = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]

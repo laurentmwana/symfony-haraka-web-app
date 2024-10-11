@@ -7,35 +7,129 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Repository\LevelRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use ApiPlatform\Metadata as Metadata;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use Symfony\Component\Serializer\Annotation\Groups;
+
 
 #[ORM\Entity(repositoryClass: LevelRepository::class)]
+#[Metadata\ApiResource(
+    operations: [
+        new Metadata\Get(
+            normalizationContext: [
+                'groups' => [
+                    'read:level:item',
+                ]
+            ],
+        ),
+        new Metadata\GetCollection(
+            normalizationContext: [
+                'groups' => [
+                    'read:level:collection',
+                ]
+            ],
+        )
+    ],
+), Metadata\ApiFilter(
+    SearchFilter::class,
+    properties: [
+        'id' => 'partial',
+        'name' => 'partial',
+        'sector' => 'exact',
+        'yearAcademic' => 'exact',
+        'programme' => 'exact',
+        'created_at' => 'partial'
+    ]
+)]
 
 class Level
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(
+        [
+            'read:level:collection',
+            'read:level:item',
+            'read:programme:item',
+            'read:student:item',
+            'read:paid:collection',
+            'read:paid:item',
+            'read:payment:collection',
+            'read:payment:item',
+
+        ]
+    )]
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'levels')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(
+        [
+            'read:level:collection',
+            'read:level:item',
+            'read:student:item',
+            'read:paid:collection',
+            'read:paid:item',
+            'read:payment:collection',
+            'read:payment:item',
+        ]
+    )]
     private ?Programme $programme = null;
 
     #[ORM\ManyToOne(inversedBy: 'levels')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(
+        [
+            'read:level:collection',
+            'read:level:item',
+            'read:programme:item',
+            'read:student:item',
+            'read:paid:collection',
+            'read:paid:item',
+            'read:payment:collection',
+            'read:payment:item',
+        ]
+    )]
     private ?Sector $sector = null;
 
     #[ORM\ManyToOne(inversedBy: 'levels')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(
+        [
+            'read:level:collection',
+            'read:level:item',
+            'read:programme:item',
+            'read:student:item',
+            'read:paid:collection',
+            'read:paid:item',
+            'read:payment:collection',
+            'read:payment:item',
+        ]
+    )]
     private ?YearAcademic $yearAcademic = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups(
+        [
+            'read:level:collection',
+            'read:level:item',
+            'read:programme:item',
+
+        ]
+    )]
     private ?\DateTimeInterface $created_at = null;
 
     /**
      * @var Collection<int, Student>
      */
     #[ORM\ManyToMany(targetEntity: Student::class, mappedBy: 'levels', cascade: ['persist'])]
+    #[Groups(
+        [
+            'read:level:item',
+            'read:programme:item',
+        ]
+    )]
     private Collection $students;
 
     /**
@@ -48,6 +142,12 @@ class Level
      * @var Collection<int, Paid>
      */
     #[ORM\OneToMany(targetEntity: Paid::class, mappedBy: 'level', orphanRemoval: true)]
+    #[Groups(
+        [
+            'read:level:collection',
+            'read:level:item',
+        ]
+    )]
     private Collection $paids;
 
     /**
@@ -59,7 +159,6 @@ class Level
     public function __construct()
     {
         $this->students = new ArrayCollection();
-
         $this->created_at = new \DateTime();
         $this->actualLevels = new ArrayCollection();
         $this->paids = new ArrayCollection();

@@ -7,33 +7,88 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Metadata as Metadata;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: AssignmentRepository::class)]
+#[Metadata\ApiResource(
+    operations: [
+        new Metadata\Get(
+            normalizationContext: [
+                'groups' => [
+                    'read:assignment:item',
+                ]
+            ],
+        ),
+        new Metadata\GetCollection(
+            normalizationContext: [
+                'groups' => [
+                    'read:assignment:collection',
+                ]
+            ],
+        )
+    ],
+), Metadata\ApiFilter(
+    SearchFilter::class,
+    properties: [
+        'id' => 'partial',
+        'name' => 'partial',
+        'alias' => 'partial',
+        'faculty' => 'exact',
+        'created_at' => 'partial'
+    ]
+)]
+
 class Assignment
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups([
+        'read:assignment:collection',
+        'read:assignment:item',
+    ])]
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'assignments')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups([
+        'read:assignment:collection',
+        'read:assignment:item',
+    ])]
     private ?Faculty $faculty = null;
 
     #[ORM\ManyToOne(inversedBy: 'assignments')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups([
+        'read:assignment:collection',
+        'read:assignment:item',
+    ])]
     private ?ExpenseControl $expenseControl = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups([
+        'read:assignment:collection',
+        'read:assignment:item',
+    ])]
     private ?\DateTimeInterface $created_at = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Groups([
+        'read:assignment:collection',
+        'read:assignment:item',
+    ])]
     private ?\DateTimeInterface $updated_at = null;
 
     /**
      * @var Collection<int, Checker>
      */
     #[ORM\ManyToMany(targetEntity: Checker::class, inversedBy: 'assignments')]
+    #[Groups([
+        'read:assignment:collection',
+        'read:assignment:item',
+    ])]
     private Collection $checkers;
 
     public function __construct()

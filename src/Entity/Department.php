@@ -9,44 +9,112 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Validator;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use ApiPlatform\Metadata as Metadata;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 
 #[ORM\Entity(repositoryClass: DepartmentRepository::class)]
 #[UniqueEntity(['alias', 'faculty'], errorPath: 'alias')]
 #[UniqueEntity(['name', 'faculty'], errorPath: 'name')]
+#[Metadata\ApiResource(
+    operations: [
+        new Metadata\Get(
+            normalizationContext: [
+                'groups' => [
+                    'read:department:item',
+                ]
+            ],
+        ),
+        new Metadata\GetCollection(
+            normalizationContext: [
+                'groups' => [
+                    'read:department:collection',
+                ]
+            ],
+        )
+    ],
+), Metadata\ApiFilter(
+    SearchFilter::class,
+    properties: [
+        'id' => 'partial',
+        'name' => 'partial',
+        'alias' => 'partial',
+        'faculty' => 'exact',
+        'created_at' => 'partial'
+    ]
+)]
 
 class Department
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(
+        [
+            'read:department:collection',
+            'read:department:item',
+        ]
+    )]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
     #[Validator\NotBlank()]
     #[Validator\Length(min: 2, max: 255)]
+    #[Groups(
+        [
+            'read:department:collection',
+            'read:department:item',
+        ]
+    )]
     private ?string $name = null;
 
     #[ORM\ManyToOne(inversedBy: 'departments')]
     #[ORM\JoinColumn(nullable: false)]
     #[Validator\NotBlank()]
+    #[Groups(
+        [
+            'read:department:item',
+        ]
+    )]
     private ?Faculty $faculty = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups(
+        [
+            'read:department:collection',
+            'read:department:item',
+        ]
+    )]
     private ?\DateTimeInterface $created_at = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Groups(
+        [
+            'read:department:item',
+        ]
+    )]
     private ?\DateTimeInterface $updated_at = null;
 
     /**
      * @var Collection<int, Sector>
      */
     #[ORM\OneToMany(targetEntity: Sector::class, mappedBy: 'department', orphanRemoval: true)]
+    #[Groups(
+        [
+            'read:department:item',
+        ]
+    )]
     private Collection $sectors;
 
     #[ORM\Column(length: 20)]
     #[Validator\NotBlank()]
     #[Validator\Length(min: 2, max: 20)]
+    #[Groups(
+        [
+            'read:department:item',
+        ]
+    )]
     private ?string $alias = null;
 
     public function __construct()
