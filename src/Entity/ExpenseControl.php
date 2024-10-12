@@ -17,6 +17,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[Metadata\ApiResource(
     operations: [
         new Metadata\Get(
+            uriTemplate: '/expense-controls',
             normalizationContext: [
                 'groups' => [
                     'read:expense-control:item',
@@ -24,6 +25,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
             ],
         ),
         new Metadata\GetCollection(
+            uriTemplate: '/expense-controls/{id}',
             normalizationContext: [
                 'groups' => [
                     'read:expense-control:collection',

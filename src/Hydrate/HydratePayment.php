@@ -38,7 +38,6 @@ final class HydratePayment
     return $this;
   }
 
-
   public function getLevel(): ?Level
   {
     return $this->level;

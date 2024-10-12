@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
@@ -10,30 +12,63 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Validator;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\Serializer\Annotation\Groups;
+use ApiPlatform\Metadata as Metadata;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_USERNAME', fields: ['username'])]
 #[Vich\Uploadable]
+#[Metadata\ApiResource(
+    normalizationContext: [
+        'groups' => [
+            'read:user:item',
+        ]
+    ],
+    operations: [
+        new Metadata\Get(
+            uriTemplate: '/me'
+        ),
+        new Metadata\Post(
+            uriTemplate: '/login'
+        ),
+    ],
+)]
 
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(
+        [
+            'read:user:item',
+        ]
+    )]
 
     private ?int $id = null;
 
     #[ORM\Column(length: 180)]
     #[Validator\NotBlank()]
     #[Validator\Length(min: 5, max: 255)]
+    #[Groups(
+        [
+            'read:user:item',
+        ]
+    )]
     private ?string $email = null;
 
     /**
      * @var list<string> The user roles
      */
     #[ORM\Column]
+    #[Groups(
+        [
+            'read:user:item',
+        ]
+    )]
     private array $roles = [];
 
     /**
@@ -51,6 +86,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, unique: true)]
     #[Validator\NotBlank()]
     #[Validator\Length(min: 6, max: 12)]
+    #[Groups(
+        [
+            'read:user:item',
+        ]
+    )]
     private ?string $username = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
@@ -68,10 +108,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(nullable: true)]
     public ?string $filePath = null;
 
+    /**
+     * @var Collection<int, Notification>
+     */
+    #[ORM\OneToMany(targetEntity: Notification::class, mappedBy: 'user', orphanRemoval: true)]
+    private Collection $notifications;
+
     public function __construct()
     {
         $this->created_at = new \DateTime();
         $this->updated_at = new \DateTime();
+        $this->notifications = new ArrayCollection();
     }
 
 
@@ -210,7 +257,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-
     public function getContentUrl(): ?string
     {
         return $this->contentUrl;
@@ -248,6 +294,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setFilePath(?string $filePath): static
     {
         $this->filePath = $filePath;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Notification>
+     */
+    public function getNotifications(): Collection
+    {
+        return $this->notifications;
+    }
+
+    public function addNotification(Notification $notification): static
+    {
+        if (!$this->notifications->contains($notification)) {
+            $this->notifications->add($notification);
+            $notification->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNotification(Notification $notification): static
+    {
+        if ($this->notifications->removeElement($notification)) {
+            // set the owning side to null (unless already changed)
+            if ($notification->getUser() === $this) {
+                $notification->setUser(null);
+            }
+        }
 
         return $this;
     }

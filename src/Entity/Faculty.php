@@ -98,12 +98,19 @@ class Faculty
     ])]
     private Collection $assignments;
 
+    /**
+     * @var Collection<int, ChoiceMethodPayment>
+     */
+    #[ORM\ManyToMany(targetEntity: ChoiceMethodPayment::class, mappedBy: 'faculties')]
+    private Collection $choiceMethodPayments;
+
     public function __construct()
     {
         $this->departments = new ArrayCollection();
         $this->created_at = new \DateTime();
         $this->updated_at = new \DateTime();
         $this->assignments = new ArrayCollection();
+        $this->choiceMethodPayments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -202,6 +209,33 @@ class Faculty
             if ($assignment->getFaculty() === $this) {
                 $assignment->setFaculty(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ChoiceMethodPayment>
+     */
+    public function getChoiceMethodPayments(): Collection
+    {
+        return $this->choiceMethodPayments;
+    }
+
+    public function addChoiceMethodPayment(ChoiceMethodPayment $choiceMethodPayment): static
+    {
+        if (!$this->choiceMethodPayments->contains($choiceMethodPayment)) {
+            $this->choiceMethodPayments->add($choiceMethodPayment);
+            $choiceMethodPayment->addFaculty($this);
+        }
+
+        return $this;
+    }
+
+    public function removeChoiceMethodPayment(ChoiceMethodPayment $choiceMethodPayment): static
+    {
+        if ($this->choiceMethodPayments->removeElement($choiceMethodPayment)) {
+            $choiceMethodPayment->removeFaculty($this);
         }
 
         return $this;

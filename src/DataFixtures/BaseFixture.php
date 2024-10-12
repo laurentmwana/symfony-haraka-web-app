@@ -170,7 +170,6 @@ class BaseFixture extends Fixture
 
             $checkers[] = $c;
         }
-        $manager->flush();
 
 
 
@@ -247,5 +246,7 @@ class BaseFixture extends Fixture
 
             $students[] = $s;
         }
+
+        $manager->flush();
     }
 }

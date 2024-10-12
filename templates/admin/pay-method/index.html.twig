@@ -1,0 +1,59 @@
+{% extends 'layouts/admin.html.twig' %}
+{% block title "Gestion de mode de paiement" %}
+{% block body %}
+<twig:Card>
+  <div class="max-w-lg mb-4">
+    <h1 class="mb-3 text-base font-semibold text-slate-700 dark:text-gray-300">
+      Gestion de mode de paiement
+    </h1>
+  </div>
+
+  <div class="flex items-center justify-between gap-x-3 mb-4">
+    <twig:Search placeholder="Rechercher un frais académique" />
+    <twig:Button size="default" href="{{ path('~pay-method.create') }}">
+      <i class="bi bi-plus"></i>
+    </twig:Button>
+  </div>
+
+  <twig:Table>
+    <twig:TableHeader>
+      <twig:TableRow>
+        <twig:TableHead> Nom </twig:TableHead>
+        <twig:TableHead> Numéro </twig:TableHead>
+        <twig:TableHead> Créer </twig:TableHead>
+        <twig:TableHead> ... </twig:TableHead>
+      </twig:TableRow>
+    </twig:TableHeader>
+
+    <twig:TableBody>
+      {% for paymentMethod in paymentMethods %}
+      <twig:TableRow>
+        <twig:TableCell>
+          <a class="hover:underline" href="{{ path('~pay-method.show', {id: paymentMethod.id}) }}">
+            {{ paymentMethod.name|u.truncate(40, '...') }}
+          </a>
+        </twig:TableCell>
+        <twig:TableCell>
+          <a class="hover:underline" href="{{ path('~pay-method.show', {id: paymentMethod.id}) }}">
+            {{ paymentMethod.numberAccount|u.truncate(40, '...') }}
+          </a>
+        </twig:TableCell>
+
+        <twig:TableCell>
+          {{ paymentMethod.createdAt|ago }}
+        </twig:TableCell>
+        <twig:TableCell>
+          {% include 'shared/action.html.twig' with {routeDelete: path('~pay-method.delete', {id: paymentMethod.id}),
+          routeEdit:
+          path('~pay-method.edit', {id: paymentMethod.id})} %}
+        </twig:TableCell>
+      </twig:TableRow>
+      {% endfor %}
+    </twig:TableBody>
+  </twig:Table>
+
+  <div>
+    {{ knp_pagination_render(paymentMethods) }}
+  </div>
+</twig:Card>
+{% endblock %}

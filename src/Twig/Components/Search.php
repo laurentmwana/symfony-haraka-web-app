@@ -16,6 +16,6 @@ final class Search
 
   public function value(): string
   {
-    return $this->request->getCurrentRequest()->query->get('query');
+    return $this->request->getCurrentRequest()->query->get('query', '');
   }
 }

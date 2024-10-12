@@ -1,0 +1,67 @@
+{% extends 'layouts/admin.html.twig' %}
+{% block title "Gestion de choix du mode de paiement" %}
+{% block body %}
+<twig:Card>
+  <div class="max-w-lg mb-4">
+    <h1 class="mb-3 text-base font-semibold text-slate-700 dark:text-gray-300">
+      Gestion de choix du mode de paiement
+    </h1>
+  </div>
+
+  <div class="flex items-center justify-between gap-x-3 mb-4">
+    <twig:Search placeholder="Rechercher un frais académique" />
+    <twig:Button size="default" href="{{ path('~choice-pay-method.create') }}">
+      <i class="bi bi-plus"></i>
+    </twig:Button>
+  </div>
+
+  <twig:Table>
+    <twig:TableHeader>
+      <twig:TableRow>
+        <twig:TableHead> Année Académque </twig:TableHead>
+        <twig:TableHead> Paiement </twig:TableHead>
+        <twig:TableHead> Nombres de faculté </twig:TableHead>
+        <twig:TableHead> Créer </twig:TableHead>
+        <twig:TableHead> ... </twig:TableHead>
+      </twig:TableRow>
+    </twig:TableHeader>
+
+    <twig:TableBody>
+      {% for choicePaymentMethod in choicePaymentMethods %}
+      <twig:TableRow>
+        <twig:TableCell>
+          <a class="hover:underline" href="">
+            {{ choicePaymentMethod.yearAcademic.name|u.truncate(20, '...', false) }}
+          </a>
+        </twig:TableCell>
+        <twig:TableCell>
+          <a class="hover:underline" href="{{ path('~pay-method.show', {id: choicePaymentMethod.paymentMethod.id}) }}">
+            {{ choicePaymentMethod.paymentMethod.name|u.truncate(20, '...', false)}}
+          </a>
+        </twig:TableCell>
+
+        <twig:TableCell>
+          <twig:Badge type="outline">
+            {{ choicePaymentMethod.faculties.count }}
+          </twig:Badge>
+        </twig:TableCell>
+
+        <twig:TableCell>
+          {{ choicePaymentMethod.createdAt|ago }}
+        </twig:TableCell>
+        <twig:TableCell>
+          {% include 'shared/action.html.twig' with {routeDelete: path('~choice-pay-method.delete', {id:
+          choicePaymentMethod.id}),
+          routeEdit:
+          path('~choice-pay-method.edit', {id: choicePaymentMethod.id})} %}
+        </twig:TableCell>
+      </twig:TableRow>
+      {% endfor %}
+    </twig:TableBody>
+  </twig:Table>
+
+  <div>
+    {{ knp_pagination_render(choicePaymentMethods) }}
+  </div>
+</twig:Card>
+{% endblock %}
