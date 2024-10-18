@@ -187,6 +187,8 @@ class Student
     )]
     private Collection $payments;
 
+    #[ORM\OneToOne(mappedBy: 'student', cascade: ['persist', 'remove'])]
+    private ?Identificator $identificator = null;
 
     public function __construct()
     {
@@ -418,6 +420,23 @@ class Student
                 $payment->setStudent(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getIdentificator(): ?Identificator
+    {
+        return $this->identificator;
+    }
+
+    public function setIdentificator(Identificator $identificator): static
+    {
+        // set the owning side of the relation if necessary
+        if ($identificator->getStudent() !== $this) {
+            $identificator->setStudent($this);
+        }
+
+        $this->identificator = $identificator;
 
         return $this;
     }

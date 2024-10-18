@@ -4,6 +4,8 @@ namespace App\Twig\Runtime;
 
 use App\Enum\PaidEnum;
 use App\Enum\RoleEnum;
+use App\Entity\Payment;
+use App\Helpers\Statistic;
 use Twig\Extension\RuntimeExtensionInterface;
 
 class HelpersRuntime implements RuntimeExtensionInterface
@@ -71,5 +73,29 @@ class HelpersRuntime implements RuntimeExtensionInterface
     public function isPaidNoTotality(PaidEnum $paidEnum): bool
     {
         return  $paidEnum->value === PaidEnum::PAID_NO_TOTALITY->value;
+    }
+
+    /**
+     * @param array<int, Payment> $payments
+     * @return float
+     */
+    public function calculateTotality(array $payments): float
+    {
+        return Statistic::totality(
+            array_map(
+                fn(Payment $payment) => $payment->getInstallment(),
+                $payments
+            )
+        );
+    }
+
+    /**
+     * @param float|int $amount
+     * @param array<int, Payment> $payments
+     * @return float
+     */
+    public function remainingTotality(float|int $amount, array $payments): float
+    {
+        return $amount - $this->calculateTotality($payments);
     }
 }

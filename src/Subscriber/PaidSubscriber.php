@@ -6,6 +6,8 @@ use App\Entity\Paid;
 use App\Entity\Level;
 use App\Entity\Student;
 use Doctrine\ORM\Events;
+use App\Endroid\EndroidHandle;
+use App\Helpers\TokenGenerator;
 use App\Repository\PaidRepository;
 use Doctrine\ORM\PersistentCollection;
 use Doctrine\ORM\EntityManagerInterface;
@@ -15,7 +17,7 @@ final class PaidSubscriber
 {
   public function __construct(
     private EntityManagerInterface $em,
-    private PaidRepository $paidRepository,
+    private PaidRepository $paidRepository
   ) {}
 
   public function onFlush(OnFlushEventArgs $args): void
@@ -70,9 +72,12 @@ final class PaidSubscriber
 
   private function addPaid(Student $student, Level $level): void
   {
+    $file = EndroidHandle::write(TokenGenerator::alpha(80));
+
     $paid = (new Paid())
       ->setStudent($student)
-      ->setLevel($level);
+      ->setLevel($level)
+      ->setFile($file);
 
     $this->em->persist($paid);
   }

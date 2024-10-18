@@ -15,7 +15,7 @@ document.querySelectorAll("#dropdown-menu").forEach((dropdownMenu) => {
 });
 
 // Toggle Responsive Menu
-const menuToggle = document.getElementById("menuToggle");
+const menuToggle = document.getElementById("menu-toggle-button");
 const sidebarMenu = document.getElementById("sidebarMenu");
 if (sidebarMenu && menuToggle) {
   menuToggle.addEventListener("click", () => {
@@ -23,3 +23,12 @@ if (sidebarMenu && menuToggle) {
     sidebarMenu.classList.toggle("block");
   });
 }
+
+document.querySelectorAll("#responsive-table").forEach((table) => {
+  const labels = Array.from(table.querySelectorAll("th")).map(
+    (th) => th.innerText
+  );
+  table.querySelectorAll("td").forEach((td, index) => {
+    td.setAttribute("data-label", labels[index % labels.length]);
+  });
+});

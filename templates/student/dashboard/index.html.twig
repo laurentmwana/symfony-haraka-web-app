@@ -1,9 +1,15 @@
 {% extends 'layouts/student.html.twig' %}
-
-{% block title "Tableau de bord" %}
+{% block title %}
+Tableau de bord
+{% endblock %}
 
 {% block body %}
-<div class="bg-card p-5">
-  <h2>Tableau de bord</h2>
-</div>
+<twig:Card>
+  <div class="max-w-lg mb-4">
+    <h1 class="mb-3 text-base font-semibold text-slate-700 dark:text-gray-300">
+      Tableau de bord
+    </h1>
+  </div>
+
+</twig:Card>
 {% endblock %}

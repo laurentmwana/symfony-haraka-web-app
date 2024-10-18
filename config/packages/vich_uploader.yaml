@@ -13,3 +13,17 @@ vich_uploader:
       upload_destination: "%kernel.project_dir%/public/picture/payment-method"
       # Will rename uploaded files using a uniqueid as a prefix.
       namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
+    qrcode_student:
+      uri_prefix: /picture/qrcode/student
+      upload_destination: "%kernel.project_dir%/public/picture/qrcode/student"
+      # Will rename uploaded files using a uniqueid as a prefix.
+      namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
+      delete_on_update: true
+      delete_on_remove: true
+    qrcode_slip:
+      uri_prefix: /picture/qrcode/slip
+      upload_destination: "%kernel.project_dir%/public/picture/qrcode/slip"
+      # Will rename uploaded files using a uniqueid as a prefix.
+      namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
+      delete_on_update: true
+      delete_on_remove: true

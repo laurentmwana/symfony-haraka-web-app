@@ -2,7 +2,9 @@
 
 namespace App\Serializer\Normalizer;
 
+use App\Entity\Paid;
 use App\Entity\User;
+use App\Entity\Identificator;
 use Vich\UploaderBundle\Storage\StorageInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
@@ -33,12 +35,16 @@ class ContentUrlNormalizer implements NormalizerInterface
             return false;
         }
 
-        return $data instanceof User;
+        return ($data instanceof Paid)
+            || ($data instanceof User)
+            || ($data instanceof Identificator);
     }
 
     public function getSupportedTypes(?string $format): array
     {
         return [
+            Paid::class => true,
+            Identificator::class => true,
             User::class => true,
         ];
     }

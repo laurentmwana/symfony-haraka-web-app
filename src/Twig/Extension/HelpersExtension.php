@@ -18,6 +18,7 @@ class HelpersExtension extends AbstractExtension
             new TwigFilter('isTotality', [HelpersRuntime::class, 'isTotality']),
             new TwigFilter('isPaidNoTotality', [HelpersRuntime::class, 'isPaidNoTotality']),
             new TwigFilter('isNoPaid', [HelpersRuntime::class, 'isNoPaid']),
+            new TwigFilter('calculateTotality', [HelpersRuntime::class, 'calculateTotality']),
         ];
     }
 
@@ -26,6 +27,8 @@ class HelpersExtension extends AbstractExtension
         return [
             new TwigFunction('cn', [HelpersRuntime::class, 'cn']),
             new TwigFunction('statePaid', [HelpersRuntime::class, 'statePaid']),
+            new TwigFunction('remainingTotality', [HelpersRuntime::class, 'remainingTotality']),
+
         ];
     }
 }

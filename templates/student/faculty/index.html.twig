@@ -1,0 +1,43 @@
+{% extends 'layouts/student.html.twig' %}
+{% block title "Liste des facultés" %}
+{% block body %}
+<twig:Card>
+  <div class="max-w-lg mb-4">
+    <h1 class="mb-3 text-base font-semibold text-slate-700 dark:text-gray-300">
+      Liste des facultés
+    </h1>
+  </div>
+
+  <div class="flex items-center justify-start gap-x-3 mb-4">
+    <twig:Search placeholder="Rechercher une faculté" />
+  </div>
+
+  <twig:Table>
+    <twig:TableHeader>
+      <twig:TableRow>
+        <twig:TableHead> Nom </twig:TableHead>
+        <twig:TableHead> Créer </twig:TableHead>
+      </twig:TableRow>
+    </twig:TableHeader>
+
+    <twig:TableBody>
+      {% for faculty in faculties %}
+      <twig:TableRow>
+        <twig:TableCell>
+          <a class="hover:underline" href="{{ path('#faculty.show', {id: faculty.id}) }}">
+            {{ faculty.name|u.truncate(40, '...', false)}}
+          </a>
+        </twig:TableCell>
+        <twig:TableCell>
+          {{ faculty.createdAt | ago }}
+        </twig:TableCell>
+      </twig:TableRow>
+      {% endfor %}
+    </twig:TableBody>
+  </twig:Table>
+
+  <div>
+    {{ knp_pagination_render(faculties) }}
+  </div>
+</twig:Card>
+{% endblock %}

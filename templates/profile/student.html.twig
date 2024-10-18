@@ -50,7 +50,23 @@
     </twig:Button>
 
   </twig:Card>
-
+  <twig:Card>
+    <div class="max-w-xl mb-4">
+      <h1 class="mb-3 text-base font-semibold text-slate-700 dark:text-gray-300">
+        Identification par Qrcode
+      </h1>
+      <p class="text-sm text-muted-foreground mb-2">
+        Si vous envisagez de supprimer votre compte, nous vous encourageons à contacter l'administrateur principal. Il
+        sera en mesure de vous fournir des informations supplémentaires sur les implications de cette décision et de
+        vous
+        guider dans le processus. Veuillez garder à l'esprit que la suppression de votre compte est une action
+        irréversible, et toutes les données associées seront définitivement perdues.
+      </p>
+    </div>
+    <div class="max-w-xl ">
+      <img width="200px" height="200px" src="{{ vich_uploader_asset(app.user.student.identificator, 'file') }}">
+    </div>
+  </twig:Card>
 
   <twig:Card>
     <div class="max-w-xl mb-4">
@@ -66,6 +82,8 @@
       </p>
     </div>
   </twig:Card>
+
+
 
 </div>
 

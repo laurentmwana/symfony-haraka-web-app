@@ -1,0 +1,55 @@
+{% extends 'layouts/student.html.twig' %}
+{% block title "Liste des options" %}
+{% block body %}
+<twig:Card>
+  <div class="max-w-lg mb-4">
+    <h1 class="mb-3 text-base font-semibold text-slate-700 dark:text-gray-300">
+      Liste des options
+    </h1>
+  </div>
+
+  <div class="flex items-center justify-start gap-x-3 mb-4">
+    <twig:Search placeholder="Rechercher une option" />
+  </div>
+
+  <twig:Table>
+    <twig:TableHeader>
+      <twig:TableRow>
+        <twig:TableHead> Nom </twig:TableHead>
+        <twig:TableHead> Alias </twig:TableHead>
+        <twig:TableHead> Département </twig:TableHead>
+        <twig:TableHead> Créer </twig:TableHead>
+      </twig:TableRow>
+    </twig:TableHeader>
+
+    <twig:TableBody>
+      {% for sector in sectors %}
+      <twig:TableRow>
+        <twig:TableCell>
+          <a class="hover:underline" href="{{ path('#sector.show', {id: sector.id}) }}">
+            {{ sector.name|u.truncate(40, '...', false)}}
+          </a>
+        </twig:TableCell>
+        <twig:TableCell>
+          <a class="hover:underline" href="{{ path('#sector.show', {id: sector.id}) }}">
+            {{ sector.alias|u.truncate(20, '...', false)}}
+          </a>
+        </twig:TableCell>
+        <twig:TableCell>
+          <a class="hover:underline" href="{{ path('~department.show', {id: sector.department.id}) }}">
+            {{ sector.department.name|u.truncate(40, '...', false)}}
+          </a>
+        </twig:TableCell>
+        <twig:TableCell>
+          {{ sector.createdAt|ago }}
+        </twig:TableCell>
+      </twig:TableRow>
+      {% endfor %}
+    </twig:TableBody>
+  </twig:Table>
+
+  <div>
+    {{ knp_pagination_render(sectors) }}
+  </div>
+</twig:Card>
+{% endblock %}

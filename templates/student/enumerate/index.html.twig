@@ -1,52 +1,7 @@
 {% extends 'layouts/student.html.twig' %}
-{% block title "Selection des tranches a payés" %}
+{% block title "En savoir plus sur le statut du paiement" %}
 {% block body %}
-<twig:Card>
-
-  <div class="mb-2">
-    <div class="max-w-lg mb-2">
-      <h1 class="mb-3 text-base font-semibold text-slate-700 dark:text-gray-300">
-        Frais académique de "<a href="{{ path('#amount.show', {id: amount.id}) }}" class="italic text-indigo-800">{{
-          amount.programme.name }}</a> "
-      </h1>
-    </div>
-    <h2 class="text-base font-semibold text-slate-500 dark:text-slate-400 mb-3">
-      {{ amount.price|number_format(2, '.', ',') }} Fc
-    </h2>
-    <ul class="max-w-md space-y-1 text-gray-500 list-inside dark:text-gray-400 ps-4 text-sm">
-      {% for installment in amount.installments %}
-      <li class="flex items-center">
-        <svg class="w-3.5 h-3.5 me-2 text-slate-500 dark:text-slate-400 flex-shrink-0" aria-hidden="true"
-          xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-          <path
-            d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
-        </svg>
-        {{ installment.price|number_format(2, '.', ',') }} Fc
-      </li>
-      {% endfor %}
-    </ul>
-  </div>
-
-  {% if payments is not empty %}
-  <div class="mb-2">
-    <div class="max-w-lg mb-2">
-      <h1 class="mb-3 text-base font-semibold text-slate-700 dark:text-gray-300">
-        Vous avez déjà payé :
-      </h1>
-    </div>
-    <ul class="max-w-md space-y-1 text-gray-500 list-inside dark:text-gray-400 ps-4 text-sm">
-      {% for payment in payments %}
-      <li class="flex items-center">
-        <svg class="w-3.5 h-3.5 me-2 text-green-500 dark:text-green-400 flex-shrink-0" aria-hidden="true"
-          xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-          <path
-            d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
-        </svg>
-        {{ payment.installment.price|number_format(2, '.', ',') }} Fc
-      </li>
-      {% endfor %}
-    </ul>
-  </div>
-  {% endif %}
-</twig:Card>
+{% include "student/paid/_state-paid.html.twig" with {paid: paid, eye: false} %}
+{% include "student/enumerate/_amount-level.html.twig" with {amount: amount} %}
+{% include "student/enumerate/_amount-paid.html.twig" with {payments: payments} %}
 {% endblock %}

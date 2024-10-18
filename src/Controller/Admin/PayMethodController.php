@@ -18,10 +18,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 #[Route('/admin', name: '~')]
 class PayMethodController extends AbstractController
 {
-  public function __construct(
-    private EntityManagerInterface $em,
-    private InstallmentRepository $installmentRepository,
-  ) {}
+  public function __construct(private EntityManagerInterface $em) {}
 
   #[Route('/pay-method', name: 'pay-method.index', methods: ['GET'])]
   public function index(

@@ -3,13 +3,16 @@
 namespace App\DataFixtures;
 
 use Faker\Factory;
+use App\Entity\Paid;
 use App\Entity\User;
 use App\Entity\Level;
 use App\Entity\Amount;
 use App\Entity\Sector;
+use App\Enum\PaidEnum;
 use App\Enum\RoleEnum;
 use App\Entity\Checker;
 use App\Entity\Faculty;
+use App\Entity\Payment;
 use App\Entity\Student;
 use App\Helpers\Number;
 use App\Enum\GenderEnum;
@@ -18,6 +21,7 @@ use App\Entity\Department;
 use App\Entity\ActualLevel;
 use App\Entity\Installment;
 use App\Entity\YearAcademic;
+use App\Repository\PaidRepository;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 
@@ -80,6 +84,7 @@ class BaseFixture extends Fixture
         }
 
         $departments = [];
+
         foreach ($faculties as $faculty) {
             for ($index = 0; $index < 3; $index++) {
                 $name = $faker->text(20);
@@ -171,8 +176,6 @@ class BaseFixture extends Fixture
             $checkers[] = $c;
         }
 
-
-
         $admin =  (new User())
             ->setUsername('padoda')
             ->setRoles([RoleEnum::ROLE_ADMIN->value])
@@ -201,8 +204,6 @@ class BaseFixture extends Fixture
             return array_slice($levels, $startIndex, 3);
         };
 
-
-
         $students = [];
 
         for ($index = 0; $index < 100; $index++) {
@@ -215,10 +216,8 @@ class BaseFixture extends Fixture
                 ->setGender(GenderEnum::from('F'))
                 ->setNumberPhone($faker->phoneNumber());
 
-
             $user =  (new User())
                 ->setUsername($faker->unique()->userName())
-
                 ->setRoles([RoleEnum::ROLE_STUDENT->value])
                 ->setEmail($faker->email())
                 ->setPassword('$2y$13$A4SPgHvZ5jWVqNkvFErFcuw6/ceNhxOBIYQK4nIoIBWbunkdBjN/O')
@@ -239,8 +238,10 @@ class BaseFixture extends Fixture
             foreach ($randomLevels as $l) {
                 $l->addStudent($s);
 
+
                 $manager->persist($l);
             }
+
             $manager->persist($s);
             $manager->persist($user);
 

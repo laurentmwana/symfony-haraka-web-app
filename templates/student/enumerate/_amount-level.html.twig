@@ -1,0 +1,54 @@
+<twig:Card>
+  <div class="mb-2">
+    <div class="max-w-lg mb-2">
+      <h1 class="mb-3 text-sm font-semibold text-slate-700 dark:text-gray-300">
+        Frais académique
+      </h1>
+    </div>
+    <div>
+
+      <div class="mb-3 rounded-md shadow-md px-2 py-1 border inline-block font-bold text-gray-800 dark:text-gray-100">
+        {{ amount.price|number_format(2, '.', ',') }} FC
+      </div>
+
+      <twig:Table>
+        <twig:TableHeader>
+          <twig:TableRow>
+            <twig:TableHead> Tranche </twig:TableHead>
+            <twig:TableHead> Priorité </twig:TableHead>
+            <twig:TableHead> Créer </twig:TableHead>
+            <twig:TableHead> ... </twig:TableHead>
+          </twig:TableRow>
+        </twig:TableHeader>
+
+        <twig:TableBody>
+          {% for installment in amount.installments %}
+          <twig:TableRow>
+            <twig:TableCell>
+              <a class="hover:underline" href="{{ path('~amount.show', {id: amount.id}) }}">
+                {{ installment.price|number_format(2, '.', ',') }} FC
+              </a>
+            </twig:TableCell>
+            <twig:TableCell>
+              <twig:Badge type="outline">
+                {{ installment.priority }}
+              </twig:Badge>
+            </twig:TableCell>
+
+            <twig:TableCell>
+              {{ installment.createdAt | ago }}
+            </twig:TableCell>
+            <twig:TableCell>
+              <div class="flex items-center justify-end gap-x-1">
+                <twig:Button href="{{ path('~amount.show', {id: amount.id}) }}" variant="outline">
+                  <i class="bi bi-gear"></i>
+                </twig:Button>
+              </div>
+            </twig:TableCell>
+          </twig:TableRow>
+          {% endfor %}
+        </twig:TableBody>
+      </twig:Table>
+    </div>
+  </div>
+</twig:Card>

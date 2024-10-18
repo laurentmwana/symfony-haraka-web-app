@@ -33,7 +33,6 @@ services:
       - { name: doctrine.event_listener, event: prePersist }
       - { name: doctrine.event_listener, event: preUpdate }
       - { name: doctrine.event_listener, event: preRemove }
-
-  App\Serializer\Normalizer\ContentUrlNormalizer:
+  App\Subscriber\StudentSubscriber:
     tags:
-      - { name: "serializer.normalizer" }
+      - { name: doctrine.event_listener, event: postPersist }

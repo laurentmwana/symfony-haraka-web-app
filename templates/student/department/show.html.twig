@@ -1,0 +1,16 @@
+{% extends 'layouts/student.html.twig' %}
+
+{% block title %}
+En savoir plus sur le départment #{{ department.id }}
+{% endblock %}
+
+{% block body %}
+<twig:Card>
+  <div class="max-w-lg mb-4">
+    <h1 class="mb-3 text-base font-semibold text-slate-700 dark:text-gray-300">
+      En savoir plus sur le départment #{{ department.id }}
+    </h1>
+  </div>
+
+</twig:Card>
+{% endblock %}

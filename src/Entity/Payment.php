@@ -100,6 +100,11 @@ class Payment
     )]
     private ?\DateTimeInterface $payment_at = null;
 
+    public function __construct()
+    {
+        $this->payment_at = new \DateTime();
+    }
+
     public function getId(): ?int
     {
         return $this->id;

@@ -32,8 +32,7 @@
                     </button>
                 </div>
                 <nav class="grid items-start px-4 text-sm font-medium">
-                    <a href="{{ path('#dashboard') }}"
-                        class="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900">
+                    <a href="{{ path('#dashboard') }}" class="{{ isActiveNavlink(path('#dashboard')) }}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                             class="h-4 w-4">
@@ -43,46 +42,63 @@
                         Tableau de bord
                     </a>
                     <div class="relative" id="dropdown-menu">
-                        <button id="dropdown-trigger"
-                            class="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900">
+                        <div id="dropdown-trigger" class="{{ isActiveNavlink(null, ['/student/edifice']) }}">
                             <i class="bi bi-backpack4"></i>
-                            Paiement
-                        </button>
+                            Edifice
+                        </div>
                         <div id="dropdown-content"
                             class="absolute z-30 left-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 hidden">
                             <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="dropdown-menu">
-                                <a href="{{ path('#paid.index') }}"
-                                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                    role="menuitem">Historique de paiement</a>
-                                <a href="{{ path('#paid.index') }}"
-                                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                    role="menuitem">Dernier paiement</a>
+                                <a href="{{ path('#faculty.index') }}"
+                                    class="{{ isActiveNavlink(path('#faculty.index'), ['/student/edifice/faculty'], {dropdown: true}) }}"
+                                    role="menuitem">Facultés</a>
+                                <a href="{{ path('#department.index') }}"
+                                    class="{{ isActiveNavlink(path('#department.index'), ['/student/edifice/department'], {dropdown: true}) }}"
+                                    role="menuitem">Départements</a>
+                                <a href="{{ path('#sector.index') }}"
+                                    class="{{ isActiveNavlink(path('#sector.index'), ['/student/edifice/sector'], {dropdown: true}) }}"
+                                    role="menuitem">Options</a>
                             </div>
                         </div>
                     </div>
 
                     <div class="relative" id="dropdown-menu">
-                        <button id="dropdown-trigger"
-                            class="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900">
+                        <div id="dropdown-trigger" class="{{ isActiveNavlink(null, ['/student/paids']) }}">
+                            <i class="bi bi-dollar"></i>
+                            Paiement
+                        </div>
+                        <div id="dropdown-content"
+                            class="absolute z-30 left-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 hidden">
+                            <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="dropdown-menu">
+                                <a href="{{ path('#paid.index') }}"
+                                    class="{{ isActiveNavlink(path('#paid.index'), ['/student/paid'], {dropdown: true}) }}"
+                                    role="menuitem">Historique de paiement</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="relative" id="dropdown-menu">
+                        <div id="dropdown-trigger" class="{{ isActiveNavlink(null, ['/student/control']) }}">
                             <i class="bi bi-toggles2"></i>
                             Contrôle
-                        </button>
+                        </div>
                         <div id="dropdown-content"
                             class="absolute z-30 left-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 hidden">
                             <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="dropdown-menu">
                                 <a href="{{ path('#checker.index') }}"
-                                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                    class="{{ isActiveNavlink(path('#checker.index'), ['/student/checker'], {dropdown: true}) }}"
                                     role="menuitem">Vérificateur</a>
                                 <a href="{{ path('#expense-control.index') }}"
-                                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">
+                                    class="{{ isActiveNavlink(path('#expense-control.index'), ['/student/expense-control'], {dropdown: true}) }}"
+                                    role="menuitem">
                                     Condition de vérification
                                 </a>
                             </div>
                         </div>
                     </div>
 
-                    <a href="{{ path('#assignment.index') }}"
-                        class="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900">
+                    <a href="{{ path('#assignment.index', ['/admin/assignment']) }}"
+                        class="{{ isActiveNavlink(path('#assignment.index')) }}">
                         <i class="bi bi-arrow-repeat"></i>
                         Affectation
                     </a>
@@ -94,20 +110,9 @@
         <div class="flex flex-col">
             <!-- Responsive Menu -->
             <header class="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6">
-                <button id="menuToggle" class="h-8 w-8 rounded-md border border-gray-300 md:hidden">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                        class="h-4 w-4 mx-auto">
-                        <line x1="4" x2="20" y1="12" y2="12"></line>
-                        <line x1="4" x2="20" y1="6" y2="6"></line>
-                        <line x1="4" x2="20" y1="18" y2="18"></line>
-                    </svg>
-                </button>
+                {% include "shared/button-toggle.html.twig" %}
                 <div class="flex-1">
-                    <button type="button" role="switch" aria-checked="true" data-state="checked" value="on"
-                        class="peer inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=unchecked]:bg-input"><span
-                            data-state="checked"
-                            class="pointer-events-none block h-5 w-5 rounded-full bg-background shadow-lg ring-0 transition-transform data-[state=checked]:translate-x-5 data-[state=unchecked]:translate-x-0"></span></button>
+
                 </div>
                 <div class="relative" id="dropdown-menu">
                     <button id="dropdown-trigger"
@@ -127,9 +132,6 @@
                             <a href="{{ path('profile.student') }}"
                                 class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Mon
                                 profile</a>
-                            <a href="{{ path('#qrcode.index') }}"
-                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">
-                                Qrcode de paiement</a>
                             <hr class="my-1">
                             {% include "shared/action-logout.html.twig" %}
                         </div>

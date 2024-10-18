@@ -36,7 +36,6 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     }
 
 
-
     public function findSearchQuery(?string $query): Query
     {
         $qb = $this->createQueryBuilder('u');

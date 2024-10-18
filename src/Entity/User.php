@@ -14,7 +14,6 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\Serializer\Annotation\Groups;
 use ApiPlatform\Metadata as Metadata;
-use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]

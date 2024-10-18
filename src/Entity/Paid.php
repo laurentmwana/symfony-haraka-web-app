@@ -4,13 +4,13 @@ namespace App\Entity;
 
 use App\Enum\PaidEnum;
 use App\Repository\PaidRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata as Metadata;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: PaidRepository::class)]
 #[Metadata\ApiResource(
@@ -39,6 +39,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
         'created_at' => 'partial'
     ]
 )]
+#[Vich\Uploadable]
 class Paid
 {
     #[ORM\Id]
@@ -97,20 +98,19 @@ class Paid
         ]
     )]
     private ?\DateTimeInterface $updated_at = null;
+    public ?string $contentUrl = null;
 
-    /**
-     * @var Collection<int, Qrcode>
-     */
-    #[ORM\OneToMany(targetEntity: Qrcode::class, mappedBy: 'paid', orphanRemoval: true)]
+    #[Vich\UploadableField(mapping: "qrcode_slip", fileNameProperty: "filePath")]
+    public ?File $file = null;
 
-    private Collection $qrcodes;
+    #[ORM\Column()]
+    public ?string $filePath = null;
 
     public function __construct()
     {
         $this->created_at = new \DateTime();
         $this->updated_at = new \DateTime();
         $this->state = PaidEnum::NO_PAID;
-        $this->qrcodes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -153,19 +153,16 @@ class Paid
 
         return $this;
     }
-
     public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->created_at;
     }
-
     public function setCreatedAt(\DateTimeInterface $created_at): static
     {
         $this->created_at = $created_at;
 
         return $this;
     }
-
     public function getUpdatedAt(): ?\DateTimeInterface
     {
         return $this->updated_at;
@@ -178,32 +175,40 @@ class Paid
         return $this;
     }
 
-    /**
-     * @return Collection<int, Qrcode>
-     */
-    public function getQrcodes(): Collection
+    public function getContentUrl(): ?string
     {
-        return $this->qrcodes;
+        return $this->contentUrl;
     }
-
-    public function addQrcode(Qrcode $qrcode): static
+    public function setContentUrl(?string $contentUrl): static
     {
-        if (!$this->qrcodes->contains($qrcode)) {
-            $this->qrcodes->add($qrcode);
-            $qrcode->setPaid($this);
+        $this->contentUrl = $contentUrl;
+
+        return $this;
+    }
+    public function getFile(): File|null
+    {
+        return $this->file;
+    }
+    public function setFile(?File $file): static
+    {
+        $this->file = $file;
+
+        if ($file) {
+            // Mettez à jour `updated_at` pour que VichUploader puisse détecter le changement
+            $this->updated_at = new \DateTime();
         }
 
         return $this;
     }
 
-    public function removeQrcode(Qrcode $qrcode): static
+    public function getFilePath(): string|null
     {
-        if ($this->qrcodes->removeElement($qrcode)) {
-            // set the owning side to null (unless already changed)
-            if ($qrcode->getPaid() === $this) {
-                $qrcode->setPaid(null);
-            }
-        }
+        return $this->filePath;
+    }
+
+    public function setFilePath(?string $filePath): static
+    {
+        $this->filePath = $filePath;
 
         return $this;
     }
