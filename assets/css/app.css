@@ -135,4 +135,35 @@
   .theme-toggle.light::before {
     transform: translateX(26px);
   }
+
+  @media screen and (max-width: 1200px) {
+    #responsive-table,
+    #responsive-table tbody,
+    #responsive-table tfoot,
+    #responsive-table tr,
+    #responsive-table th,
+    #responsive-table td {
+      @apply block;
+    }
+
+    #responsive-table tr {
+      @apply mb-[30px] border-b-0 bg-background;
+    }
+
+    #responsive-table tr:hover {
+      @apply bg-inherit;
+    }
+
+    #responsive-table thead {
+      display: none;
+    }
+
+    #responsive-table td {
+      @apply relative ps-[170px] -mt-[1px] border-b border-muted-foreground/20;
+    }
+
+    #responsive-table td::before {
+      @apply absolute left-0 top-0 bottom-0 p-3 flex items-center justify-center w-[145px] text-center content-[attr(data-label)] border-e border-muted-foreground/20;
+    }
+  }
 }

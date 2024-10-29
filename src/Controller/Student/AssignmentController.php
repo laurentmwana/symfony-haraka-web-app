@@ -4,8 +4,12 @@
 namespace App\Controller\Student;
 
 use App\Entity\Assignment;
+use App\Mapped\MappedYear;
+use App\Mapped\MappedSearch;
 use App\Hydrate\HydrateAssignment;
 use App\Form\FilterAssignmentFormType;
+use App\Form\Other\MappedYearFormType;
+use App\Form\Other\MappedSearchFormType;
 use App\Repository\AssignmentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
@@ -24,15 +28,18 @@ class  AssignmentController extends AbstractController
     Request $request
   ): Response {
 
-    $hydrate = new HydrateAssignment();
+    $mapped = new MappedYear();
 
-    $form = $this->createForm(FilterAssignmentFormType::class, $hydrate);
+    $form = $this->createForm(MappedYearFormType::class, $mapped);
     $form->handleRequest($request);
 
-    $assignments = $paginator->paginate(
-      $repository->findSearchQuery($hydrate),
-      $request->get('page', 1)
-    );
+    $assignments = $form->isSubmitted() && $form->isValid()
+      ? $paginator->paginate(
+        $repository->findSearchQuery($mapped)
+      )
+      : $paginator->paginate(
+        $repository->findSearchQuery(),
+      );
 
     return $this->render('student/assignment/index.html.twig', [
       'assignments' => $assignments,

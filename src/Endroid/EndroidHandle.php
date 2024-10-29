@@ -6,7 +6,6 @@ use App\Helpers\TokenGenerator;
 use Endroid\QrCode\Builder\Builder;
 use Endroid\QrCode\Encoding\Encoding;
 use Endroid\QrCode\Writer\PngWriter;
-use Endroid\QrCode\Writer\SvgWriter;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -16,14 +15,14 @@ final class EndroidHandle
   public static function write(string $data): File
   {
     $qr = Builder::create()
-      ->writer(new SvgWriter())
+      ->writer(new PngWriter())
       ->data($data)
       ->encoding(new Encoding('UTF-8'))
       ->size(200)
       ->margin(10)
       ->build();
 
-    $name = sprintf("%s.svg", TokenGenerator::alpha(10));
+    $name = sprintf("%s.png", TokenGenerator::alpha(10));
 
     $temp = sprintf(
       "%s/%s",

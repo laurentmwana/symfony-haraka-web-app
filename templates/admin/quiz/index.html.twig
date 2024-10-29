@@ -1,0 +1,60 @@
+{% extends 'layouts/admin.html.twig' %}
+{% block title "Gestion des quiz" %}
+{% block body %}
+<twig:Card>
+  <div class="max-w-lg mb-4">
+    <h1 class="mb-3 text-base font-semibold text-slate-700 dark:text-gray-300">
+      Gestion des quiz
+    </h1>
+  </div>
+
+  <div class="flex items-center justify-between gap-x-3 mb-4">
+    <twig:Search placeholder="Rechercher une quiz" />
+    <twig:Button size="default" href="{{ path('~quiz.create') }}">
+      <i class="bi bi-plus"></i>
+    </twig:Button>
+  </div>
+
+  <twig:Table>
+    <twig:TableHeader>
+      <twig:TableRow>
+        <twig:TableHead> Question </twig:TableHead>
+        <twig:TableHead> Publié </twig:TableHead>
+        <twig:TableHead> Nom </twig:TableHead>
+        <twig:TableHead> Créer </twig:TableHead>
+        <twig:TableHead> ... </twig:TableHead>
+      </twig:TableRow>
+    </twig:TableHeader>
+
+    <twig:TableBody>
+      {% for quiz in quizzes %}
+      <twig:TableRow>
+        <twig:TableCell>
+          <a class="hover:underline" href="{{ path('~quiz.show', {id: quiz.id}) }}">
+            {{ quiz.request|u.truncate(50, '...', false)}}
+          </a>
+        </twig:TableCell>
+        <twig:TableCell>
+          <twig:Badge type="{{ quiz.featured ? 'success' : 'destructive' }}">
+            {{ quiz.featured ? 'Oui' : 'Non' }}
+          </twig:Badge>
+        </twig:TableCell>
+        <twig:TableCell>
+          {{ quiz.createdAt | ago }}
+        </twig:TableCell>
+        <twig:TableCell>
+          {% include 'shared/action.html.twig' with {
+          routeDelete: path('~quiz.delete', {id: quiz.id}),
+          routeEdit:path('~quiz.edit', {id: quiz.id})
+          } %}
+        </twig:TableCell>
+      </twig:TableRow>
+      {% endfor %}
+    </twig:TableBody>
+  </twig:Table>
+
+  <div>
+    {{ knp_pagination_render(quizzes) }}
+  </div>
+</twig:Card>
+{% endblock %}

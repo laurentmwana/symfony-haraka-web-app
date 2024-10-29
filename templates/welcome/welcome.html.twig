@@ -9,6 +9,8 @@
 {% block body %}
 
 <div class="container py-12">
-  <h2>A propos de nous</h2>
+  <div class="mx-auto max-w-4xl">
+    {% include "welcome/_quiz.html.twig" with {quizzes} %}
+  </div>
 </div>
 {% endblock %}

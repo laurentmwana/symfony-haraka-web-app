@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Base;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-class PageController extends AbstractController
+class DocumentationController extends AbstractController
 {
-    #[Route('/about', name: 'page.about')]
+    #[Route('/documentation', name: 'doc.index')]
     public function index(): Response
     {
-        return $this->render('page/about.html.twig',);
+        return $this->render('documentation/index.html.twig');
     }
 }

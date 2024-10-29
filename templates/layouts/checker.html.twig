@@ -67,16 +67,12 @@
         <!-- Main Content -->
         <div class="flex flex-col">
             <!-- Responsive Menu -->
-            <header class="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6">
-                <button id="dropdown-trigger" class="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center">
-                    {% include "shared/profiler-trigger.html.twig" with {user: app.user} %}
-                </button>
+            <!-- Responsive Menu -->
+            <header class="flex h-14 items-center gap-4 border-b bg-white px-4 lg:h-[60px] lg:px-6">
+                {% include "shared/button-toggle.html.twig" %}
                 <div class="flex-1"></div>
                 <div class="relative" id="dropdown-menu">
-                    <button id="dropdown-trigger"
-                        class="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center">
-                        {% include "shared/profiler-trigger.html.twig" with {user: app.user} %}
-                    </button>
+                    {% include "shared/profiler-trigger.html.twig" with {user: app.user} %}
                     <div id="dropdown-content"
                         class="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 hidden">
                         <div class="py-1" role="menu" aria-orientation="vertical">
