@@ -1,22 +1,15 @@
 {{ form_start(form, {attr: {class: 'flex items-center gap-4'}}) }}
-
 <div class="max-w-lg">
   {{ form_row(form.query) }}
 </div>
 <div class="max-w-lg">
   {{ form_row(form.yearAcademic) }}
 </div>
-<div class="max-w-lg">
-  {{ form_row(form.programme) }}
-</div>
-<div class="max-w-lg">
-  {{ form_row(form.sector) }}
-</div>
 
-  <twig:Button type="submit" size="default">
+<twig:Button type="submit" size="default">
   <div class="flex items-center gap-x-2">
     <i class="bi bi-filter"></i>
-  <span>Filtrer</span>
+    <span>Filtrer</span>
   </div>
-  </twig:Button>
+</twig:Button>
 {{ form_end(form) }}

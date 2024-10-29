@@ -36,4 +36,13 @@ class CheckerRepository extends ServiceEntityRepository
 
         return $qb->orderBy('c.updated_at', 'DESC')->getQuery();
     }
+
+    public function findAll(): array
+    {
+        return $this->createQueryBuilder('c')
+            ->leftJoin('c.user', 'u')
+            ->addSelect('u')
+            ->getQuery()
+            ->getResult();
+    }
 }

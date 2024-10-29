@@ -48,34 +48,35 @@
   }
 
   .dark {
-    --background: 237 30% 14%;
-    --foreground: 60 30% 96%;
-    --muted: 237 12% 18%;
-    --muted-foreground: 237 12% 68%;
-    --popover: 237 30% 11%;
-    --popover-foreground: 0 0% 100%;
-    --card: 237 30% 12%;
-    --card-foreground: 0 0% 100%;
-    --border: 237 20% 19%;
-    --input: 237 20% 22%;
-    --primary: 60 30% 96%;
-    --primary-foreground: 60 30% 16%;
-    --secondary: 60 20% 25%;
-    --secondary-foreground: 60 20% 85%;
-    --accent: 237 30% 29%;
-    --accent-foreground: 237 30% 89%;
-    --destructive: 7 80% 49%;
-    --destructive-foreground: 0 0% 100%;
-    --ring: 60 30% 96%;
+    --background: 0 0% 3.9%;
+    --foreground: 0 0% 98%;
+    --muted: 0 0% 14.9%;
+    --muted-foreground: 0 0% 63.9%;
+    --popover: 0 0% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --card: 0 0% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --border: 0 0% 14.9%;
+    --input: 0 0% 14.9%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 0 0% 9%;
+    --secondary: 0 0% 14.9%;
+    --secondary-foreground: 0 0% 98%;
+    --accent: 0 0% 14.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --ring: 0 0% 83.1%;
   }
+}
 
-  * {
-    @apply border-border;
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
   }
-  body {
-    @apply bg-background text-foreground;
-  }
+}
 
+@layer base {
   .menu-button span {
     transform-origin: center;
     transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
@@ -88,5 +89,50 @@
   }
   .menu-button.opened span:nth-child(3) {
     transform: translateY(-8px) rotate(-45deg);
+  }
+
+  ::selection {
+    @apply bg-slate-200  text-muted-foreground;
+  }
+
+  ::-webkit-scrollbar {
+    @apply w-1 h-1;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply p-2 bg-background;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply rounded-sm bg-gray-500;
+  }
+
+  textarea {
+    min-height: 85px;
+  }
+  .theme-toggle {
+    width: 50px;
+    height: 24px;
+    background-color: #4b5563;
+    border-radius: 50px;
+    padding: 2px;
+    position: relative;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  .theme-toggle::before {
+    content: "";
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: white;
+    transition: transform 0.3s;
+  }
+  .theme-toggle.light {
+    background-color: #d1d5db;
+  }
+  .theme-toggle.light::before {
+    transform: translateX(26px);
   }
 }

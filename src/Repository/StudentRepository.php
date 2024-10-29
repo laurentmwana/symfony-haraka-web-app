@@ -24,11 +24,13 @@ class StudentRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('s')
 
             ->leftJoin('s.actualLevel', 'ac')
+            ->innerJoin('s.identificator', 'i')
+            ->leftJoin('s.user', 'u')
             ->innerJoin('ac.level', 'l')
             ->innerJoin('l.sector', 'se')
             ->innerJoin('l.programme', 'p')
             ->innerJoin('l.yearAcademic', 'y')
-            ->addSelect('se', 'y', 'p', 'l', 'ac');
+            ->addSelect('se', 'y', 'p', 'l', 'ac', 'i', 'u');
 
         if (null !== $query && !empty($query)) {
             $qb->where($qb->expr()->orX(

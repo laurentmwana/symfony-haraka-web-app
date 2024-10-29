@@ -127,26 +127,11 @@
                         </div>
                     </div>
 
-                    <div class="relative" id="dropdown-menu">
-                        <button id="dropdown-trigger"
-                            class="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900">
-                            <i class="bi bi-arrow-up-left-circle-fill"></i>
-                            Promotion
-                        </button>
-                        <div id="dropdown-content"
-                            class="absolute z-30 left-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 hidden">
-                            <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="dropdown-menu">
-                                <a href="{{ path('~level.index') }}"
-                                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">
-                                    Afficher toutes les promotions
-                                </a>
-                                <a href="{{ path('~level.students') }}"
-                                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">
-                                    Etudiants par par rapport à la promotion
-                                </a>
-                            </div>
-                        </div>
-                    </div>
+                    <a href="{{ path('~level.index') }}"
+                        class="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900">
+                        <i class="bi bi-arrow-up-left-circle-fill"></i>
+                        Promotion
+                    </a>
 
                     <div class="relative" id="dropdown-menu">
                         <button id="dropdown-trigger"
@@ -160,7 +145,7 @@
                                 <a href="{{ path('~student.index') }}"
                                     class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                                     role="menuitem">Gérer</a>
-                                <a href="{{ path('~year-academic.index') }}"
+                                <a href="{{ path('~paid.index') }}"
                                     class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">
                                     Paiement
                                 </a>
@@ -224,10 +209,7 @@
                 {% include "shared/button-toggle.html.twig" %}
                 <div class="flex-1"></div>
                 <div class="relative" id="dropdown-menu">
-                    <button id="dropdown-trigger"
-                        class="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center">
-                        {% include "shared/profiler-trigger.html.twig" with {user: app.user} %}
-                    </button>
+                    {% include "shared/profiler-trigger.html.twig" with {user: app.user} %}
                     <div id="dropdown-content"
                         class="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 hidden">
                         <div class="py-1" role="menu" aria-orientation="vertical">

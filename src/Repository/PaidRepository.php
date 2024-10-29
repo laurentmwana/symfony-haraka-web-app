@@ -5,6 +5,8 @@ namespace App\Repository;
 use App\Entity\Paid;
 use App\Entity\Student;
 use Doctrine\ORM\Query;
+use App\Mapped\MappedYear;
+use App\Entity\YearAcademic;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
@@ -18,6 +20,39 @@ class PaidRepository extends ServiceEntityRepository
         parent::__construct($registry, Paid::class);
     }
 
+    public function findSearchQuery(?MappedYear $mapped = null): Query
+    {
+        $qb = $this->createQueryBuilder('p')
+            ->innerJoin('p.student', 's')
+            ->innerJoin('s.user', 'u')
+            ->innerJoin('s.identificator', 'i')
+            ->innerJoin('s.actualLevel', 'ac')
+            ->innerJoin('p.level', 'l')
+            ->innerJoin('l.yearAcademic', 'y')
+            ->innerJoin('l.sector', 'se')
+            ->addSelect('se', 'y', 'l', 's', 'u', 'i', 'ac');
+
+        if (
+            $mapped instanceof MappedYear
+            && $mapped->getYearAcademic() instanceof YearAcademic
+        ) {
+            $qb->andWhere('l.yearAcademic = :yearAcademic')
+                ->setParameter('yearAcademic', $mapped->getYearAcademic());
+        }
+
+        if (
+            $mapped instanceof MappedYear &&
+            ($mapped->getQuery() !== null && !empty($mapped->getQuery()))
+        ) {
+            $qb
+                ->andWhere('p.name = :np')
+                ->orWhere('se.name = :ns')
+                ->setParameter('np', $mapped->getQuery())
+                ->setParameter('ns', $mapped->getQuery());
+        }
+
+        return $qb->orderBy('p.created_at', 'DESC')->getQuery();
+    }
 
     public function findAllPaids(Student $student): Query
     {

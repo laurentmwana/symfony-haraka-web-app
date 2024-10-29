@@ -3,12 +3,6 @@
 namespace App\Form;
 
 use App\Entity\User;
-use App\Enum\RoleEnum;
-use App\Entity\Checker;
-use App\Entity\Student;
-use App\Helpers\Formatter;
-use App\Repository\CheckerRepository;
-use App\Repository\StudentRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;

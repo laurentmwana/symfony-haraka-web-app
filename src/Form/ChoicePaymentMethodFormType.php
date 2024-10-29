@@ -18,15 +18,15 @@ class ChoicePaymentMethodFormType extends AbstractType
         $builder
             ->add('paymentMethod', EntityType::class, [
                 'class' => PaymentMethod::class,
-                'choice_label' => 'id',
+                'choice_label' => 'name',
             ])
             ->add('yearAcademic', EntityType::class, [
                 'class' => YearAcademic::class,
-                'choice_label' => 'id',
+                'choice_label' => 'name',
             ])
             ->add('faculties', EntityType::class, [
                 'class' => Faculty::class,
-                'choice_label' => 'id',
+                'choice_label' => 'name',
                 'multiple' => true,
             ])
         ;

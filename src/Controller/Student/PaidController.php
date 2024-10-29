@@ -6,9 +6,9 @@ use App\Entity\User;
 use App\Hydrate\HydratePayment;
 use App\Repository\PaidRepository;
 use App\Form\FilterPaymentFormType;
-use App\Repository\PaymentRepository;
+use App\Form\Other\MappedYearFormType;
+use App\Mapped\MappedYear;
 use Knp\Component\Pager\PaginatorInterface;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -27,9 +27,9 @@ class PaidController extends AbstractController
         /** @var User */
         $user = $this->getUser();
 
-        $hydrate = new HydratePayment();
+        $mapped = new MappedYear();
 
-        $form = $this->createForm(FilterPaymentFormType::class, $hydrate,);
+        $form = $this->createForm(MappedYearFormType::class, $mapped,);
         $form->handleRequest($request);
 
         $paids = $paginator->paginate(

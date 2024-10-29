@@ -8,6 +8,7 @@ use Doctrine\ORM\Query;
 use App\Entity\Programme;
 use App\Entity\YearAcademic;
 use App\Hydrate\HydrateLevel;
+use App\Mapped\MappedYear;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
@@ -24,28 +25,31 @@ class LevelRepository extends ServiceEntityRepository
         parent::__construct($registry, Level::class);
     }
 
-    public function findSearchQuery(HydrateLevel $hydrateLevel): Query
+    public function findSearchQuery(?MappedYear $mapped = null): Query
     {
         $qb = $this->createQueryBuilder('l')
-            ->leftJoin('l.students', 's')
             ->innerJoin('l.programme', 'p')
             ->innerJoin('l.yearAcademic', 'y')
             ->innerJoin('l.sector', 'se')
-            ->addSelect('s', 'se', 'y', 'p');
+            ->addSelect('se', 'y', 'p');
 
-        if ($hydrateLevel->getProgramme() instanceof Programme) {
-            $qb->andWhere('l.programme = :programme')
-                ->setParameter('programme', $hydrateLevel->getProgramme());
-        }
-
-        if ($hydrateLevel->getSector() instanceof Sector) {
-            $qb->andWhere('l.sector = :sector')
-                ->setParameter('sector', $hydrateLevel->getSector());
-        }
-
-        if ($hydrateLevel->getYearAcademic() instanceof YearAcademic) {
+        if (
+            $mapped instanceof MappedYear
+            && $mapped->getYearAcademic() instanceof YearAcademic
+        ) {
             $qb->andWhere('l.yearAcademic = :yearAcademic')
-                ->setParameter('yearAcademic', $hydrateLevel->getYearAcademic());
+                ->setParameter('yearAcademic', $mapped->getYearAcademic());
+        }
+
+        if (
+            $mapped instanceof MappedYear &&
+            ($mapped->getQuery() !== null && !empty($mapped->getQuery()))
+        ) {
+            $qb
+                ->andWhere('p.name = :np')
+                ->orWhere('se.name = :ns')
+                ->setParameter('np', $mapped->getQuery())
+                ->setParameter('ns', $mapped->getQuery());
         }
 
         return $qb->orderBy('l.created_at', 'DESC')->getQuery();
@@ -73,7 +77,7 @@ class LevelRepository extends ServiceEntityRepository
     }
 
 
-    public function findSearchWithStudentQuery(HydrateLevel $hydrateLevel): Query
+    public function findSearchWithStudentQuery(?MappedYear $mapped = null): Query
     {
         $qb = $this->createQueryBuilder('l')
             ->leftJoin('l.students', 's')
@@ -83,23 +87,20 @@ class LevelRepository extends ServiceEntityRepository
             ->innerJoin('l.students', 'sts')
             ->addSelect('s', 'se', 'y', 'p', 'sts');
 
-        if ($hydrateLevel->getProgramme() instanceof Programme) {
-            $qb->andWhere('l.programme = :programme')
-                ->setParameter('programme', $hydrateLevel->getProgramme());
-        }
 
-        if ($hydrateLevel->getSector() instanceof Sector) {
-            $qb->andWhere('l.sector = :sector')
-                ->setParameter('sector', $hydrateLevel->getSector());
-        }
-
-        if ($hydrateLevel->getYearAcademic() instanceof YearAcademic) {
+        if (
+            $mapped instanceof MappedYear &&
+            $mapped->getYearAcademic() instanceof YearAcademic
+        ) {
             $qb->andWhere('l.yearAcademic = :yearAcademic')
-                ->setParameter('yearAcademic', $hydrateLevel->getYearAcademic());
+                ->setParameter('yearAcademic', $mapped->getYearAcademic());
         }
 
-        if ($hydrateLevel->getQuery() !== null && !empty($hydrateLevel->getQuery())) {
-            $query = $hydrateLevel->getQuery();
+        if (
+            $mapped instanceof MappedYear &&
+            ($mapped->getQuery() !== null && !empty($mapped->getQuery()))
+        ) {
+            $query = $mapped->getQuery();
 
             $qb->andWhere($qb->expr()->orX(
                 $qb->expr()->like('sts.id', ':q'),

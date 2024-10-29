@@ -25,7 +25,6 @@ phpstan.neon
 /node_modules/
 /public/build/
 /public/picture/
-/public/bundles/
 npm-debug.log
 yarn-error.log
 ###< symfony/webpack-encore-bundle ###

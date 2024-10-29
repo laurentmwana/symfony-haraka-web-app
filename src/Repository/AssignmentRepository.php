@@ -9,6 +9,7 @@ use App\Entity\Assignment;
 use App\Entity\YearAcademic;
 use App\Entity\ExpenseControl;
 use App\Hydrate\HydrateAssignment;
+use App\Mapped\MappedYear;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
@@ -24,8 +25,9 @@ class AssignmentRepository extends ServiceEntityRepository
 
     public function findSearchQueryForChecker(
         Checker $checker,
-        HydrateAssignment $hydrateAssignment
+        ?MappedYear $mapped = null
     ): Query {
+
         $qb = $this->createQueryBuilder('a')
             ->leftJoin('a.expenseControl', 'e')
             ->innerJoin('e.yearAcademics', 'y')
@@ -33,25 +35,26 @@ class AssignmentRepository extends ServiceEntityRepository
             ->innerJoin('a.checkers', 'c')
             ->addSelect('e', 'f', 'c', 'y');
 
-        $qb->where('c.id = :checker');
+        $qb
+            ->where('c.id = :checker')
+            ->setParameter('checker', $checker);
 
-        $qb->setParameter('checker', $checker);
-
-        if ($hydrateAssignment->getExpenseControl() instanceof ExpenseControl) {
-            $qb->andWhere('a.expenseControl = :expenseControl')
-                ->setParameter('expenseControl', $hydrateAssignment->getExpenseControl());
-        }
-
-        if ($hydrateAssignment->getYearAcademic() instanceof YearAcademic) {
+        if (
+            $mapped instanceof MappedYear &&
+            $mapped->getYearAcademic() instanceof YearAcademic
+        ) {
             $qb->andWhere('y.id = :yearAcademic')
                 ->setParameter(
                     'yearAcademic',
-                    $hydrateAssignment->getYearAcademic()->getId()
+                    $mapped->getYearAcademic()->getId()
                 );
         }
 
-        if ($hydrateAssignment->getQuery() !== null && !empty($hydrateAssignment->getQuery())) {
-            $query = $hydrateAssignment->getQuery();
+        if (
+            $mapped instanceof MappedYear &&
+            ($mapped->getQuery() !== null && !empty($mapped->getQuery()))
+        ) {
+            $query = $mapped->getQuery();
 
             $qb->andWhere($qb->expr()->orX(
                 $qb->expr()->like('y.id', ':q'),
@@ -68,8 +71,7 @@ class AssignmentRepository extends ServiceEntityRepository
         return $qb->orderBy('a.updated_at', 'DESC')->getQuery();
     }
 
-
-    public function findSearchQuery(HydrateAssignment $hydrateAssignment): Query
+    public function findSearchQuery(?MappedYear $mapped = null): Query
     {
         $qb = $this->createQueryBuilder('a')
             ->leftJoin('a.expenseControl', 'e')
@@ -78,22 +80,22 @@ class AssignmentRepository extends ServiceEntityRepository
             ->innerJoin('a.checkers', 'c')
             ->addSelect('e', 'f', 'c', 'y');
 
-
-        if ($hydrateAssignment->getExpenseControl() instanceof ExpenseControl) {
-            $qb->andWhere('a.expenseControl = :expenseControl')
-                ->setParameter('expenseControl', $hydrateAssignment->getExpenseControl());
-        }
-
-        if ($hydrateAssignment->getYearAcademic() instanceof YearAcademic) {
+        if (
+            $mapped instanceof MappedYear &&
+            $mapped->getYearAcademic() instanceof YearAcademic
+        ) {
             $qb->andWhere('y.id = :yearAcademic')
                 ->setParameter(
                     'yearAcademic',
-                    $hydrateAssignment->getYearAcademic()->getId()
+                    $mapped->getYearAcademic()->getId()
                 );
         }
 
-        if ($hydrateAssignment->getQuery() !== null && !empty($hydrateAssignment->getQuery())) {
-            $query = $hydrateAssignment->getQuery();
+        if (
+            $mapped instanceof MappedYear &&
+            $mapped->getQuery() !== null && !empty($mapped->getQuery())
+        ) {
+            $query = $mapped->getQuery();
 
             $qb->andWhere($qb->expr()->orX(
                 $qb->expr()->like('y.id', ':q'),

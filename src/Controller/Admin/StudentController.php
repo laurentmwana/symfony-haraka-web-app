@@ -28,6 +28,7 @@ class StudentController extends AbstractController
     PaginatorInterface $paginator,
     Request $request
   ): Response {
+
     $students = $paginator->paginate(
       $repository->findSearchQuery($request->get('query')),
       $request->get('page', 1)

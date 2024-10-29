@@ -1,0 +1,82 @@
+{% extends 'layouts/admin.html.twig' %} {% block title "Tableau de bord" %} {%
+block body %}
+<twig:Card>
+  <div class="max-w-lg mb-4">
+    <h1 class="mb-3 text-base font-semibold text-slate-700 dark:text-gray-300">
+      Paiements effectuées
+    </h1>
+  </div>
+
+  <div class="flex items-center justify-start gap-x-3 mb-4">
+    {% include 'admin/paid/_form.html.twig' with {form: form} %}
+  </div>
+
+  <twig:Table>
+    <twig:TableHeader>
+      <twig:TableRow>
+        <twig:TableHead> Promotion </twig:TableHead>
+        <twig:TableHead> Année academique </twig:TableHead>
+        <twig:TableHead> Etudiant </twig:TableHead>
+        <twig:TableHead> Statut </twig:TableHead>
+        <twig:TableHead> Créer </twig:TableHead>
+        <twig:TableHead> ... </twig:TableHead>
+      </twig:TableRow>
+    </twig:TableHeader>
+
+    <twig:TableBody>
+      {% for paid in paids %}
+      {% set level = paid.level %}
+      {% set student = paid.student %}
+      <twig:TableRow>
+        <twig:TableCell>
+          <a class="hover:underline" href="{{ path('~programme.show', {id: level.programme.id}) }}">
+            {{ level.programme.alias ~ ' ' ~ level.sector.alias }}
+          </a>
+        </twig:TableCell>
+
+        <twig:TableCell>
+          <a class="hover:underline" href="{{ path('~year-academic.show', {id: level.yearAcademic.id}) }}">
+            {{ level.yearAcademic.name|u.truncate(40, '...', false)}}
+          </a>
+        </twig:TableCell>
+
+        <twig:TableCell>
+          <a class="hover:underline" href="{{ path('~student.show', {id: student.id}) }}">
+            {{ student.name ~ ' ' ~ student.firstname }}
+          </a>
+        </twig:TableCell>
+
+        <twig:TableCell>
+
+          <twig:Badge>
+            {% if paid.state|isTotality %}
+            Totalité
+            {% elseif paid.state|isPaidNoTotality %}
+            Pas totalité
+            {% else %}
+            Pas payé
+            {% endif %}
+
+          </twig:Badge>
+        </twig:TableCell>
+
+        <twig:TableCell>
+          {{ paid.createdAt|ago }}
+        </twig:TableCell>
+
+        <twig:TableCell>
+          <twig:Button variant="outline" href="{{ path('~paid.show', {id: paid.id}) }}">
+            <i class="bi bi-eye"></i>
+          </twig:Button>
+        </twig:TableCell>
+
+      </twig:TableRow>
+      {% endfor %}
+    </twig:TableBody>
+  </twig:Table>
+
+  <div>
+    {{ knp_pagination_render(paids) }}
+  </div>
+</twig:Card>
+{% endblock %}

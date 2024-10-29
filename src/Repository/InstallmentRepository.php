@@ -46,7 +46,7 @@ class InstallmentRepository extends ServiceEntityRepository
      */
     private function getTotalPriceForAmount(Amount $amount, ?int $excludeItemId = null): float
     {
-        $qb = $this->createQueryBuilder('i')
+        $qb = $this->createQueryBuilder(alias: 'i')
             ->select('SUM(i.price)')
             ->andWhere('i.amount = :amount')
             ->setParameter('amount', $amount->getId());

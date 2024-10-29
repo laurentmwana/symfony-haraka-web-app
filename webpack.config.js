@@ -28,7 +28,7 @@ Encore
   // will require an extra script tag for runtime.js
   // but, you probably want this, unless you're building a single-page app
   .enableSingleRuntimeChunk()
-  .enablePostCssLoader()
+
   /*
    * FEATURE CONFIG
    *
@@ -51,10 +51,12 @@ Encore
   .configureBabelPresetEnv((config) => {
     config.useBuiltIns = "usage";
     config.corejs = "3.38";
-  });
+  })
 
-// enables Sass/SCSS support
-//.enableSassLoader()
+  .enablePostCssLoader()
+
+  // enables Sass/SCSS support
+  .enableSassLoader();
 
 // uncomment if you use TypeScript
 //.enableTypeScriptLoader()
