@@ -22,51 +22,50 @@
   font-display: swap;
   src: url("./../fonts/Inter-Bold.woff2") format("woff2");
 }
-
 @layer base {
   :root {
     --background: 0 0% 100%;
-    --foreground: 0 0% 3.9%;
-    --muted: 0 0% 96.1%;
-    --muted-foreground: 0 0% 45.1%;
+    --foreground: 222.2 84% 4.9%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 3.9%;
+    --popover-foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 3.9%;
-    --border: 0 0% 89.8%;
-    --input: 0 0% 89.8%;
-    --primary: 0 0% 9%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 0 0% 96.1%;
-    --secondary-foreground: 0 0% 9%;
-    --accent: 0 0% 96.1%;
-    --accent-foreground: 0 0% 9%;
+    --card-foreground: 222.2 84% 4.9%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --primary: 221.2 83.2% 53.3%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --ring: 0 0% 3.9%;
+    --destructive-foreground: 210 40% 98%;
+    --ring: 221.2 83.2% 53.3%;
     --radius: 0.5rem;
   }
 
   .dark {
-    --background: 0 0% 3.9%;
-    --foreground: 0 0% 98%;
-    --muted: 0 0% 14.9%;
-    --muted-foreground: 0 0% 63.9%;
-    --popover: 0 0% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --card: 0 0% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --border: 0 0% 14.9%;
-    --input: 0 0% 14.9%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 0 0% 9%;
-    --secondary: 0 0% 14.9%;
-    --secondary-foreground: 0 0% 98%;
-    --accent: 0 0% 14.9%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --ring: 0 0% 83.1%;
+    --background: 230 24% 19%;
+    --foreground: 229 35% 75%;
+    --muted: 230 12% 23%;
+    --muted-foreground: 230 12% 73%;
+    --popover: 230 24% 16%;
+    --popover-foreground: 229 35% 85%;
+    --card: 230 24% 17%;
+    --card-foreground: 229 35% 80%;
+    --border: 230 14% 24%;
+    --input: 230 14% 27%;
+    --primary: 223 45% 44%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 223 30% 75%;
+    --secondary-foreground: 223 30% 15%;
+    --accent: 230 24% 34%;
+    --accent-foreground: 230 24% 94%;
+    --destructive: 2 80% 58%;
+    --destructive-foreground: 0 0% 100%;
+    --ring: 223 45% 44%;
   }
 }
 
@@ -154,7 +153,8 @@
       @apply bg-inherit;
     }
 
-    #responsive-table thead {
+    #responsive-table thead,
+    #responsive-table tfoot {
       display: none;
     }
 
@@ -165,5 +165,14 @@
     #responsive-table td::before {
       @apply absolute left-0 top-0 bottom-0 p-3 flex items-center justify-center w-[145px] text-center content-[attr(data-label)] border-e border-muted-foreground/20;
     }
+  }
+
+  html.is-changing .transition-fade {
+    transition: opacity 0.25s;
+    opacity: 1;
+  }
+  /* Define the styles for the unloaded pages */
+  html.is-animating .transition-fade {
+    opacity: 0;
   }
 }

@@ -25,6 +25,7 @@
     },
     "dependencies": {
         "bootstrap-icons": "^1.11.3",
+        "swup": "^4.8.1",
         "tailwindcss-animate": "^1.0.7"
     }
 }

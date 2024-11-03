@@ -24,6 +24,10 @@ services:
     tags:
       - { name: doctrine.event_listener, event: onFlush }
 
+  App\Subscriber\PaymentSubscriber:
+    tags:
+      - { name: doctrine.event_listener, event: postPersist }
+
   App\Subscriber\ContactMessageSubscriber:
     tags:
       - { name: doctrine.event_listener, event: postPersist }
@@ -36,3 +40,8 @@ services:
   App\Subscriber\StudentSubscriber:
     tags:
       - { name: doctrine.event_listener, event: postPersist }
+
+  App\Payment\PaypalPayment:
+    arguments:
+      $secret: "%env(PAYPAL_SECRET)%"
+      $clientId: "%env(PAYPAL_CLIENT_ID)%"

@@ -16,8 +16,8 @@ use Doctrine\ORM\Event\OnFlushEventArgs;
 final class PaidSubscriber
 {
   public function __construct(
-    private EntityManagerInterface $em,
-    private PaidRepository $paidRepository
+    private readonly EntityManagerInterface $em,
+    private readonly PaidRepository $paidRepository
   ) {}
 
   public function onFlush(OnFlushEventArgs $args): void
@@ -43,7 +43,10 @@ final class PaidSubscriber
         // add paid to student
         foreach ($collection->getInsertDiff() as $levelAdded) {
           if ($levelAdded instanceof Level) {
-            $this->addPaid($student, $levelAdded);
+            $this->addPaid(
+              $student,
+              $levelAdded
+            );
           }
         }
 
@@ -67,6 +70,7 @@ final class PaidSubscriber
   {
     return [
       Events::onFlush,
+      Events::postPersist,
     ];
   }
 

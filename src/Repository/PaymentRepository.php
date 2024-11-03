@@ -22,6 +22,37 @@ class PaymentRepository extends ServiceEntityRepository
         parent::__construct($registry, Payment::class);
     }
 
+    public function findSumBy(
+        Amount $amount,
+        Student $student,
+        Level $level,
+        bool $paid = false
+    ): int {
+        $qb = $this->createQueryBuilder('p')
+            ->innerJoin('p.student', 's')
+            ->innerJoin('p.level', 'l')
+            ->innerJoin('p.amount', 'a')
+            ->innerJoin('a.installments', 'ci')
+            ->innerJoin('p.installment', 'i')
+            ->addSelect('s', 'l', 'ci', 'i', 'a');
+
+        // Ajouter des conditions pour le filtre
+        $qb->andWhere('s.id = :student')
+            ->andWhere('a.id = :amount')
+            ->andWhere('l.id = :level')
+            ->andWhere('p.paid = :paid')
+            ->setParameter('student', $student)
+            ->setParameter('level', $level)
+            ->setParameter('amount', $amount)
+            ->setParameter('paid', $paid);
+
+        // Calculer et retourner la somme des prix
+        return (int) $qb->select('SUM(i.price)')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+
     /**
      * @param \App\Entity\Amount $amount
      * @param \App\Entity\Student $student
@@ -36,9 +67,9 @@ class PaymentRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('p')
             ->innerJoin('p.student', 's')
             ->innerJoin('p.level', 'l')
-            ->innerJoin('p.amount', 'a')
-            ->innerJoin('a.installments', 'ci')
-            ->innerJoin('p.installment', 'i')
+            ->leftJoin('p.amount', 'a')
+            ->leftJoin('a.installments', 'ci')
+            ->leftJoin('p.installment', 'i')
             ->addSelect('s', 'l', 'ci', 'i', 'a');
 
         $qb
@@ -55,7 +86,7 @@ class PaymentRepository extends ServiceEntityRepository
             ->getQuery()->getResult();
     }
 
-    public function findSearchQuery(HydratePayment $hydrate): Query
+    public function findSearchQuery(): Query
     {
         $qb = $this->createQueryBuilder('p')
             ->innerJoin('p.student', 's')

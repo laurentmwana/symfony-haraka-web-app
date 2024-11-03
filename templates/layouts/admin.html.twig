@@ -25,14 +25,8 @@
 
                     <div class="relative ml-auto" id="dropdown-menu">
                         <button id="dropdown-trigger" class=" h-8 w-8 rounded-md border border-gray-300">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round" class="h-4 w-4 mx-auto">
-                                <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path>
-                                <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path>
-                            </svg>
+                            <i class="bi bi-bell"></i>
                         </button>
-
 
                         <div id="dropdown-content"
                             class="absolute z-30 left-0 mt-2 w-[320px] h-[520px] rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 hidden">
@@ -47,15 +41,6 @@
                                     class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                                     role="menuitem">Frais académique</a>
 
-                                <a href="{{ path('~pay-method.index') }}"
-                                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Mode
-                                    de paiement</a>
-
-                                <a href="{{ path('~choice-pay-method.index') }}"
-                                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">
-
-                                    Choix du mode de paiement par faculté
-                                </a>
                             </div>
                         </div>
                     </div>
@@ -112,16 +97,7 @@
                                     role="menuitem">Année academique</a>
                                 <a href="{{ path('~amount.index') }}"
                                     class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                    role="menuitem">Frais académique</a>
-
-                                <a href="{{ path('~pay-method.index') }}"
-                                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Mode
-                                    de paiement</a>
-
-                                <a href="{{ path('~choice-pay-method.index') }}"
-                                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">
-
-                                    Choix du mode de paiement par faculté
+                                    role="menuitem">Frais académique
                                 </a>
                             </div>
                         </div>
@@ -203,7 +179,7 @@
                     <div class="relative" id="dropdown-menu">
                         <button id="dropdown-trigger"
                             class="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900">
-                            <i class="bi bi-person"></i>
+                            <i class="bi bi-motherboard-fill"></i>
                             Autres
                         </button>
                         <div id="dropdown-content"

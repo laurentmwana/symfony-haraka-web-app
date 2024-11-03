@@ -4,13 +4,15 @@
 
 {% block body %}
 <div class="container py-12">
-  <div class="max-w-lg">
-    <h2 class="text-base font-semibold text-gray-700 dark:text-gray-50 mb-4">
-      {{ quiz.request }}
-    </h2>
-    <p class="text-muted-foreground text-sm ">
-      {{ quiz.response }}
-    </p>
-  </div>
+  <twig:Container>
+    <div class="max-w-lg">
+      <h2 class="text-base font-semibold text-gray-700 dark:text-gray-50 mb-4">
+        {{ quiz.request }}
+      </h2>
+      <p class="text-muted-foreground text-sm ">
+        {{ quiz.response }}
+      </p>
+    </div>
+  </twig:Container>
 </div>
 {% endblock %}

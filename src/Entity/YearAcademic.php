@@ -127,19 +127,12 @@ class YearAcademic
     #[ORM\ManyToMany(targetEntity: ExpenseControl::class, mappedBy: 'yearAcademics')]
     private Collection $expenseControls;
 
-    /**
-     * @var Collection<int, ChoiceMethodPayment>
-     */
-    #[ORM\OneToMany(targetEntity: ChoiceMethodPayment::class, mappedBy: 'yearAcademic', orphanRemoval: true)]
-    private Collection $choiceMethodPayments;
-
     public function __construct()
     {
         $this->created_at = new \DateTime();
         $this->amounts = new ArrayCollection();
         $this->levels = new ArrayCollection();
         $this->expenseControls = new ArrayCollection();
-        $this->choiceMethodPayments = new ArrayCollection();
     }
     public function getId(): ?int
     {
@@ -276,36 +269,6 @@ class YearAcademic
     {
         if ($this->expenseControls->removeElement($expenseControl)) {
             $expenseControl->removeYearAcademic($this);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, ChoiceMethodPayment>
-     */
-    public function getChoiceMethodPayments(): Collection
-    {
-        return $this->choiceMethodPayments;
-    }
-
-    public function addChoiceMethodPayment(ChoiceMethodPayment $choiceMethodPayment): static
-    {
-        if (!$this->choiceMethodPayments->contains($choiceMethodPayment)) {
-            $this->choiceMethodPayments->add($choiceMethodPayment);
-            $choiceMethodPayment->setYearAcademic($this);
-        }
-
-        return $this;
-    }
-
-    public function removeChoiceMethodPayment(ChoiceMethodPayment $choiceMethodPayment): static
-    {
-        if ($this->choiceMethodPayments->removeElement($choiceMethodPayment)) {
-            // set the owning side to null (unless already changed)
-            if ($choiceMethodPayment->getYearAcademic() === $this) {
-                $choiceMethodPayment->setYearAcademic(null);
-            }
         }
 
         return $this;

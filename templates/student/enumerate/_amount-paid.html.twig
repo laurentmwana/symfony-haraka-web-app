@@ -2,7 +2,7 @@
   <div class="mb-2">
     <div class="max-w-lg mb-2">
       <h1 class="mb-3 text-sm font-semibold text-slate-700 dark:text-gray-300">
-        Tranches que vous devez payé
+        Historique de paiement
       </h1>
     </div>
     <div class="mb-3">
@@ -10,7 +10,11 @@
         <twig:TableHeader>
           <twig:TableRow>
             <twig:TableHead> Tranche </twig:TableHead>
+            <twig:TableHead> Payé </twig:TableHead>
             <twig:TableHead> Date d'écheance </twig:TableHead>
+            <twig:TableHead>
+
+            </twig:TableHead>
           </twig:TableRow>
         </twig:TableHeader>
 
@@ -21,26 +25,73 @@
               {{ payment.installment.price|number_format(2, '.', ',') }} FC
             </twig:TableCell>
             <twig:TableCell>
+              <twig:Badge type="{{ payment.paid ? 'success' : 'destructive' }}">
+                {{ payment.paid ? 'Oui' : 'Non' }}
+              </twig:Badge>
+            </twig:TableCell>
+            <twig:TableCell>
+              {% if payment.paymentAt is not null %}
               {{ payment.paymentAt.format('d-m-Y H:i') }}
+              {% else %}
+              .....
+              {% endif %}
+            </twig:TableCell>
+            <twig:TableCell>
+              {% if payment.paid != true %}
+
+              <div class="flex items-center justify-end">
+                <twig:Button href="" variant="outline">
+                  <div class="flex items-center gap-x-1">
+                    <i class="bi bi-cash"></i>
+                    <span>Payer</span>
+                  </div>
+                </twig:Button>
+              </div>
+
+              {% endif %}
             </twig:TableCell>
           </twig:TableRow>
           {% endfor %}
         </twig:TableBody>
       </twig:Table>
     </div>
-    <div class="flex flex-col gap-3 max-w-sm">
-      <div
-        class="bg-gray-50 text-sm dark:bg-gray-400 p-2 rounded-md shadow-sm shadow-blue-500 font-semibold border border-r-blue-400">
-        Total : {{ payments|calculateTotality|number_format(2, '.', ',') }} FC
-      </div>
-      {% set r = remainingTotality(amount.price, payments) %}
+    <div class="mb-3">
 
-      {% if r > 0 %}
-      <div
-        class="bg-gray-50 text-sm dark:bg-gray-400 p-2 rounded-md shadow-sm shadow-red-500 font-semibold border border-r-red-400">
-        Reste : {{ r|number_format(2, '.', ',') }} FC
-      </div>
-      {% endif %}
+      <twig:Table>
+        <twig:TableHeader>
+          <twig:TableRow>
+            <twig:TableHead>
+              <div class="flex items-center justify-start">
+                <twig:Button href="" variant="default">
+                  <div class="flex items-center gap-x-1">
+                    <i class="bi bi-cash"></i>
+                    <span>Payer la totalité</span>
+                  </div>
+                </twig:Button>
+              </div>
+            </twig:TableHead>
+            <twig:TableHead> Total payé </twig:TableHead>
+            <twig:TableHead> Total à payer </twig:TableHead>
+          </twig:TableRow>
+        </twig:TableHeader>
+
+        <twig:TableBody>
+          <twig:TableRow>
+            <twig:TableCell></twig:TableCell>
+            <twig:TableCell>
+              {{ paidPayments|number_format(2, '.', ',') }} FC
+            </twig:TableCell>
+            <twig:TableCell>
+              {{ unPaidPayments|number_format(2, '.', ',') }} FC
+            </twig:TableCell>
+            <twig:TableCell>
+            </twig:TableCell>
+            <twig:TableCell>
+            </twig:TableCell>
+          </twig:TableRow>
+        </twig:TableBody>
+
+      </twig:Table>
     </div>
   </div>
 </twig:Card>

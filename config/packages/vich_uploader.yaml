@@ -4,25 +4,25 @@ vich_uploader:
     type: attribute
   mappings:
     student_image:
-      uri_prefix: /picture/students/image
-      upload_destination: "%kernel.project_dir%/public/picture/students/image"
+      uri_prefix: /vich-uploader/students/image
+      upload_destination: "%kernel.project_dir%/public/vich-uploader/students/image"
       # Will rename uploaded files using a uniqueid as a prefix.
       namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
     payment_method_image:
-      uri_prefix: /picture/payment-method/
-      upload_destination: "%kernel.project_dir%/public/picture/payment-method"
+      uri_prefix: /vich-uploader/payment-method/
+      upload_destination: "%kernel.project_dir%/public/vich-uploader/payment-method"
       # Will rename uploaded files using a uniqueid as a prefix.
       namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
     qrcode_student:
-      uri_prefix: /picture/qrcode/student
-      upload_destination: "%kernel.project_dir%/public/picture/qrcode/student"
+      uri_prefix: /vich-uploader/qrcode/student
+      upload_destination: "%kernel.project_dir%/public/vich-uploader/qrcode/student"
       # Will rename uploaded files using a uniqueid as a prefix.
       namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
       delete_on_update: true
       delete_on_remove: true
     qrcode_slip:
-      uri_prefix: /picture/qrcode/slip
-      upload_destination: "%kernel.project_dir%/public/picture/qrcode/slip"
+      uri_prefix: /vich-uploader/qrcode/slip
+      upload_destination: "%kernel.project_dir%/public/vich-uploader/qrcode/slip"
       # Will rename uploaded files using a uniqueid as a prefix.
       namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
       delete_on_update: true

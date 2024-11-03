@@ -72,7 +72,7 @@ class Payment
     private ?Amount $amount = null;
 
     #[ORM\ManyToOne(inversedBy: 'payments')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     #[Groups(
         [
             'read:payment:collection',
@@ -82,7 +82,7 @@ class Payment
     private ?Installment $installment = null;
 
     #[ORM\ManyToOne(inversedBy: 'payments')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn()]
     #[Groups(
         [
             'read:payment:collection',
@@ -91,7 +91,7 @@ class Payment
     )]
     private ?Level $level = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     #[Groups(
         [
             'read:payment:collection',
@@ -100,9 +100,18 @@ class Payment
     )]
     private ?\DateTimeInterface $payment_at = null;
 
+    #[ORM\Column]
+    #[Groups(
+        [
+            'read:payment:collection',
+            'read:payment:item',
+        ]
+    )]
+    private ?bool $paid = null;
+
     public function __construct()
     {
-        $this->payment_at = new \DateTime();
+        $this->paid = false;
     }
 
     public function getId(): ?int
@@ -166,6 +175,18 @@ class Payment
     public function setPaymentAt(\DateTimeInterface $payment_at): static
     {
         $this->payment_at = $payment_at;
+
+        return $this;
+    }
+
+    public function isPaid(): ?bool
+    {
+        return $this->paid;
+    }
+
+    public function setPaid(bool $paid): static
+    {
+        $this->paid = $paid;
 
         return $this;
     }

@@ -33,16 +33,32 @@ class EnumeratePaidController extends AbstractController
 
         $amount = $amountRepository->findAllForLevel($paid->getLevel());
 
+        $paidPayments = $paymentRepository->findSumBy(
+            $amount,
+            $paid->getStudent(),
+            $paid->getLevel(),
+            true
+        );
+
+        $unPaidPayments = $paymentRepository->findSumBy(
+            $amount,
+            $paid->getStudent(),
+            $paid->getLevel()
+        );
+
         $payments = $paymentRepository->findAllForStudent(
             $amount,
             $paid->getStudent(),
             $paid->getLevel()
         );
 
+
         return $this->render('student/enumerate/index.html.twig', [
             'amount' => $amount,
             'paid' => $paid,
-            'payments' => $payments
+            'payments' => $payments,
+            'paidPayments' => $paidPayments,
+            'unPaidPayments' => $unPaidPayments,
         ]);
     }
 }

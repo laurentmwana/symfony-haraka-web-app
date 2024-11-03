@@ -3,14 +3,25 @@
 {% block title "Page d'accueil" %}
 
 {% block hero %}
-{% include "welcome/hero.html.twig" %}
+{% include "welcome/_hero.html.twig" %}
 {% endblock %}
 
 {% block body %}
 
 <div class="container py-12">
   <div class="mx-auto max-w-4xl">
-    {% include "welcome/_quiz.html.twig" with {quizzes} %}
+    <twig:WrapperSection title="Frais académique" description="Nous avons répondu aux questions que vous vous posez sur l'entreprise, l'entrepreneuriat, et pourquoi suivre nos
+    formations (textuelles ou vidéo).">
+      <twig:Card>
+        <h1>600,000.00FC</h1>
+        <h2>Licence 1</h2>
+      </twig:Card>
+    </twig:WrapperSection>
+
+    <twig:WrapperSection title="Questions fréquemment posées" description="Nous avons répondu aux questions que vous vous posez sur l'entreprise, l'entrepreneuriat, et pourquoi suivre nos
+        formations (textuelles ou vidéo).">
+      {% include "welcome/_quiz.html.twig" with {quizzes} %}
+    </twig:WrapperSection>
   </div>
 </div>
 {% endblock %}

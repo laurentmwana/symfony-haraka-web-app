@@ -32,6 +32,7 @@ const onLoad = () => {
       td.setAttribute("data-label", labels[index % labels.length]);
     });
   });
+  
 };
 
 document.addEventListener("DOMContentLoaded", onLoad);
