@@ -18,6 +18,24 @@ class AmountRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Amount::class);
     }
+
+    public function findByCurrentYearAcademic(): array
+    {
+        $qb = $this->createQueryBuilder('a')
+            ->leftJoin('a.installments', 'i')
+            ->innerJoin('a.programme', 'p')
+            ->innerJoin('a.yearAcademic', 'y')
+            ->addSelect('i', 'p', 'y');
+
+        $qb->where('y.closed = :closed');
+
+        $qb->setParameter('closed', false);
+
+        return $qb->orderBy('p.created_at', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
     public function findSearchQuery(?string $query): Query
     {
         $qb = $this->createQueryBuilder('a')

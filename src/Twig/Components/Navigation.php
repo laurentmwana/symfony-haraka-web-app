@@ -5,4 +5,9 @@ namespace App\Twig\Components;
 use Symfony\UX\TwigComponent\Attribute\AsTwigComponent;
 
 #[AsTwigComponent]
-final class Navigation {}
+final class Navigation
+{
+  public string $href = '';
+
+  public array $indexers = [];
+}

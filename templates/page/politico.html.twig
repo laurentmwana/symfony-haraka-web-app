@@ -1,0 +1,86 @@
+{% extends 'layouts/base.html.twig' %}
+
+{% block title "Politique de confidentialité" %}
+
+{% block body %}
+<div class="container py-12">
+  <twig:Container>
+    <twig:PageHeader class="mb-3" title="Politique de confidentialité" />
+
+    <div class="max-w-4xl">
+      <div>
+        <h2 class="font-semibold text-slate-700 text-base mb-3">
+          Utilisation des données personnelles collectées
+        </h2>
+        {% include "shared/separator.html.twig" with {className: 'my-5 w-[80%]'} %}
+
+        <div class="mb-4">
+          <h3 class="font-semibold text-slate-700 text-base mb-2">
+            Cookies
+          </h3>
+          <p class="dark:text-gray-400 text-slate-700 text-sm">
+            Si vous avez un compte et que vous vous
+            connectez sur le site, un cookie temporaire sera
+            créé afin de persister votre état de connexion.
+            Ce cookie sera automatiquement détruit lorsque
+            vous vous déconnectez du site.
+          </p>
+        </div>
+        <div class="mb-4">
+          <h3 class="font-semibold text-slate-700 text-base mb-2">
+            Coordonnées
+          </h3>
+          <p class="dark:text-gray-400 text-slate-700 text-sm mb-2">
+            adresse e-mail : L'adresse e-mail que nous
+            allons utiliser pour vous contacter.
+          </p>
+          <p class="dark:text-gray-400 text-slate-700 text-sm mb-2">
+            téléphone : Le numéro que vous allez utiliser
+            pour effectuer le paiement.
+          </p>
+        </div>
+      </div>
+
+      {% include "shared/separator.html.twig" with {className: 'my-5'} %}
+
+      <div class="mb-4">
+        <h2 class="font-semibold text-slate-700 text-base">
+          Durées de stockage de vos données
+        </h2>
+        {% include "shared/separator.html.twig" with {className: 'my-5 w-[80%]'} %}
+
+
+        <div class="mb-4">
+          <p class="dark:text-gray-400 text-slate-700 text-sm">
+            Pour les utilisateurs qui s'enregistrent sur le
+            site, nous stockons également les données
+            personnelles (nom, prénom, email, numéro de
+            téléphone, etc.) indiquées dans leur profil.
+            Tous les utilisateurs peuvent voir, editer ou
+            supprimer leurs informations
+            personnelles(compte) à tout moment. Seul
+            l'administrateur du site peut aussi voir, editer
+            ou supprimer ces informations.
+          </p>
+        </div>
+      </div>
+      {% include "shared/separator.html.twig" with {className: 'my-5'} %}
+      <div class="mb-4">
+        <h2 class="font-semibold text-slate-700 text-base">
+          Les droits que vous avez sur vos données.
+        </h2>
+        {% include "shared/separator.html.twig" with {className: 'my-5 w-[80%]'} %}
+
+        <div class="mb-4">
+          <p class="dark:text-gray-400 text-slate-700 text-sm">
+            Si vous avez un compte et que vous souhaitez
+            supprimer votre compte, vous pouvez le faire
+            directement depuis votre profil en cliquant sur
+            le bouton supprimé.
+          </p>
+        </div>
+      </div>
+    </div>
+  </twig:Container>
+</div>
+{% endblock %}

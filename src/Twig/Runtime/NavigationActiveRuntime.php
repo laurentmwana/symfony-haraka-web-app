@@ -31,6 +31,22 @@ class NavigationActiveRuntime implements RuntimeExtensionInterface
             : "cursor-pointer flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900";
     }
 
+
+    /**
+     * @param mixed $link
+     * @param array<int, string> $indexers
+     * @return string
+     */
+    public function isActiveNavlinkBase(mixed $link, array $indexers = []): string
+    {
+        $active = $this->isActive($link, $indexers);
+
+        return $active
+            ? "transition-colors hover:text-primary/80 text-primary"
+            : "transition-colors hover:text-foreground/80 text-foreground/60";
+    }
+
+
     /**
      * @param mixed $link
      * @param array<int, string> $indexers
@@ -39,7 +55,6 @@ class NavigationActiveRuntime implements RuntimeExtensionInterface
     private function isActive(mixed $link, array $indexers = []): bool
     {
         $url = $this->request->getCurrentRequest()->getPathInfo();
-
 
         if (!empty($indexers)) {
             return in_array(true, array_map(

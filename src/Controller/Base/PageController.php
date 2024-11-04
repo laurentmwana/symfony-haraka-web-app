@@ -14,4 +14,11 @@ class PageController extends AbstractController
     {
         return $this->render('page/about.html.twig',);
     }
+
+
+    #[Route('/politico', name: 'page.politico')]
+    public function politico(): Response
+    {
+        return $this->render('page/politico.html.twig',);
+    }
 }

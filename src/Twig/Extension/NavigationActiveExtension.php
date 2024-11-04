@@ -13,6 +13,7 @@ class NavigationActiveExtension extends AbstractExtension
     {
         return [
             new TwigFunction('isActiveNavlink', [NavigationActiveRuntime::class, 'isActiveNavlink']),
+            new TwigFunction('isActiveNavlinkBase', [NavigationActiveRuntime::class, 'isActiveNavlinkBase']),
         ];
     }
 }
