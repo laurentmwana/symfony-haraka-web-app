@@ -2,26 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
-@font-face {
-  font-family: "Inter";
-  font-weight: 400;
-  font-display: swap;
-  src: url("./../fonts/Inter-Regular.woff2") format("woff2");
+body {
+  font-family: "Inter", Helvetica, sans-serif;
 }
 
-@font-face {
-  font-family: "Inter";
-  font-weight: 500;
-  font-display: swap;
-  src: url("./../fonts/Inter-Medium.woff2") format("woff2");
-}
-
-@font-face {
-  font-family: "Inter";
-  font-weight: 700;
-  font-display: swap;
-  src: url("./../fonts/Inter-Bold.woff2") format("woff2");
-}
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -44,6 +28,14 @@
     --destructive-foreground: 210 40% 98%;
     --ring: 221.2 83.2% 53.3%;
     --radius: 0.5rem;
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
   .dark {
@@ -66,32 +58,20 @@
     --destructive: 2 80% 58%;
     --destructive-foreground: 0 0% 100%;
     --ring: 223 45% 44%;
-  }
-}
-
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
   }
 }
 
 @layer base {
-  .menu-button span {
-    transform-origin: center;
-    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
-  }
-  .menu-button.opened span:nth-child(1) {
-    transform: translateY(8px) rotate(45deg);
-  }
-  .menu-button.opened span:nth-child(2) {
-    opacity: 0;
-  }
-  .menu-button.opened span:nth-child(3) {
-    transform: translateY(-8px) rotate(-45deg);
-  }
-
-  ::selection {
-    @apply bg-slate-200  text-muted-foreground;
+  body {
+    @apply bg-background text-foreground;
   }
 
   ::-webkit-scrollbar {
@@ -105,74 +85,74 @@
   ::-webkit-scrollbar-thumb {
     @apply rounded-sm bg-gray-500;
   }
+}
 
-  textarea {
-    min-height: 85px;
+@layer utilities {
+  .container-center {
+    @apply mx-auto max-w-4xl;
   }
-  .theme-toggle {
-    width: 50px;
-    height: 24px;
-    background-color: #4b5563;
-    border-radius: 50px;
-    padding: 2px;
-    position: relative;
-    cursor: pointer;
-    transition: background-color 0.3s;
+
+  .container-card {
+    @apply bg-card rounded-md shadow-sm p-4 border;
   }
-  .theme-toggle::before {
-    content: "";
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background-color: white;
-    transition: transform 0.3s;
+
+  .container-dashboard {
+    @apply py-10 px-5 w-full;
   }
-  .theme-toggle.light {
-    background-color: #d1d5db;
+
+  .text-description {
+    @apply text-sm text-muted-foreground;
   }
-  .theme-toggle.light::before {
-    transform: translateX(26px);
+
+  .text-page {
+    @apply text-xl font-semibold text-gray-700 dark:text-gray-200 mb-4;
+  }
+
+  .card-wrapper {
+    @apply bg-card py-6 px-7 border shadow-sm rounded-md;
+  }
+
+  .link-show {
+    @apply hover:underline;
   }
 
   @media screen and (max-width: 1200px) {
-    #responsive-table,
-    #responsive-table tbody,
-    #responsive-table tfoot,
-    #responsive-table tr,
-    #responsive-table th,
-    #responsive-table td {
+    .custom-response-table,
+    .custom-response-table tbody,
+    .custom-response-table tfoot,
+    .custom-response-table tr,
+    .custom-response-table th,
+    .custom-response-table td {
       @apply block;
     }
 
-    #responsive-table tr {
+    .custom-response-table tr {
       @apply mb-[30px] border-b-0 bg-background;
     }
 
-    #responsive-table tr:hover {
+    .custom-response-table tr:hover {
       @apply bg-inherit;
     }
 
-    #responsive-table thead,
-    #responsive-table tfoot {
+    .custom-response-table thead {
       display: none;
     }
 
-    #responsive-table td {
+    .custom-response-table td {
       @apply relative ps-[170px] -mt-[1px] border-b border-muted-foreground/20;
     }
 
-    #responsive-table td::before {
+    .custom-response-table td::before {
       @apply absolute left-0 top-0 bottom-0 p-3 flex items-center justify-center w-[145px] text-center content-[attr(data-label)] border-e border-muted-foreground/20;
     }
   }
+}
 
-  html.is-changing .transition-fade {
-    transition: opacity 0.25s;
-    opacity: 1;
+@layer base {
+  * {
+    @apply border-border;
   }
-  /* Define the styles for the unloaded pages */
-  html.is-animating .transition-fade {
-    opacity: 0;
+  body {
+    @apply bg-background text-foreground;
   }
 }

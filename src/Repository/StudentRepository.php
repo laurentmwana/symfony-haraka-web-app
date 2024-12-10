@@ -24,7 +24,6 @@ class StudentRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('s')
 
             ->leftJoin('s.actualLevel', 'ac')
-            ->innerJoin('s.identificator', 'i')
             ->leftJoin('s.user', 'u')
             ->innerJoin('ac.level', 'l')
             ->innerJoin('l.sector', 'se')
@@ -43,14 +42,4 @@ class StudentRepository extends ServiceEntityRepository
 
         return $qb->orderBy('s.updated_at', 'DESC')->getQuery();
     }
-
-    //    public function findOneBySomeField($value): ?Student
-    //    {
-    //        return $this->createQueryBuilder('s')
-    //            ->andWhere('s.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
 }

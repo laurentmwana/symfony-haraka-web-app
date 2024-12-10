@@ -3,16 +3,19 @@
 namespace App\Entity;
 
 use App\Enum\GenderEnum;
-use App\Repository\StudentRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Validator\Constraints as Validator;
 use ApiPlatform\Metadata as Metadata;
+use App\Repository\StudentRepository;
+use Doctrine\Common\Collections\Collection;
+use Symfony\Component\HttpFoundation\File\File;
+use Doctrine\Common\Collections\ArrayCollection;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\Validator\Constraints as Validator;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
 
 
 #[ORM\Entity(repositoryClass: StudentRepository::class)]
@@ -46,6 +49,7 @@ use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
         'created_at' => 'partial'
     ]
 )]
+#[Vich\Uploadable]
 class Student
 {
     #[ORM\Id]
@@ -186,9 +190,13 @@ class Student
         ]
     )]
     private Collection $payments;
+    public ?string $contentUrl = null;
 
-    #[ORM\OneToOne(mappedBy: 'student', cascade: ['persist', 'remove'])]
-    private ?Identificator $identificator = null;
+    #[Vich\UploadableField(mapping: "qrcode_student", fileNameProperty: "identificatorPath")]
+    public ?File $identificator = null;
+
+    #[ORM\Column()]
+    public ?string $identificatorPath = null;
 
     public function __construct()
     {
@@ -424,19 +432,41 @@ class Student
         return $this;
     }
 
-    public function getIdentificator(): ?Identificator
+    public function getContentUrl(): ?string
+    {
+        return $this->contentUrl;
+    }
+
+    public function setContentUrl(?string $contentUrl): static
+    {
+        $this->contentUrl = $contentUrl;
+
+        return $this;
+    }
+    public function getIdentificator(): File|null
     {
         return $this->identificator;
     }
-
-    public function setIdentificator(Identificator $identificator): static
+    public function setIdentificator(?File $identificator): static
     {
-        // set the owning side of the relation if necessary
-        if ($identificator->getStudent() !== $this) {
-            $identificator->setStudent($this);
+        $this->identificator = $identificator;
+
+        if ($identificator) {
+            // Mettez à jour `updated_at` pour que VichUploader puisse détecter le changement
+            $this->updated_at = new \DateTime();
         }
 
-        $this->identificator = $identificator;
+        return $this;
+    }
+
+    public function getIdentificatorPath(): string|null
+    {
+        return $this->identificatorPath;
+    }
+
+    public function setIdentificatorPath(?string $identificatorPath): static
+    {
+        $this->identificatorPath = $identificatorPath;
 
         return $this;
     }

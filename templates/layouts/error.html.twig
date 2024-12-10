@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>{% block title %} Une erreur est survenue {% endblock %} - Haraka</title>
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
+  {% block stylesheets %}
+  {{ encore_entry_link_tags('app') }}
+  {% endblock %}
+
+  {% block javascripts %}
+  {{ encore_entry_script_tags('app') }}
+  {% endblock %}
+</head>
+
+<body>
+  <div class="h-full relative" id="swup">
+    <div class="container py-16">
+      <div class="container-center">
+        <twig:PageHeader class="mb-3" title="Problème">
+
+        </twig:PageHeader>
+        <div class="card-wrapper mb-2">
+          <p class="text-description mb-2">
+
+          </p>
+        </div>
+
+        <twig:Button dimension="sm" href="{{ path('welcome') }}">
+          <i class="bi bi-arrow-left"></i>
+          <span>Page d'accueil</span>
+        </twig:Button>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

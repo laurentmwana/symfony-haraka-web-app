@@ -98,6 +98,7 @@ class Paid
         ]
     )]
     private ?\DateTimeInterface $updated_at = null;
+
     public ?string $contentUrl = null;
 
     #[Vich\UploadableField(mapping: "qrcode_slip", fileNameProperty: "filePath")]
@@ -179,6 +180,7 @@ class Paid
     {
         return $this->contentUrl;
     }
+
     public function setContentUrl(?string $contentUrl): static
     {
         $this->contentUrl = $contentUrl;

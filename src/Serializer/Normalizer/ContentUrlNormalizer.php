@@ -5,6 +5,7 @@ namespace App\Serializer\Normalizer;
 use App\Entity\Paid;
 use App\Entity\User;
 use App\Entity\Identificator;
+use App\Entity\Student;
 use Vich\UploaderBundle\Storage\StorageInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
@@ -22,7 +23,11 @@ class ContentUrlNormalizer implements NormalizerInterface
         array $context = []
     ): array|string|int|float|bool|\ArrayObject|null {
         $context[self::ALREADY_CALLED] = true;
-        $object->contentUrl = $this->storage->resolveUri($object, 'file');
+        if ($object instanceof Student) {
+            $object->contentUrl = $this->storage->resolveUri($object, 'identificator');
+        } else {
+            $object->contentUrl = $this->storage->resolveUri($object, 'file');
+        }
         return $this->normalizer->normalize($object, $format, $context);
     }
 
@@ -37,14 +42,14 @@ class ContentUrlNormalizer implements NormalizerInterface
 
         return ($data instanceof Paid)
             || ($data instanceof User)
-            || ($data instanceof Identificator);
+            || ($data instanceof Student);
     }
 
     public function getSupportedTypes(?string $format): array
     {
         return [
             Paid::class => true,
-            Identificator::class => true,
+            Student::class => true,
             User::class => true,
         ];
     }

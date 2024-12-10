@@ -2,12 +2,10 @@
 
 namespace App\Subscriber;
 
-use App\Entity\Identificator;
 use App\Entity\Student;
 use Doctrine\ORM\Events;
 use App\Endroid\EndroidHandle;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Event\PostPersistEventArgs;
 use Doctrine\ORM\Event\PrePersistEventArgs;
 
 final class StudentSubscriber
@@ -17,21 +15,19 @@ final class StudentSubscriber
     private EndroidHandle $endroidHandle
   ) {}
 
-  public function postPersist(PostPersistEventArgs $args): void
+  public function prePersist(PrePersistEventArgs $args): void
   {
     $student = $args->getObject();
+
     if ($student instanceof Student) {
       $file = $this->endroidHandle->write($student->getNumberPhone());
 
-      $identificator = (new Identificator())
-        ->setFile($file)
-        ->setStudent($student);
+      $student->setIdentificator($file);
 
-      $this->em->persist($identificator);
+      $this->em->persist($student);
       $this->em->flush();
     }
   }
-
 
 
   /**
@@ -40,7 +36,7 @@ final class StudentSubscriber
   public function getSubscribedEvents(): array
   {
     return [
-      Events::postPersist,
+      Events::prePersist,
     ];
   }
 }

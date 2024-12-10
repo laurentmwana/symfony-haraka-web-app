@@ -89,22 +89,12 @@ class Faculty
     ])]
     private Collection $departments;
 
-    /**
-     * @var Collection<int, Assignment>
-     */
-    #[ORM\OneToMany(targetEntity: Assignment::class, mappedBy: 'faculty', orphanRemoval: true)]
-    #[Groups([
-        'read:faculty:item',
-    ])]
-    private Collection $assignments;
-
 
     public function __construct()
     {
         $this->departments = new ArrayCollection();
         $this->created_at = new \DateTime();
         $this->updated_at = new \DateTime();
-        $this->assignments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -172,36 +162,6 @@ class Faculty
             // set the owning side to null (unless already changed)
             if ($department->getFaculty() === $this) {
                 $department->setFaculty(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Assignment>
-     */
-    public function getAssignments(): Collection
-    {
-        return $this->assignments;
-    }
-
-    public function addAssignment(Assignment $assignment): static
-    {
-        if (!$this->assignments->contains($assignment)) {
-            $this->assignments->add($assignment);
-            $assignment->setFaculty($this);
-        }
-
-        return $this;
-    }
-
-    public function removeAssignment(Assignment $assignment): static
-    {
-        if ($this->assignments->removeElement($assignment)) {
-            // set the owning side to null (unless already changed)
-            if ($assignment->getFaculty() === $this) {
-                $assignment->setFaculty(null);
             }
         }
 

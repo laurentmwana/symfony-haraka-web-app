@@ -26,13 +26,20 @@ use ApiPlatform\Metadata as Metadata;
             'read:user:item',
         ]
     ],
+    denormalizationContext: [
+        'groups' => [
+            'write:user'
+        ]
+    ],
     operations: [
         new Metadata\Get(
             uriTemplate: '/me'
         ),
-        new Metadata\Post(
-            uriTemplate: '/login'
-        ),
+        new Metadata\Get(),
+        new Metadata\Post(),
+        new Metadata\Delete(),
+        new Metadata\Patch(),
+        new Metadata\GetCollection(),
     ],
 )]
 
@@ -55,6 +62,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(
         [
             'read:user:item',
+            'write:user'
         ]
     )]
     private ?string $email = null;
@@ -66,6 +74,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(
         [
             'read:user:item',
+            'write:user'
         ]
     )]
     private array $roles = [];
@@ -74,12 +83,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var string The hashed password
      */
     #[ORM\Column]
+    #[Groups(
+        [
+            'write:user'
+        ]
+    )]
     private ?string $password = null;
 
     #[ORM\OneToOne(inversedBy: 'user', cascade: ['persist', 'remove'])]
+    #[Groups(
+        [
+            'read:user:item',
+            'write:user'
+        ]
+    )]
     private ?Student $student = null;
 
     #[ORM\OneToOne(inversedBy: 'user', cascade: ['persist', 'remove'])]
+    #[Groups(
+        [
+            'read:user:collection',
+            'read:user:item',
+            'write:user'
+        ]
+    )]
     private ?Checker $checker = null;
 
     #[ORM\Column(length: 255, unique: true)]
@@ -87,9 +114,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Validator\Length(min: 6, max: 12)]
     #[Groups(
         [
+            'read:user:collection',
             'read:user:item',
+            'write:user'
         ]
     )]
+
     private ?string $username = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
@@ -98,6 +128,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $updated_at = null;
 
+    #[Groups(
+        [
+            'read:user:collection',
+            'read:user:item',
+        ]
+    )]
     public ?string $contentUrl = null;
 
 
@@ -111,6 +147,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var Collection<int, Notification>
      */
     #[ORM\OneToMany(targetEntity: Notification::class, mappedBy: 'user', orphanRemoval: true)]
+    #[Groups(
+        [
+            'read:user:item',
+        ]
+    )]
     private Collection $notifications;
 
     public function __construct()

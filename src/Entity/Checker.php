@@ -120,17 +120,6 @@ class Checker
     )]
     private ?\DateTimeInterface $updated_at = null;
 
-    /**
-     * @var Collection<int, Assignment>
-     */
-    #[ORM\ManyToMany(targetEntity: Assignment::class, mappedBy: 'checkers')]
-    #[Groups(
-        [
-            'read:checker:collection',
-            'read:checker:item',
-        ]
-    )]
-    private Collection $assignments;
 
     #[ORM\OneToOne(mappedBy: 'checker', cascade: ['persist', 'remove'])]
     private ?User $user = null;
@@ -139,7 +128,6 @@ class Checker
     {
         $this->created_at = new \DateTime();
         $this->updated_at = new \DateTime();
-        $this->assignments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -215,33 +203,6 @@ class Checker
     public function setUpdatedAt(?\DateTimeInterface $updated_at): static
     {
         $this->updated_at = $updated_at;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Assignment>
-     */
-    public function getAssignments(): Collection
-    {
-        return $this->assignments;
-    }
-
-    public function addAssignment(Assignment $assignment): static
-    {
-        if (!$this->assignments->contains($assignment)) {
-            $this->assignments->add($assignment);
-            $assignment->addChecker($this);
-        }
-
-        return $this;
-    }
-
-    public function removeAssignment(Assignment $assignment): static
-    {
-        if ($this->assignments->removeElement($assignment)) {
-            $assignment->removeChecker($this);
-        }
 
         return $this;
     }

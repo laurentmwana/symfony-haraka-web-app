@@ -30,31 +30,32 @@ block body %}
       <twig:TableRow>
         <twig:TableCell>
           <a class="hover:underline" href="{{ path('~expense-control.show', {id: expenseControl.id}) }}">
-          {{ expenseControl.startAt.format('d-m-Y')}}
+            {{ expenseControl.startAt.format('d-m-Y')}}
           </a>
         </twig:TableCell>
         <twig:TableCell>
           <a class="hover:underline" href="{{ path('~expense-control.show', {id: expenseControl.id}) }}">
-          {{ expenseControl.endAt.format('d-m-Y')}}
+            {{ expenseControl.endAt.format('d-m-Y')}}
           </a>
         </twig:TableCell>
         <twig:TableCell>
           <div class="flex items-center justify-start flex-wrap gap-1">
             {% for year in expenseControl.yearAcademics %}
-              <twig:Badge  type="{{ year.closed ? 'secondary' : 'outline' }}">
+            <twig:Badge type="{{ year.closed ? 'secondary' : 'outline' }}">
               <a class="" href="{{ path('~expense-control.show', {id: expenseControl.id}) }}">
-              {{ year.name }}
-            </a>
-        </twig:Badge>
-             
-          {% endfor %}
+                {{ year.name }}
+              </a>
+            </twig:Badge>
+
+            {% endfor %}
           </div>
         </twig:TableCell>
         <twig:TableCell>
           {{ expenseControl.createdAt | ago }}
         </twig:TableCell>
         <twig:TableCell>
-          {% include 'shared/action.html.twig' with {routeDelete: path('~expense-control.delete', {id: expenseControl.id}), routeEdit: path('~expense-control.edit', {id: expenseControl.id})} %}
+          {% include 'shared/action.html.twig' with {routeDelete: path('~expense-control.delete', {id:
+          expenseControl.id}), routeEdit: path('~expense-control.edit', {id: expenseControl.id})} %}
         </twig:TableCell>
       </twig:TableRow>
       {% endfor %}

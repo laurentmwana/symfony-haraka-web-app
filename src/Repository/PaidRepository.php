@@ -25,7 +25,6 @@ class PaidRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('p')
             ->innerJoin('p.student', 's')
             ->innerJoin('s.user', 'u')
-            ->innerJoin('s.identificator', 'i')
             ->innerJoin('s.actualLevel', 'ac')
             ->innerJoin('p.level', 'l')
             ->innerJoin('l.yearAcademic', 'y')
