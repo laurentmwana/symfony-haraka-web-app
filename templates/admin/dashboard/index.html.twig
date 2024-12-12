@@ -5,12 +5,74 @@ Tableau de bord
 {% endblock %}
 
 {% block body %}
-<twig:Card>
-  <div class="max-w-lg mb-4">
-    <h1 class="mb-3 text-base font-semibold text-slate-700 dark:text-gray-300">
-      Tableau de bord
-    </h1>
-  </div>
+<twig:PageHeader class="mb-2" title="Tableau de bord" />
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+  <twig:Card>
+    <h2 class="text-3xl font-semibold mb-2">
+      {{ faculties }}
+    </h2>
+    <p class="text-description">
+      {{ faculties > 0 ? "facultés" : "faculté" }}
+    </p>
+  </twig:Card>
+  <twig:Card>
+    <h2 class="text-3xl font-semibold mb-2">
+      {{ departments }}
+    </h2>
+    <p class="text-description">
+      {{ departments > 0 ? "départements" : "département" }}
+    </p>
+  </twig:Card>
+  <twig:Card>
+    <h2 class="text-3xl font-semibold mb-2">
+      {{ sectors }}
+    </h2>
+    <p class="text-description">
+      {{ sectors > 0 ? "options" : "option" }}
+    </p>
+  </twig:Card>
+  <twig:Card>
+    <h2 class="text-3xl font-semibold mb-2">
+      {{ students }}
+    </h2>
+    <p class="text-description">
+      {{ students > 0 ? "étudiants" : "étudiant" }}
+    </p>
+  </twig:Card>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+  <div class="lg:col-span-2">
+    <twig:Card>
+      <div class="mb-4">
+        <h2 class="text-base font-semibold mb-2">
+          Statistique des utilisateurs
+        </h2>
+        <p class="text-description">
 
-</twig:Card>
+        </p>
+      </div>
+      <div id="pie-apexchart" data-pie="{{ users }}"></div>
+    </twig:Card>
+  </div>
+  <div class="flex flex-col gap-4 ">
+    <h2 class="text-base font-semibold mb-2">
+      Notification
+    </h2>
+
+    {% for notification in notifications %}
+    <div class="mb-2">
+      <h3>
+        {{ notification.title|u.truncate(70, '...') }}
+      </h3>
+      <p>
+        {{ notification.description|u.truncate(100, '...') }}
+      </p>
+    </div>
+    {% else %}
+    <p class="text-description">
+      Pas de notification disponible
+    </p>
+    {% endfor %}
+  </div>
+</div>
 {% endblock %}

@@ -1,6 +1,4 @@
 document.querySelectorAll("#dropdown-menu").forEach((dropdownMenu) => {
-  console.log(dropdownMenu);
-
   const dropdownTrigger = dropdownMenu.querySelector("#dropdown-trigger");
   const dropdownContent = dropdownMenu.querySelector("#dropdown-content");
   if (dropdownTrigger && dropdownContent) {

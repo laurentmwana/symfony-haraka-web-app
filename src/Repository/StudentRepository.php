@@ -29,7 +29,7 @@ class StudentRepository extends ServiceEntityRepository
             ->innerJoin('l.sector', 'se')
             ->innerJoin('l.programme', 'p')
             ->innerJoin('l.yearAcademic', 'y')
-            ->addSelect('se', 'y', 'p', 'l', 'ac', 'i', 'u');
+            ->addSelect('se', 'y', 'p', 'l', 'ac', 'u');
 
         if (null !== $query && !empty($query)) {
             $qb->where($qb->expr()->orX(
