@@ -53,13 +53,13 @@ class DashboardController extends AbstractController
     ]);
   }
 
-  private function getUserStat(): JsonResponse
+  private function getUserStat(): bool|string
   {
     $data = [
       'student' => 45,
       'checker' => 60,
     ];
 
-    return $this->json($data);
+    return $this->json($data)->getContent();
   }
 }

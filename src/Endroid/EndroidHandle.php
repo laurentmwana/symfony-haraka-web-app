@@ -14,13 +14,9 @@ final class EndroidHandle
 
     public static function write(string $data): File
     {
-        $qr = (new Builder(
-            writer: new PngWriter(),
-            data: $data,
-            encoding: new Encoding('UTF-8'),
-            size: 200,
-            margin: 10
-        ))->build();
+        $builder = new Builder();
+
+        $result = $builder->build();
 
         $name = sprintf("%s.png", TokenGenerator::alpha(10));
 
@@ -30,7 +26,7 @@ final class EndroidHandle
             $name
         );
 
-        file_put_contents($temp, $qr->getString());
+        file_put_contents($temp, $result->getString());
 
         return new UploadedFile(
             $temp,

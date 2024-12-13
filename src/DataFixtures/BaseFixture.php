@@ -33,17 +33,17 @@ class BaseFixture extends Fixture
 
         $programmes = $this->loadProgrammes($manager);
 
-        $faculties = $this->loadFaculties($manager, 12);
+        $faculties = $this->loadFaculties($manager, 6);
         $departments = $this->loadDepartments($manager, $faculties);
         $sectors = $this->loadSectors($manager, $departments);
 
         $year = $this->getLatestYear($manager);
         $levels = $this->loadLevels($manager, $programmes, $sectors, $year);
-        $checkers = $this->loadCheckers($manager, 100);
+        $checkers = $this->loadCheckers($manager, 5);
 
         $this->loadAdmin($manager);
         $this->loadCheckerUsers($manager, $checkers);
-        $this->loadStudents($manager, $levels, 40);
+        $this->loadStudents($manager, $levels, 3);
 
         $manager->flush();
     }
@@ -102,7 +102,7 @@ class BaseFixture extends Fixture
         $faker = Factory::create();
         $departments = [];
         foreach ($faculties as $faculty) {
-            for ($i = 0; $i < 3; $i++) {
+            for ($i = 0; $i < 2; $i++) {
                 $department = (new Department())
                     ->setName($name = $faker->text(20))
                     ->setAlias(substr($name, 0, 8))

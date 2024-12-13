@@ -104,8 +104,11 @@ class Paid
     #[Vich\UploadableField(mapping: "qrcode_slip", fileNameProperty: "filePath")]
     public ?File $file = null;
 
-    #[ORM\Column()]
+    #[ORM\Column(nullable: true)]
     public ?string $filePath = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $token = null;
 
     public function __construct()
     {
@@ -211,6 +214,18 @@ class Paid
     public function setFilePath(?string $filePath): static
     {
         $this->filePath = $filePath;
+
+        return $this;
+    }
+
+    public function getToken(): ?string
+    {
+        return $this->token;
+    }
+
+    public function setToken(string $token): static
+    {
+        $this->token = $token;
 
         return $this;
     }

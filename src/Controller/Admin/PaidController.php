@@ -3,16 +3,9 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Paid;
-use App\Entity\Level;
-use App\Entity\Programme;
 use App\Mapped\MappedYear;
-use App\Hydrate\HydrateLevel;
-use App\Form\FilterLevelFormType;
 use App\Repository\PaidRepository;
-use App\Repository\LevelRepository;
 use App\Form\Other\MappedYearFormType;
-use App\Repository\ProgrammeRepository;
-use App\Form\FilterLevelStudentFormType;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

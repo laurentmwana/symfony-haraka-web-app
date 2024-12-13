@@ -20,32 +20,12 @@
         <!-- Sidebar Menu -->
         <div id="sidebarMenu" class="hidden border-r bg-muted/40 md:block">
             <div class="flex h-full max-h-screen flex-col gap-2">
-                <div class="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
+                <div class="flex justify-between h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
                     {% include 'shared/logo.html.twig' with {homeUrl: path('dashboard.index')} %}
 
-                    <div class="relative ml-auto" id="dropdown-menu">
-                        <button id="dropdown-trigger" class=" h-8 w-8 rounded-md border border-gray-300">
-                            <i class="bi bi-bell"></i>
-                        </button>
-
-                        <div id="dropdown-content"
-                            class="absolute z-30 left-0 mt-2 w-[320px] h-[520px] rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 hidden">
-                            <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="dropdown-menu">
-                                <a href="{{ path('~programme.index') }}"
-                                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                    role="menuitem">Programme</a>
-                                <a href="{{ path('~year-academic.index') }}"
-                                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                    role="menuitem">Année academique</a>
-                                <a href="{{ path('~amount.index') }}"
-                                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                    role="menuitem">Frais académique</a>
-
-                            </div>
-                        </div>
-                    </div>
-
-
+                    <twig:Button variant="outline" href="{{ path('~notification.index') }}">
+                        <i class="bi bi-bell text-base"></i>
+                    </twig:Button>
                 </div>
                 <nav class="grid items-start px-4 text-sm font-medium">
                     <a href="{{ path('dashboard.index') }}"

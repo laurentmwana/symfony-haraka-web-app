@@ -76,12 +76,15 @@ final class PaidSubscriber
 
   private function addPaid(Student $student, Level $level): void
   {
-    $file = EndroidHandle::write(TokenGenerator::alpha(80));
+    $file = EndroidHandle::write(
+      sprintf(TokenGenerator::alpha(255))
+    );
 
     $paid = (new Paid())
       ->setStudent($student)
-      ->setLevel($level)
-      ->setFile($file);
+      ->setFile($file)
+      ->setLevel($level);
+
 
     $this->em->persist($paid);
   }

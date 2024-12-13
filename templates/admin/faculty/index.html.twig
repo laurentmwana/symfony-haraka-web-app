@@ -3,7 +3,7 @@ block body %}
 <twig:Card>
   <div class="max-w-lg mb-4">
     <h1 class="mb-3 text-base font-semibold text-slate-700 dark:text-gray-300">
-      Gestion de faculté
+      Gestion de facultés
     </h1>
   </div>
 
@@ -28,14 +28,15 @@ block body %}
       <twig:TableRow>
         <twig:TableCell>
           <a class="hover:underline" href="{{ path('~faculty.show', {id: faculty.id}) }}">
-          {{ faculty.name|u.truncate(40, '...', false)}}
+            {{ faculty.name|u.truncate(40, '...', false)}}
           </a>
         </twig:TableCell>
         <twig:TableCell>
           {{ faculty.createdAt | ago }}
         </twig:TableCell>
         <twig:TableCell>
-          {% include 'shared/action.html.twig' with {routeDelete: path('~faculty.delete', {id: faculty.id}), routeEdit: path('~faculty.edit', {id: faculty.id})} %}
+          {% include 'shared/action.html.twig' with {routeDelete: path('~faculty.delete', {id: faculty.id}), routeEdit:
+          path('~faculty.edit', {id: faculty.id})} %}
         </twig:TableCell>
       </twig:TableRow>
       {% endfor %}
