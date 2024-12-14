@@ -5,35 +5,51 @@ namespace App\Endroid;
 use App\Helpers\TokenGenerator;
 use Endroid\QrCode\Builder\Builder;
 use Endroid\QrCode\Encoding\Encoding;
-use Endroid\QrCode\Writer\PngWriter;
-use Symfony\Component\HttpFoundation\File\File;
+use Endroid\QrCode\Label\Font\NotoSans;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 final class EndroidHandle
 {
-
-    public static function write(string $data): File
+    /**
+     * Génère un QR code à partir d'une donnée et retourne un fichier temporaire.
+     *
+     * @param string $data Le contenu à inclure dans le QR code.
+     * @param string|null $label Optionnel : un texte à afficher sous le QR code.
+     * @return UploadedFile
+     */
+    public static function write(string $data, ?string $label = null): UploadedFile
     {
-        $builder = new Builder();
+        // Construction du QR code
+        $builder = Builder::create()
+            ->data($data)
+            ->encoding(new Encoding('UTF-8'))
+            ->size(300)
+            ->margin(10);
+
+        // Ajout d'une étiquette si elle est définie
+        if ($label) {
+            $builder->labelText($label)
+                ->labelFont(new NotoSans(20));
+        }
 
         $result = $builder->build();
 
+        // Génération d'un nom unique pour le fichier
         $name = sprintf("%s.png", TokenGenerator::alpha(10));
 
-        $temp = sprintf(
-            "%s/%s",
-            sys_get_temp_dir(),
-            $name
-        );
+        // Chemin du fichier temporaire
+        $tempPath = sprintf("%s/%s", sys_get_temp_dir(), $name);
 
-        file_put_contents($temp, $result->getString());
+        // Écriture du QR code dans le fichier
+        file_put_contents($tempPath, $result->getString());
 
+        // Retourne le fichier temporaire comme UploadedFile
         return new UploadedFile(
-            $temp,
+            $tempPath,
             $name,
             'image/png',
-            null, // Size (optional)
-            true  // Mark as test mode to avoid permission issues
+            null, // Taille (null pour ne pas recalculer)
+            true  // Mode test pour éviter les problèmes de permissions
         );
     }
 }
