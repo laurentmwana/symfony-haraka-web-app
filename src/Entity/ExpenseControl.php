@@ -17,7 +17,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[Metadata\ApiResource(
     operations: [
         new Metadata\Get(
-            uriTemplate: '/expense-controls',
+            uriTemplate: '/expense-controls/{id}',
             normalizationContext: [
                 'groups' => [
                     'read:expense-control:item',
@@ -25,7 +25,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
             ],
         ),
         new Metadata\GetCollection(
-            uriTemplate: '/expense-controls/{id}',
+            uriTemplate: '/expense-controls',
             normalizationContext: [
                 'groups' => [
                     'read:expense-control:collection',
@@ -100,6 +100,7 @@ class ExpenseControl
     #[Validator\NotBlank()]
     #[Groups([
         'read:expense-control:item',
+        'read:expense-control:collection'
 
     ])]
     private Collection $yearAcademics;

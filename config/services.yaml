@@ -20,11 +20,11 @@ services:
       - "../src/Entity/"
       - "../src/Kernel.php"
 
-  App\Subscriber\PaidSubscriber:
-    tags:
-      - { name: doctrine.event_listener, event: onFlush }
+  App\Controller\:
+    resource: "../src/Controller/"
+    tags: ["controller.service_arguments"]
 
-  App\Subscriber\PaymentSubscriber:
+  App\Subscriber\PaidSubscriber:
     tags:
       - { name: doctrine.event_listener, event: postPersist }
 
@@ -37,11 +37,20 @@ services:
       - { name: doctrine.event_listener, event: prePersist }
       - { name: doctrine.event_listener, event: preUpdate }
       - { name: doctrine.event_listener, event: preRemove }
-  App\Subscriber\StudentSubscriber:
-    tags:
-      - { name: doctrine.event_listener, event: prePersist }
 
   App\Payment\PaypalPayment:
     arguments:
       $secret: "%env(PAYPAL_SECRET)%"
       $clientId: "%env(PAYPAL_CLIENT_ID)%"
+
+  App\Subscriber\JWTCreatedSubscriber:
+    tags:
+      - {
+          name: "kernel.event_listener",
+          event: "lexik_jwt_authentication.on_jwt_created",
+          method: "onJWTCreated",
+        }
+
+  App\Serializer\Normalizer\ContentUrlNormalizer:
+    tags:
+      - { name: "serializer.normalizer" }

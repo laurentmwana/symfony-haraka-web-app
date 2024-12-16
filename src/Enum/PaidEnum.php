@@ -4,9 +4,9 @@ namespace App\Enum;
 
 enum PaidEnum: string
 {
-    case TOTALITY = 'paid the full amount';
+    case TOTALITY = 'TOTALITY';
 
-    case PAID_NO_TOTALITY = 'is paid no totality';
+    case PAID_NO_TOTALITY = 'PAID_NO_TOTALITY';
 
-    case NO_PAID  = "has not yet paid";
+    case NO_PAID  = "NO_PAID";
 }

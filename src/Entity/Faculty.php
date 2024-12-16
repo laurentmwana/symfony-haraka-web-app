@@ -50,6 +50,7 @@ class Faculty
             'read:faculty:collection',
             'read:faculty:item',
             'read:department:item',
+            'read:department:collection',
         ]
     )]
     private ?int $id = null;
@@ -62,6 +63,7 @@ class Faculty
             'read:faculty:collection',
             'read:faculty:item',
             'read:department:item',
+            'read:department:collection',
         ]
     )]
     private ?string $name = null;
@@ -71,6 +73,7 @@ class Faculty
         'read:faculty:collection',
         'read:faculty:item',
         'read:department:item',
+        'read:department:collection',
     ])]
     private ?\DateTimeInterface $created_at = null;
 

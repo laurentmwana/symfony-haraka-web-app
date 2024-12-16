@@ -54,6 +54,7 @@ class Department
         [
             'read:department:collection',
             'read:department:item',
+            'read:faculty:item'
         ]
     )]
     private ?int $id = null;
@@ -65,6 +66,7 @@ class Department
         [
             'read:department:collection',
             'read:department:item',
+            'read:faculty:item'
         ]
     )]
     private ?string $name = null;
@@ -74,6 +76,7 @@ class Department
     #[Validator\NotBlank()]
     #[Groups(
         [
+            'read:department:collection',
             'read:department:item',
         ]
     )]
@@ -84,6 +87,7 @@ class Department
         [
             'read:department:collection',
             'read:department:item',
+            'read:faculty:item'
         ]
     )]
     private ?\DateTimeInterface $created_at = null;

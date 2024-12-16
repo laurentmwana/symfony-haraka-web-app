@@ -121,24 +121,6 @@ class Level
     private ?\DateTimeInterface $created_at = null;
 
     /**
-     * @var Collection<int, Student>
-     */
-    #[ORM\ManyToMany(targetEntity: Student::class, mappedBy: 'levels', cascade: ['persist'])]
-    #[Groups(
-        [
-            'read:level:item',
-            'read:programme:item',
-        ]
-    )]
-    private Collection $students;
-
-    /**
-     * @var Collection<int, ActualLevel>
-     */
-    #[ORM\OneToMany(targetEntity: ActualLevel::class, mappedBy: 'level', orphanRemoval: true)]
-    private Collection $actualLevels;
-
-    /**
      * @var Collection<int, Paid>
      */
     #[ORM\OneToMany(targetEntity: Paid::class, mappedBy: 'level', orphanRemoval: true)]
@@ -156,13 +138,18 @@ class Level
     #[ORM\OneToMany(targetEntity: Payment::class, mappedBy: 'level', orphanRemoval: true)]
     private Collection $payments;
 
+    /**
+     * @var Collection<int, Student>
+     */
+    #[ORM\OneToMany(targetEntity: Student::class, mappedBy: 'level')]
+    private Collection $students;
+
     public function __construct()
     {
-        $this->students = new ArrayCollection();
         $this->created_at = new \DateTime();
-        $this->actualLevels = new ArrayCollection();
         $this->paids = new ArrayCollection();
         $this->payments = new ArrayCollection();
+        $this->students = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -218,62 +205,6 @@ class Level
         return $this;
     }
 
-    /**
-     * @return Collection<int, Student>
-     */
-    public function getStudents(): Collection
-    {
-        return $this->students;
-    }
-
-    public function addStudent(Student $student): static
-    {
-        if (!$this->students->contains($student)) {
-            $this->students->add($student);
-            $student->addLevel($this);
-        }
-
-        return $this;
-    }
-
-    public function removeStudent(Student $student): static
-    {
-        if ($this->students->removeElement($student)) {
-            $student->removeLevel($this);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, ActualLevel>
-     */
-    public function getActualLevels(): Collection
-    {
-        return $this->actualLevels;
-    }
-
-    public function addActualLevel(ActualLevel $actualLevel): static
-    {
-        if (!$this->actualLevels->contains($actualLevel)) {
-            $this->actualLevels->add($actualLevel);
-            $actualLevel->setLevel($this);
-        }
-
-        return $this;
-    }
-
-    public function removeActualLevel(ActualLevel $actualLevel): static
-    {
-        if ($this->actualLevels->removeElement($actualLevel)) {
-            // set the owning side to null (unless already changed)
-            if ($actualLevel->getLevel() === $this) {
-                $actualLevel->setLevel(null);
-            }
-        }
-
-        return $this;
-    }
 
     /**
      * @return Collection<int, Paid>
@@ -329,6 +260,36 @@ class Level
             // set the owning side to null (unless already changed)
             if ($payment->getLevel() === $this) {
                 $payment->setLevel(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Student>
+     */
+    public function getStudents(): Collection
+    {
+        return $this->students;
+    }
+
+    public function addStudent(Student $student): static
+    {
+        if (!$this->students->contains($student)) {
+            $this->students->add($student);
+            $student->setLevel($this);
+        }
+
+        return $this;
+    }
+
+    public function removeStudent(Student $student): static
+    {
+        if ($this->students->removeElement($student)) {
+            // set the owning side to null (unless already changed)
+            if ($student->getLevel() === $this) {
+                $student->setLevel(null);
             }
         }
 

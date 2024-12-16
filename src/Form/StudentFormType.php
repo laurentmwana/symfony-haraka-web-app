@@ -34,16 +34,10 @@ class StudentFormType extends AbstractType
                 'widget' => 'single_text',
             ])
             ->add('number_phone')
-            ->add('actualLevel', ChoiceType::class, [
+            ->add('level', ChoiceType::class, [
                 'choice_label' => fn(?Level $level): string|null => $this->formatLevel($level),
                 'choice_value' => 'id',
                 'choices' => $this->levelRepository->findAllWith(),
-                'mapped' => false,
-                'constraints' => [
-                    new Validator\NotBlank(['groups' => ['student:validator:actual']]),
-                    new Validator\Email(['groups' => ['student:validator:actual']]),
-                ],
-                'placeholder' => 'Choisissez une promotion'
             ])
         ;
     }

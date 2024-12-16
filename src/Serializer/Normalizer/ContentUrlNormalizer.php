@@ -23,11 +23,8 @@ class ContentUrlNormalizer implements NormalizerInterface
         array $context = []
     ): array|string|int|float|bool|\ArrayObject|null {
         $context[self::ALREADY_CALLED] = true;
-        if ($object instanceof Student) {
-            $object->contentUrl = $this->storage->resolveUri($object, 'identificator');
-        } else {
-            $object->contentUrl = $this->storage->resolveUri($object, 'file');
-        }
+
+        $object->contentUrl = $this->storage->resolveUri($object, 'file');
         return $this->normalizer->normalize($object, $format, $context);
     }
 
@@ -41,15 +38,13 @@ class ContentUrlNormalizer implements NormalizerInterface
         }
 
         return ($data instanceof Paid)
-            || ($data instanceof User)
-            || ($data instanceof Student);
+            || ($data instanceof User);
     }
 
     public function getSupportedTypes(?string $format): array
     {
         return [
             Paid::class => true,
-            Student::class => true,
             User::class => true,
         ];
     }

@@ -50,6 +50,8 @@ class Programme
             'read:yearAcademic:item',
             'read:payment:collection',
             'read:payment:item',
+            'read:level:item',
+            'read:level:collection'
         ]
     )]
     private ?int $id = null;
@@ -62,6 +64,8 @@ class Programme
             'read:yearAcademic:item',
             'read:payment:collection',
             'read:payment:item',
+            'read:level:item',
+            'read:level:collection'
         ]
     )]
     private ?string $name = null;
@@ -73,6 +77,8 @@ class Programme
             'read:programme:item',
             'read:payment:collection',
             'read:payment:item',
+            'read:level:item',
+            'read:level:collection'
         ]
     )]
     private ?string $alias = null;

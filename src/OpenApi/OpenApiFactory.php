@@ -29,11 +29,11 @@ class OpenApiFactory implements OpenApiFactoryInterface
 
     $schemas = $openApi->getComponents()->getSecuritySchemes();
 
-    // $schemas['bearerAuth'] = new \ArrayObject([
-    //   'type' => 'http',
-    //   'scheme' => 'bearer',
-    //   'bearerFormat' => 'JWT'
-    // ]);
+    $schemas['bearerAuth'] = new \ArrayObject([
+      'type' => 'http',
+      'scheme' => 'bearer',
+      'bearerFormat' => 'JWT'
+    ]);
 
     // $pathItem = $openApi->getPaths()->getPath('/api/grumpy_pizzas/{id}');
     // $operation = $pathItem->getGet();

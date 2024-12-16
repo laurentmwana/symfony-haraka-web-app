@@ -2,18 +2,19 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
+use ApiPlatform\Metadata as Metadata;
+use App\Controller\APIs\MeController;
+use Doctrine\Common\Collections\Collection;
 use Symfony\Component\HttpFoundation\File\File;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Validator;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
-use Vich\UploaderBundle\Mapping\Annotation as Vich;
-use Symfony\Component\Serializer\Annotation\Groups;
-use ApiPlatform\Metadata as Metadata;
 
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
@@ -21,25 +22,17 @@ use ApiPlatform\Metadata as Metadata;
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_USERNAME', fields: ['username'])]
 #[Vich\Uploadable]
 #[Metadata\ApiResource(
+    security: "is_granted('ROLE_USER')",
     normalizationContext: [
         'groups' => [
             'read:user:item',
-        ]
-    ],
-    denormalizationContext: [
-        'groups' => [
-            'write:user'
-        ]
+        ],
     ],
     operations: [
         new Metadata\Get(
-            uriTemplate: '/me'
+            uriTemplate: '/me',
+            controller: MeController::class,
         ),
-        new Metadata\Get(),
-        new Metadata\Post(),
-        new Metadata\Delete(),
-        new Metadata\Patch(),
-        new Metadata\GetCollection(),
     ],
 )]
 
@@ -51,6 +44,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(
         [
             'read:user:item',
+            'read:notification:item'
         ]
     )]
 
@@ -62,7 +56,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(
         [
             'read:user:item',
-            'write:user'
+            'read:notification:item'
         ]
     )]
     private ?string $email = null;
@@ -74,7 +68,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(
         [
             'read:user:item',
-            'write:user'
+            'read:notification:item'
         ]
     )]
     private array $roles = [];
@@ -83,18 +77,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var string The hashed password
      */
     #[ORM\Column]
-    #[Groups(
-        [
-            'write:user'
-        ]
-    )]
     private ?string $password = null;
 
     #[ORM\OneToOne(inversedBy: 'user', cascade: ['persist', 'remove'])]
     #[Groups(
         [
             'read:user:item',
-            'write:user'
         ]
     )]
     private ?Student $student = null;
@@ -102,9 +90,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToOne(inversedBy: 'user', cascade: ['persist', 'remove'])]
     #[Groups(
         [
-            'read:user:collection',
             'read:user:item',
-            'write:user'
         ]
     )]
     private ?Checker $checker = null;
@@ -114,9 +100,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Validator\Length(min: 6, max: 12)]
     #[Groups(
         [
-            'read:user:collection',
             'read:user:item',
-            'write:user'
+            'read:notification:item'
         ]
     )]
 
@@ -130,7 +115,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[Groups(
         [
-            'read:user:collection',
             'read:user:item',
         ]
     )]

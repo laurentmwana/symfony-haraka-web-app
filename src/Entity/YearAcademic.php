@@ -54,6 +54,8 @@ class YearAcademic
             'read:student:item',
             'read:paid:collection',
             'read:paid:item',
+            'read:expense-control:collection',
+            'read:expense-control:item',
         ]
     )]
     private ?int $id = null;
@@ -68,6 +70,8 @@ class YearAcademic
             'read:student:item',
             'read:paid:collection',
             'read:paid:item',
+            'read:expense-control:collection',
+            'read:expense-control:item',
         ]
     )]
     private ?string $name = null;
@@ -80,6 +84,7 @@ class YearAcademic
             'read:level:collection',
             'read:level:item',
             'read:student:item',
+            'read:expense-control:item',
         ]
     )]
     private ?bool $closed = false;
@@ -89,6 +94,7 @@ class YearAcademic
         [
             'read:yearAcademic:collection',
             'read:yearAcademic:item',
+            'read:expense-control:item',
         ]
     )]
     private ?\DateTimeInterface $created_at = null;

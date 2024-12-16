@@ -1,5 +1,5 @@
 api_platform:
-  title: Hello API Platform
+  title: Haraka API Platform
   version: 1.0.0
   formats:
     jsonld: ["application/ld+json"]
@@ -12,3 +12,9 @@ api_platform:
     pagination_client_items_per_page: true
     pagination_items_per_page: 12
     pagination_maximum_items_per_page: 50
+
+  swagger:
+    api_keys:
+      JWT:
+        name: Authorization
+        type: header

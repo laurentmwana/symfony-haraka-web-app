@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20241015155621 extends AbstractMigration
+final class Version20241215144816 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -20,12 +20,12 @@ final class Version20241015155621 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE qrcode ADD created_at DATETIME NOT NULL, ADD updated_at DATETIME DEFAULT NULL');
+        $this->addSql('ALTER TABLE student DROP INDEX UNIQ_B723AF335FB14BA7, ADD INDEX IDX_B723AF335FB14BA7 (level_id)');
     }
 
     public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE qrcode DROP created_at, DROP updated_at');
+        $this->addSql('ALTER TABLE student DROP INDEX IDX_B723AF335FB14BA7, ADD UNIQUE INDEX UNIQ_B723AF335FB14BA7 (level_id)');
     }
 }

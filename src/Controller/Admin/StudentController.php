@@ -3,10 +3,8 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\ActualLevel;
 use App\Entity\Student;
 use App\Form\StudentFormType;
-use App\Repository\LevelRepository;
 use App\Repository\StudentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
@@ -15,7 +13,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\FormInterface;
 
 #[Route('/admin', name: '~')]
 class StudentController extends AbstractController
@@ -50,20 +47,9 @@ class StudentController extends AbstractController
   {
     $form = $this->createForm(StudentFormType::class, $student);
 
-    $form->get('actualLevel')
-      ->setData($student->getActualLevel()->getLevel());
-
     $form->handleRequest($request);
 
     if ($form->isSubmitted() && $form->isValid()) {
-
-      $newLevel = $this->getActualLevel($form)->getLevel();
-
-      $student->removeLevel($student->getActualLevel()->getLevel());
-      $student->addLevel($newLevel);
-
-      $student->getActualLevel()->setLevel($newLevel);
-      $student->getActualLevel()->setUpdatedAt(new \DateTime());
 
       $student->setUpdatedAt(new \DateTime());
 
@@ -89,12 +75,6 @@ class StudentController extends AbstractController
 
     if ($form->isSubmitted() && $form->isValid()) {
 
-      $actualLevel = $this->getActualLevel($form);
-
-      $student->setActualLevel($actualLevel);
-
-      $student->addLevel($actualLevel->getLevel());
-
       $this->em->persist($student);
       $this->em->flush();
 
@@ -113,17 +93,5 @@ class StudentController extends AbstractController
     $this->em->flush();
 
     return $this->redirectToRoute('~student.index');
-  }
-
-  private function getActualLevel(FormInterface $form): ActualLevel
-  {
-    $level =  $form->get('actualLevel')->getData();
-
-    if (null === $level) {
-      throw new \RuntimeException("Nous n'avons pas pu trouvé cette promotion");
-    }
-
-    return (new ActualLevel())
-      ->setLevel($level);
   }
 }

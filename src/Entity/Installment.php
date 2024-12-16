@@ -19,6 +19,8 @@ class Installment
     #[ORM\Column]
     #[Groups([
         'read:yearAcademic:item',
+        'read:amount:collection',
+        'read:amount:item',
         'read:payment:collection',
         'read:payment:item',
     ])]
@@ -36,6 +38,8 @@ class Installment
         'read:yearAcademic:item',
         'read:payment:collection',
         'read:payment:item',
+        'read:amount:collection',
+        'read:amount:item',
     ])]
     private ?float $price = null;
 
@@ -51,6 +55,8 @@ class Installment
         'read:yearAcademic:item',
         'read:payment:collection',
         'read:payment:item',
+        'read:amount:collection',
+        'read:amount:item',
     ])]
     private ?int $priority = null;
 

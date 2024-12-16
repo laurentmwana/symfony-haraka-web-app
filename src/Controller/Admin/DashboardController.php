@@ -13,10 +13,8 @@ use App\Repository\FacultyRepository;
 use App\Repository\StudentRepository;
 use App\Repository\DepartmentRepository;
 use App\Repository\NotificationRepository;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class DashboardController extends AbstractController
@@ -55,9 +53,12 @@ class DashboardController extends AbstractController
 
   private function getUserStat(): bool|string
   {
+    $countStudent = $this->userRepository->countUserForRole(RoleEnum::ROLE_STUDENT->value);
+    $countChecker = $this->userRepository->countUserForRole(RoleEnum::ROLE_CHECKER->value);
+
     $data = [
-      'student' => 45,
-      'checker' => 60,
+      'student' => $countStudent,
+      'checker' => $countChecker,
     ];
 
     return $this->json($data)->getContent();

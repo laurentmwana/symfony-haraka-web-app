@@ -14,17 +14,21 @@ security:
     dev:
       pattern: ^/(_(profiler|wdt)|css|images|js)/
       security: false
+
     login:
       pattern: ^/api/login$
       stateless: true
       json_login:
-        check_path: /api/login
+        check_path: api_login
+        username_path: email
+        password_path: password
         success_handler: lexik_jwt_authentication.handler.authentication_success
         failure_handler: lexik_jwt_authentication.handler.authentication_failure
 
     api:
       pattern: ^/api
       stateless: true
+      provider: app_user_provider
       jwt: ~
 
     main:
@@ -55,17 +59,9 @@ security:
     - { path: ^/profile/checker, roles: ROLE_CHECKER }
     - { path: ^/profile/admin, roles: ROLE_ADMIN }
     - { path: ^/profile/student, roles: ROLE_STUDENT }
-    - { path: ^/api/amounts, roles: [ROLE_STUDENT, ROLE_ADMIN, ROLE_CHECKER] }
-    - { path: ^/api/faculties, roles: [ROLE_STUDENT, ROLE_ADMIN, ROLE_CHECKER] }
-    - {
-        path: ^/api/departments,
-        roles: [ROLE_STUDENT, ROLE_ADMIN, ROLE_CHECKER],
-      }
-    - { path: ^/api/sectors, roles: [ROLE_STUDENT, ROLE_ADMIN, ROLE_CHECKER] }
-    - {
-        path: ^/api/year-academics,
-        roles: [ROLE_STUDENT, ROLE_ADMIN, ROLE_CHECKER],
-      }
+
+    - { path: ^/api/me, roles: IS_AUTHENTICATED_FULLY }
+    - { path: ^/api/login, roles: PUBLIC_ACCESS }
 
 when@test:
   security:

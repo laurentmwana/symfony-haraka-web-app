@@ -25,11 +25,10 @@ class PaidRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('p')
             ->innerJoin('p.student', 's')
             ->innerJoin('s.user', 'u')
-            ->innerJoin('s.actualLevel', 'ac')
-            ->innerJoin('p.level', 'l')
+            ->innerJoin('s.level', 'l')
             ->innerJoin('l.yearAcademic', 'y')
             ->innerJoin('l.sector', 'se')
-            ->addSelect('se', 'y', 'l', 's', 'u', 'i', 'ac');
+            ->addSelect('se', 'y', 'l', 's', 'u');
 
         if (
             $mapped instanceof MappedYear
@@ -44,8 +43,8 @@ class PaidRepository extends ServiceEntityRepository
             ($mapped->getQuery() !== null && !empty($mapped->getQuery()))
         ) {
             $qb
-                ->andWhere('p.name = :np')
-                ->orWhere('se.name = :ns')
+                ->andWhere('se.name = :np')
+                ->orWhere('s.name = :ns')
                 ->setParameter('np', $mapped->getQuery())
                 ->setParameter('ns', $mapped->getQuery());
         }
@@ -71,5 +70,26 @@ class PaidRepository extends ServiceEntityRepository
         return $qb
             ->orderBy('pr.name', 'DESC')
             ->orderBy('pr.id', 'ASC')->getQuery();
+    }
+
+
+    public function findResponseQrcode(string $token): ?Paid
+    {
+        $qb = $this->createQueryBuilder('p')
+            ->innerJoin('p.student', 's')
+            ->innerJoin('p.level', 'l')
+            ->innerJoin('l.programme', 'pr')
+            ->innerJoin('l.sector', 'se')
+            ->leftJoin('s.payments', 'pa')
+            ->leftJoin('l.yearAcademic', 'y')
+            ->leftJoin('pa.amount', 'a')
+            ->leftJoin('pa.installment', 'i')
+            ->addSelect('s', 'l', 'i', 'a', 'pr', 'se', 'y', 'pa');
+
+        return $qb
+            ->where('p.token = :token')
+            ->setParameter('token', $token)
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 }

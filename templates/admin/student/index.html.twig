@@ -21,7 +21,7 @@ block body %}
         <twig:TableHead> Postnom </twig:TableHead>
         <twig:TableHead> Sexe </twig:TableHead>
         <twig:TableHead> Téléphone </twig:TableHead>
-        <twig:TableHead> Promotion Actuelle </twig:TableHead>
+        <twig:TableHead> Promotion </twig:TableHead>
         <twig:TableHead> Créer </twig:TableHead>
         <twig:TableHead> ... </twig:TableHead>
       </twig:TableRow>
@@ -32,44 +32,45 @@ block body %}
       <twig:TableRow>
         <twig:TableCell>
           <a class="hover:underline" href="{{ path('~student.show', {id: student.id}) }}">
-          {{ student.name|u.truncate(40, '...', false)}}
+            {{ student.name|u.truncate(40, '...', false)}}
           </a>
         </twig:TableCell>
         <twig:TableCell>
           <a class="hover:underline" href="{{ path('~student.show', {id: student.id}) }}">
-          {{ student.firstname|u.truncate(40, '...', false)}}
+            {{ student.firstname|u.truncate(40, '...', false)}}
           </a>
         </twig:TableCell>
 
         <twig:TableCell>
           <a class="hover:underline" href="{{ path('~student.show', {id: student.id}) }}">
-          {{ student.gender.value}}
+            {{ student.gender.value}}
           </a>
         </twig:TableCell>
 
         <twig:TableCell>
           <a class="hover:underline" href="{{ path('~student.show', {id: student.id}) }}">
-          {{ student.numberPhone|u.truncate(12, '...', false)}}
+            {{ student.numberPhone|u.truncate(12, '...', false)}}
           </a>
         </twig:TableCell>
 
         <twig:TableCell>
-          {% if student.actualLevel is not null %}
-            <a class="hover:underline" href="{{ path('~student.show', {id: student.id}) }}">
-          
-          {% set level = student.actualLevel.level %}
-          {% set actual = level.programme.name ~ " - " ~ level.sector.alias ~ " [" ~ level.yearAcademic.name ~ "]" %}
-          
-          {{ actual|u.truncate(30, '...', false)}}
+          {% if student.level %}
+          <a class="hover:underline" href="{{ path('~level.show', {id: student.level.id}) }}">
+
+            {% set level = student.level.programme.name ~ " - " ~ student.level.sector.alias ~ " [" ~
+            student.level.yearAcademic.name ~ "]" %}
+
+            {{ level|u.truncate(30, '...', false)}}
           </a>
-            {% endif %}
-        
+          {% endif %}
+
         </twig:TableCell>
         <twig:TableCell>
           {{ student.createdAt | ago }}
         </twig:TableCell>
         <twig:TableCell>
-          {% include 'shared/action.html.twig' with {routeDelete: path('~student.delete', {id: student.id}), routeEdit: path('~student.edit', {id: student.id})} %}
+          {% include 'shared/action.html.twig' with {routeDelete: path('~student.delete', {id: student.id}), routeEdit:
+          path('~student.edit', {id: student.id})} %}
         </twig:TableCell>
       </twig:TableRow>
       {% endfor %}

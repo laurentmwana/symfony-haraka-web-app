@@ -13,7 +13,6 @@ use App\Entity\{
     Student,
     Programme,
     Department,
-    ActualLevel,
     Installment,
     YearAcademic
 };
@@ -33,12 +32,17 @@ class BaseFixture extends Fixture
 
         $programmes = $this->loadProgrammes($manager);
 
-        $faculties = $this->loadFaculties($manager, 6);
+        $faculties = $this->loadFaculties($manager, 3);
         $departments = $this->loadDepartments($manager, $faculties);
         $sectors = $this->loadSectors($manager, $departments);
 
         $year = $this->getLatestYear($manager);
-        $levels = $this->loadLevels($manager, $programmes, $sectors, $year);
+        $levels = $this->loadLevels(
+            $manager,
+            $programmes,
+            $sectors,
+            $year
+        );
         $checkers = $this->loadCheckers($manager, 5);
 
         $this->loadAdmin($manager);
@@ -60,7 +64,6 @@ class BaseFixture extends Fixture
 
         $manager->flush();
     }
-
     private function loadProgrammes(ObjectManager $manager): array
     {
         $programmeData = [
@@ -136,9 +139,12 @@ class BaseFixture extends Fixture
         return $manager->getRepository(YearAcademic::class)
             ->findOneBy(['closed' => 0]);
     }
-
-    private function loadLevels(ObjectManager $manager, array $programmes, array $sectors, YearAcademic $year): array
-    {
+    private function loadLevels(
+        ObjectManager $manager,
+        array $programmes,
+        array $sectors,
+        YearAcademic $year
+    ): array {
         $levels = [];
         foreach ($programmes as $programme) {
             $amount = (new Amount())
@@ -159,11 +165,11 @@ class BaseFixture extends Fixture
                 ->setSector($sectors[array_rand($sectors)])
                 ->setYearAcademic($year);
             $manager->persist($level);
+
             $levels[] = $level;
         }
         return $levels;
     }
-
     private function loadCheckers(ObjectManager $manager, int $count): array
     {
         $faker = Factory::create();
@@ -204,36 +210,36 @@ class BaseFixture extends Fixture
         }
     }
 
+    /**
+     * @param \Doctrine\Persistence\ObjectManager $manager
+     * @param array<int, Level> $levels
+     * @param int $count
+     * @return void
+     */
     private function loadStudents(ObjectManager $manager, array $levels, int $count): void
     {
         $faker = Factory::create();
-        for ($i = 0; $i < $count; $i++) {
-            $student = (new Student())
-                ->setName($faker->name())
-                ->setFirstname($faker->firstName())
-                ->setLastname($faker->lastName())
-                ->setGender(GenderEnum::FEMALE)
-                ->setHappy($faker->dateTimeBetween())
-                ->setNumberPhone($faker->phoneNumber());
+        foreach ($levels as $level) {
+            for ($i = 0; $i < $count; $i++) {
+                $student = (new Student())
+                    ->setName($faker->name())
+                    ->setFirstname($faker->firstName())
+                    ->setLastname($faker->lastName())
+                    ->setGender(GenderEnum::FEMALE)
+                    ->setHappy($faker->dateTimeBetween())
+                    ->setLevel($level)
+                    ->setNumberPhone($faker->phoneNumber());
 
-            $user = (new User())
-                ->setUsername($faker->unique()->userName())
-                ->setRoles([RoleEnum::ROLE_STUDENT->value])
-                ->setEmail($faker->email())
-                ->setPassword('$2y$13$A4SPgHvZ5jWVqNkvFErFcuw6/ceNhxOBIYQK4nIoIBWbunkdBjN/O')
-                ->setStudent($student);
+                $user = (new User())
+                    ->setUsername($faker->unique()->userName())
+                    ->setRoles([RoleEnum::ROLE_STUDENT->value])
+                    ->setEmail($faker->email())
+                    ->setPassword('$2y$13$A4SPgHvZ5jWVqNkvFErFcuw6/ceNhxOBIYQK4nIoIBWbunkdBjN/O')
+                    ->setStudent($student);
 
-            $assignedLevels = array_slice($levels, $faker->numberBetween(0, count($levels) - 3), 3);
-            $actualLevel = (new ActualLevel())->setLevel(end($assignedLevels));
-            $student->setActualLevel($actualLevel);
-
-            foreach ($assignedLevels as $level) {
-                $level->addStudent($student);
-                $manager->persist($level);
+                $manager->persist($student);
+                $manager->persist($user);
             }
-
-            $manager->persist($student);
-            $manager->persist($user);
         }
     }
 }

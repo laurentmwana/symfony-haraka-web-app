@@ -4,12 +4,14 @@ namespace App\Repository;
 
 use App\Entity\User;
 use App\Enum\RoleEnum;
+use App\Helpers\CheckRoleUser;
 use Doctrine\ORM\Query;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * @extends ServiceEntityRepository<User>
@@ -109,5 +111,46 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $qb->setParameter('checker', '%' . RoleEnum::ROLE_CHECKER->value  . '%');
 
         return $qb->orderBy('u.created_at', 'DESC')->getQuery();
+    }
+
+
+    public function countUserForRole(string $role): int
+    {
+        $qb = $this->createQueryBuilder('u');
+
+        $result =  $qb->select('COUNT(u.id)')
+            ->where($qb->expr()->like('u.roles', ':user'))
+
+            ->setParameter('user', '%' . $role  . '%')
+            ->getQuery()
+            ->getSingleResult();
+
+        return !empty($result) ? array_values($result)[0] : 0;
+    }
+
+    public function findMe(User $user)
+    {
+
+        $qb = $this->createQueryBuilder('u');
+
+
+        $qb->leftJoin('u.notifications', 'ns')
+            ->addSelect('ns');
+
+        if (CheckRoleUser::isStudent($user->getRoles())) {
+            $qb->innerJoin('u.student', 's')
+                ->innerJoin('s.level', 'l')
+                ->innerJoin('s.paids', 'ps')
+                ->innerJoin('s.payments', 'pt')
+                ->addSelect('s', 'pt', 'ps', 'l')
+            ;
+        }
+
+        $qb->where('u.id = :userId')
+            ->setParameter('userId', $user->getId());
+
+        return $qb->getQuery()
+            ->setMaxResults(1)
+            ->getOneOrNullResult();
     }
 }

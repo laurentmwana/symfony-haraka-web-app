@@ -3,22 +3,34 @@
 namespace App\Entity;
 
 use App\Enum\PaidEnum;
-use App\Repository\PaidRepository;
+use App\Owner\UserStudentOwnerInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\PaidRepository;
 use ApiPlatform\Metadata as Metadata;
+use App\Controller\APIs\PaidStudentController;
+use Symfony\Component\HttpFoundation\File\File;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: PaidRepository::class)]
 #[Metadata\ApiResource(
+    security: "is_granted('ROLE_USER')",
     operations: [
         new Metadata\Get(
             normalizationContext: [
                 'groups' => [
                     'read:paid:item',
+                ]
+            ],
+        ),
+        new Metadata\Post(
+            uriTemplate: '/verify-response-qrcode/{token}',
+            controller: PaidStudentController::class,
+            normalizationContext: [
+                'groups' => [
+                    'read:paid:state',
                 ]
             ],
         ),
@@ -40,7 +52,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
     ]
 )]
 #[Vich\Uploadable]
-class Paid
+class Paid implements UserStudentOwnerInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -59,6 +71,7 @@ class Paid
         [
             'read:paid:collection',
             'read:paid:item',
+            'read:level:item',
         ]
     )]
     private ?Student $student = null;
@@ -78,6 +91,7 @@ class Paid
         [
             'read:paid:collection',
             'read:paid:item',
+            'read:level:item'
         ]
     )]
     private ?PaidEnum $state = null;
@@ -99,6 +113,13 @@ class Paid
     )]
     private ?\DateTimeInterface $updated_at = null;
 
+    #[Groups(
+        [
+            'read:paid:collection',
+            'read:paid:item',
+            'read:level:item',
+        ]
+    )]
     public ?string $contentUrl = null;
 
     #[Vich\UploadableField(mapping: "qrcode_slip", fileNameProperty: "filePath")]
@@ -108,6 +129,13 @@ class Paid
     public ?string $filePath = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(
+        [
+            'read:paid:collection',
+            'read:paid:item',
+            'read:level:item',
+        ]
+    )]
     private ?string $token = null;
 
     public function __construct()
