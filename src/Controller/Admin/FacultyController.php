@@ -35,13 +35,13 @@ class FacultyController extends AbstractController
     ]);
   }
 
-  #[Route('/faculty/{id}', name: 'faculty.show', methods: ['GET'], requirements: ['id' => REGEX_ID])]
+  #[Route('/faculty/{id}', name: 'faculty.show', methods: ['GET'], requirements: ['id' => "[0-9]+"])]
   public function show(Faculty $faculty): Response
   {
     return $this->render('admin/faculty/show.html.twig', compact('faculty'));
   }
 
-  #[Route('/faculty/{id}/edit', name: 'faculty.edit', methods: ['GET', 'POST'], requirements: ['id' => REGEX_ID])]
+  #[Route('/faculty/{id}/edit', name: 'faculty.edit', methods: ['GET', 'POST'], requirements: ['id' => "[0-9]+"])]
   public function edit(Request $request, Faculty $faculty): Response|RedirectResponse
   {
     $form = $this->createForm(FacultyFormType::class, $faculty);
@@ -83,7 +83,7 @@ class FacultyController extends AbstractController
     ]);
   }
 
-  #[Route('/faculty/{id}/delete', name: 'faculty.delete', methods: ['DELETE'], requirements: ['id' => REGEX_ID])]
+  #[Route('/faculty/{id}/delete', name: 'faculty.delete', methods: ['DELETE'], requirements: ['id' => "[0-9]+"])]
   public function delete(Faculty $faculty): RedirectResponse
   {
     $this->em->remove($faculty);

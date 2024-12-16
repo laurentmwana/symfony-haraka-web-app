@@ -31,7 +31,7 @@ class CommunicateController extends AbstractController
     ]);
   }
 
-  #[Route('/communicate/{id}', name: 'co.show', methods: ['GET'], requirements: ['id' => REGEX_ID])]
+  #[Route('/communicate/{id}', name: 'co.show', methods: ['GET'], requirements: ['id' => "[0-9]+"])]
   public function show(Amount $amount): Response
   {
     return $this->render('student/communicate/show.html.twig', compact('amount'));

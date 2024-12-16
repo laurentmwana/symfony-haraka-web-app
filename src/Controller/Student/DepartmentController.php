@@ -31,7 +31,7 @@ class DepartmentController extends AbstractController
     ]);
   }
 
-  #[Route('/department/{id}', name: 'department.show', methods: ['GET'], requirements: ['id' => REGEX_ID])]
+  #[Route('/department/{id}', name: 'department.show', methods: ['GET'], requirements: ['id' => "[0-9]+"])]
   public function show(Department $department): Response
   {
     return $this->render('student/department/show.html.twig', compact('department'));

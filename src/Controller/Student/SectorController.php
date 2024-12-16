@@ -30,7 +30,7 @@ class SectorController extends AbstractController
     ]);
   }
 
-  #[Route('/sector/{id}', name: 'sector.show', methods: ['GET'], requirements: ['id' => REGEX_ID])]
+  #[Route('/sector/{id}', name: 'sector.show', methods: ['GET'], requirements: ['id' => "[0-9]+"])]
   public function show(Sector $sector): Response
   {
     return $this->render('student/sector/show.html.twig', compact('sector'));

@@ -32,7 +32,7 @@ class FacultyController extends AbstractController
     ]);
   }
 
-  #[Route('/faculty/{id}', name: 'faculty.show', methods: ['GET'], requirements: ['id' => REGEX_ID])]
+  #[Route('/faculty/{id}', name: 'faculty.show', methods: ['GET'], requirements: ['id' => "[0-9]+"])]
   public function show(Faculty $faculty): Response
   {
     return $this->render('student/faculty/show.html.twig', compact('faculty'));

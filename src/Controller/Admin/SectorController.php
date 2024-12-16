@@ -34,13 +34,13 @@ class SectorController extends AbstractController
     ]);
   }
 
-  #[Route('/sector/{id}', name: 'sector.show', methods: ['GET'], requirements: ['id' => REGEX_ID])]
+  #[Route('/sector/{id}', name: 'sector.show', methods: ['GET'], requirements: ['id' => "[0-9]+"])]
   public function show(Sector $sector): Response
   {
     return $this->render('admin/sector/show.html.twig', compact('sector'));
   }
 
-  #[Route('/sector/{id}/edit', name: 'sector.edit', methods: ['GET', 'POST'], requirements: ['id' => REGEX_ID])]
+  #[Route('/sector/{id}/edit', name: 'sector.edit', methods: ['GET', 'POST'], requirements: ['id' => "[0-9]+"])]
   public function edit(Request $request, Sector $sector): Response|RedirectResponse
   {
     $form = $this->createForm(SectorFormType::class, $sector);
@@ -81,7 +81,7 @@ class SectorController extends AbstractController
     ]);
   }
 
-  #[Route('/sector/{id}/delete', name: 'sector.delete', methods: ['DELETE'], requirements: ['id' => REGEX_ID])]
+  #[Route('/sector/{id}/delete', name: 'sector.delete', methods: ['DELETE'], requirements: ['id' => "[0-9]+"])]
   public function delete(Sector $sector): RedirectResponse
   {
     $this->em->remove($sector);

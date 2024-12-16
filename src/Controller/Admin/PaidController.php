@@ -46,7 +46,7 @@ class PaidController extends AbstractController
   }
 
 
-  #[Route('/paid/{id}', name: 'paid.show', methods: ['GET'], requirements: ['id' => REGEX_ID])]
+  #[Route('/paid/{id}', name: 'paid.show', methods: ['GET'], requirements: ['id' => "[0-9]+"])]
   public function show(Paid $paid): Response
   {
 

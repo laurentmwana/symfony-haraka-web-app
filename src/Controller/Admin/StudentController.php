@@ -36,13 +36,13 @@ class StudentController extends AbstractController
     ]);
   }
 
-  #[Route('/student/{id}', name: 'student.show', methods: ['GET'], requirements: ['id' => REGEX_ID])]
+  #[Route('/student/{id}', name: 'student.show', methods: ['GET'], requirements: ['id' => "[0-9]+"])]
   public function show(Student $student): Response
   {
     return $this->render('admin/student/show.html.twig', compact('student'));
   }
 
-  #[Route('/student/{id}/edit', name: 'student.edit', methods: ['GET', 'POST'], requirements: ['id' => REGEX_ID])]
+  #[Route('/student/{id}/edit', name: 'student.edit', methods: ['GET', 'POST'], requirements: ['id' => "[0-9]+"])]
   public function edit(Request $request, Student $student): Response|RedirectResponse
   {
     $form = $this->createForm(StudentFormType::class, $student);
@@ -86,7 +86,7 @@ class StudentController extends AbstractController
     ]);
   }
 
-  #[Route('/student/{id}/delete', name: 'student.delete', methods: ['DELETE'], requirements: ['id' => REGEX_ID])]
+  #[Route('/student/{id}/delete', name: 'student.delete', methods: ['DELETE'], requirements: ['id' => "[0-9]+"])]
   public function delete(Student $student): RedirectResponse
   {
     $this->em->remove($student);

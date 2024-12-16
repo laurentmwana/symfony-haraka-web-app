@@ -2,10 +2,7 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\Sector;
 use App\Entity\YearAcademic;
-use App\Form\SectorFormType;
-use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\YearAcademicRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,7 +30,7 @@ class YearAcademicController extends AbstractController
     ]);
   }
 
-  #[Route('/year-academic/{id}', name: 'year-academic.show', methods: ['GET'], requirements: ['id' => REGEX_ID])]
+  #[Route('/year-academic/{id}', name: 'year-academic.show', methods: ['GET'], requirements: ['id' => "[0-9]+"])]
   public function show(YearAcademic $yearAcademic): Response
   {
     return $this->render('admin/year-academic/show.html.twig', [

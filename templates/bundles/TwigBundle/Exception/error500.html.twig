@@ -1,7 +1,24 @@
 {% extends "layouts/error.html.twig" %}
 
 {% block title %}
+Erreur interne du serveur
+{% endblock %}
 
 {% block body %}
+
+<twig:PageHeader class="mb-3" title="Erreur interne du serveur">
+  Une erreur inattendue est survenue. Veuillez réessayer plus tard.
+</twig:PageHeader>
+
+<div class="card-wrapper mb-2">
+  <p class="text-description mb-2">{{exception.message}}</p>
+</div>
+
+<twig:Button dimension="sm" href="{{ path('welcome') }}">
+  <div class="flex gap-4 items-center">
+    <i class="bi bi-arrow-left"></i>
+    <span>Page d'accueil</span>
+  </div>
+</twig:Button>
 
 {% endblock %}

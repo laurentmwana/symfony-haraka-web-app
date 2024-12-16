@@ -35,13 +35,13 @@ class DepartmentController extends AbstractController
     ]);
   }
 
-  #[Route('/department/{id}', name: 'department.show', methods: ['GET'], requirements: ['id' => REGEX_ID])]
+  #[Route('/department/{id}', name: 'department.show', methods: ['GET'], requirements: ['id' => "[0-9]+"])]
   public function show(Department $department): Response
   {
     return $this->render('admin/department/show.html.twig', compact('department'));
   }
 
-  #[Route('/department/{id}/edit', name: 'department.edit', methods: ['GET', 'POST'], requirements: ['id' => REGEX_ID])]
+  #[Route('/department/{id}/edit', name: 'department.edit', methods: ['GET', 'POST'], requirements: ['id' => "[0-9]+"])]
   public function edit(Request $request, Department $department): Response|RedirectResponse
   {
     $form = $this->createForm(DepartmentFormType::class, $department);
@@ -82,7 +82,7 @@ class DepartmentController extends AbstractController
     ]);
   }
 
-  #[Route('/department/{id}/delete', name: 'department.delete', methods: ['DELETE'], requirements: ['id' => REGEX_ID])]
+  #[Route('/department/{id}/delete', name: 'department.delete', methods: ['DELETE'], requirements: ['id' => "[0-9]+"])]
   public function delete(Department $department): RedirectResponse
   {
     $this->em->remove($department);

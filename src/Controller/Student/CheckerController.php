@@ -30,7 +30,7 @@ class  CheckerController extends AbstractController
     ]);
   }
 
-  #[Route('/checker/{id}', name: 'checker.show', methods: ['GET'], requirements: ['id' => REGEX_ID])]
+  #[Route('/checker/{id}', name: 'checker.show', methods: ['GET'], requirements: ['id' => "[0-9]+"])]
   public function show(Checker $checker): Response
   {
     return $this->render('student/checker/show.html.twig', compact('checker'));

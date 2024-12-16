@@ -74,10 +74,7 @@
   "autoload-dev": {
     "psr-4": {
       "App\\Tests\\": "tests/"
-    },
-    "files": [
-      "./src/Globals/const.php"
-    ]
+    }
   },
   "replace": {
     "symfony/polyfill-ctype": "*",

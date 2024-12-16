@@ -33,7 +33,7 @@ class Installment
 
     #[ORM\Column]
     #[Validator\NotBlank()]
-    #[Validator\Regex(REGEX_FLOAT)]
+    #[Validator\Regex("/^([0-9]*[1-9][0-9]*)(\.[0-9]+)?$/")]
     #[Groups([
         'read:yearAcademic:item',
         'read:payment:collection',

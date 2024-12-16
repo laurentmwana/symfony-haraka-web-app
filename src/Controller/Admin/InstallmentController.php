@@ -23,7 +23,7 @@ class InstallmentController extends AbstractController
     private EntityManagerInterface $em
   ) {}
 
-  #[Route('/amount/{id}/generate-manual', name: 'installment.manual', methods: ['GET', 'POST'], requirements: ['id' => REGEX_ID])]
+  #[Route('/amount/{id}/generate-manual', name: 'installment.manual', methods: ['GET', 'POST'], requirements: ['id' => "[0-9]+"])]
   public function manual(Request $request, Amount $amount): Response|RedirectResponse
   {
     $form = $this->createForm(CollectionInstallmentFormType::class, $amount);

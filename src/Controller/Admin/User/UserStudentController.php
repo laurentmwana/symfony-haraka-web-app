@@ -38,13 +38,13 @@ class UserStudentController extends AbstractController
     ]);
   }
 
-  #[Route('/student/{id}', name: 'user.student.show', methods: ['GET'], requirements: ['id' => REGEX_ID])]
+  #[Route('/student/{id}', name: 'user.student.show', methods: ['GET'], requirements: ['id' => "[0-9]+"])]
   public function show(User $user): Response
   {
     return $this->render('admin/user/student/show.html.twig', compact('user'));
   }
 
-  #[Route('/student/{id}/edit', name: 'user.student.edit', methods: ['GET', 'POST'], requirements: ['id' => REGEX_ID])]
+  #[Route('/student/{id}/edit', name: 'user.student.edit', methods: ['GET', 'POST'], requirements: ['id' => "[0-9]+"])]
   public function edit(Request $request, User $user, UserPasswordHasherInterface $hasher): Response|RedirectResponse
   {
     $form = $this->createForm(UserStudentFormType::class, $user);
@@ -97,7 +97,7 @@ class UserStudentController extends AbstractController
     ]);
   }
 
-  #[Route('/student/{id}/delete', name: 'user.student.delete', methods: ['DELETE'], requirements: ['id' => REGEX_ID])]
+  #[Route('/student/{id}/delete', name: 'user.student.delete', methods: ['DELETE'], requirements: ['id' => "[0-9]+"])]
   public function delete(User $user): RedirectResponse
   {
     $this->em->remove($user);

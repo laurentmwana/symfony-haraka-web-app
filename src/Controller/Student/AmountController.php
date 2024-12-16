@@ -33,7 +33,7 @@ class AmountController extends AbstractController
     ]);
   }
 
-  #[Route('/amount/{id}', name: 'amount.show', methods: ['GET'], requirements: ['id' => REGEX_ID])]
+  #[Route('/amount/{id}', name: 'amount.show', methods: ['GET'], requirements: ['id' => "[0-9]+"])]
   public function show(Amount $amount): Response
   {
     return $this->render('student/amount/show.html.twig', compact('amount'));

@@ -38,60 +38,71 @@
             </twig:TableCell>
             <twig:TableCell>
               {% if payment.paid != true %}
-
-              <div class="flex items-center justify-end">
-                <twig:Button href="" variant="outline">
+              <form onsubmit="return confirm('Voulez-vous vraiment effectué cette action ?')"
+                action="{{ path('@installment', {id: payment.id}) }}" method="post">
+                <input type="hidden" name="_token" value="{{ csrf_token('totality') }}">
+                <twig:Button variant="default">
                   <div class="flex items-center gap-x-1">
                     <i class="bi bi-cash"></i>
                     <span>Payer</span>
                   </div>
                 </twig:Button>
-              </div>
-
-              {% endif %}
-            </twig:TableCell>
-          </twig:TableRow>
-          {% endfor %}
-        </twig:TableBody>
-      </twig:Table>
+              </form>
     </div>
-    <div class="mb-3">
 
-      <twig:Table>
-        <twig:TableHeader>
-          <twig:TableRow>
-            <twig:TableHead>
-              <div class="flex items-center justify-start">
-                <twig:Button href="" variant="default">
+    {% endif %}
+    </twig:TableCell>
+    </twig:TableRow>
+    {% endfor %}
+    </twig:TableBody>
+    </twig:Table>
+  </div>
+  <div class="mb-3">
+
+    <twig:Table>
+      <twig:TableHeader>
+        <twig:TableRow>
+          <twig:TableHead>
+            {% if paid.state|isTotality %}
+            <div></div>
+            {% else %}
+            <div class="flex items-center justify-start">
+              <form onsubmit="return confirm('Voulez-vous vraiment effectué cette action ?')"
+                action="{{ path('@totality', {id: paid.id}) }}" method="post">
+                <input type="hidden" name="_token" value="{{ csrf_token('totality') }}">
+                <twig:Button variant="default">
                   <div class="flex items-center gap-x-1">
                     <i class="bi bi-cash"></i>
                     <span>Payer la totalité</span>
                   </div>
                 </twig:Button>
-              </div>
-            </twig:TableHead>
-            <twig:TableHead> Total payé </twig:TableHead>
-            <twig:TableHead> Total à payer </twig:TableHead>
-          </twig:TableRow>
-        </twig:TableHeader>
+              </form>
+            </div>
+            {% endif %}
 
-        <twig:TableBody>
-          <twig:TableRow>
-            <twig:TableCell></twig:TableCell>
-            <twig:TableCell>
-              {{ paidPayments|number_format(2, '.', ',') }} FC
-            </twig:TableCell>
-            <twig:TableCell>
-              {{ unPaidPayments|number_format(2, '.', ',') }} FC
-            </twig:TableCell>
-            <twig:TableCell>
-            </twig:TableCell>
-            <twig:TableCell>
-            </twig:TableCell>
-          </twig:TableRow>
-        </twig:TableBody>
+          </twig:TableHead>
+          <twig:TableHead> Total payé </twig:TableHead>
+          <twig:TableHead> Total à payer </twig:TableHead>
+        </twig:TableRow>
+      </twig:TableHeader>
 
-      </twig:Table>
-    </div>
+      <twig:TableBody>
+        <twig:TableRow>
+          <twig:TableCell></twig:TableCell>
+          <twig:TableCell>
+            {{ paidPayments|number_format(2, '.', ',') }} FC
+          </twig:TableCell>
+          <twig:TableCell>
+            {{ unPaidPayments|number_format(2, '.', ',') }} FC
+          </twig:TableCell>
+          <twig:TableCell>
+          </twig:TableCell>
+          <twig:TableCell>
+          </twig:TableCell>
+        </twig:TableRow>
+      </twig:TableBody>
+
+    </twig:Table>
+  </div>
   </div>
 </twig:Card>

@@ -35,13 +35,13 @@ class  ExpenseControlController extends AbstractController
     ]);
   }
 
-  #[Route('/expense-control/{id}', name: 'expense-control.show', methods: ['GET'], requirements: ['id' => REGEX_ID])]
+  #[Route('/expense-control/{id}', name: 'expense-control.show', methods: ['GET'], requirements: ['id' => "[0-9]+"])]
   public function show(ExpenseControl $expenseControl): Response
   {
     return $this->render('admin/expense-control/show.html.twig', compact('expenseControl'));
   }
 
-  #[Route('/expense-control/{id}/edit', name: 'expense-control.edit', methods: ['GET', 'POST'], requirements: ['id' => REGEX_ID])]
+  #[Route('/expense-control/{id}/edit', name: 'expense-control.edit', methods: ['GET', 'POST'], requirements: ['id' => "[0-9]+"])]
   public function edit(Request $request, ExpenseControl $expenseControl): Response|RedirectResponse
   {
     $form = $this->createForm(ExpenseControlFormType::class, $expenseControl);
@@ -82,7 +82,7 @@ class  ExpenseControlController extends AbstractController
     ]);
   }
 
-  #[Route('/expense-control/{id}/delete', name: 'expense-control.delete', methods: ['DELETE'], requirements: ['id' => REGEX_ID])]
+  #[Route('/expense-control/{id}/delete', name: 'expense-control.delete', methods: ['DELETE'], requirements: ['id' => "[0-9]+"])]
   public function delete(ExpenseControl $expenseControl): RedirectResponse
   {
     $this->em->remove($expenseControl);

@@ -30,7 +30,7 @@ class ProgrammeController extends AbstractController
     ]);
   }
 
-  #[Route('/programme/{id}', name: 'programme.show', methods: ['GET'], requirements: ['id' => REGEX_ID])]
+  #[Route('/programme/{id}', name: 'programme.show', methods: ['GET'], requirements: ['id' => "[0-9]+"])]
   public function show(Programme $programme): Response
   {
     return $this->render('admin/programme/show.html.twig', [

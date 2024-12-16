@@ -41,13 +41,13 @@ class QuizController extends AbstractController
     ]);
   }
 
-  #[Route('/quiz/{id}', name: 'quiz.show', methods: ['GET'], requirements: ['id' => REGEX_ID])]
+  #[Route('/quiz/{id}', name: 'quiz.show', methods: ['GET'], requirements: ['id' => "[0-9]+"])]
   public function show(Quiz $quiz): Response
   {
     return $this->render('admin/quiz/show.html.twig', compact('quiz'));
   }
 
-  #[Route('/quiz/{id}/edit', name: 'quiz.edit', methods: ['GET', 'POST'], requirements: ['id' => REGEX_ID])]
+  #[Route('/quiz/{id}/edit', name: 'quiz.edit', methods: ['GET', 'POST'], requirements: ['id' => "[0-9]+"])]
   public function edit(Request $request, Quiz $quiz): Response|RedirectResponse
   {
     $form = $this->createForm(QuizFormType::class, $quiz);
@@ -88,7 +88,7 @@ class QuizController extends AbstractController
     ]);
   }
 
-  #[Route('/quiz/{id}/delete', name: 'quiz.delete', methods: ['DELETE'], requirements: ['id' => REGEX_ID])]
+  #[Route('/quiz/{id}/delete', name: 'quiz.delete', methods: ['DELETE'], requirements: ['id' => "[0-9]+"])]
   public function delete(Quiz $quiz): RedirectResponse
   {
     $this->em->remove($quiz);

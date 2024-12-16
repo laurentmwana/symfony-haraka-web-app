@@ -51,7 +51,7 @@ class LevelController extends AbstractController
   }
 
 
-  #[Route('/level/{id}', name: 'level.show', methods: ['GET'], requirements: ['id' => REGEX_ID])]
+  #[Route('/level/{id}', name: 'level.show', methods: ['GET'], requirements: ['id' => "[0-9]+"])]
   public function show(Level $level): Response
   {
 

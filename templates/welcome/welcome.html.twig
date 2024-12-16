@@ -9,9 +9,10 @@
 
 <div class="container py-12">
   <div class="mx-auto max-w-4xl">
-    <twig:WrapperSection title="Frais académique" description="Nous avons répondu aux questions que vous vous posez sur l'entreprise, l'entrepreneuriat, et pourquoi suivre nos
-   
-    formations (textuelles ou vidéo).">
+    <twig:WrapperSection title="Frais académique" description="
+    Afin de garantir une expérience éducative de qualité et de soutenir les infrastructures universitaires, 
+    le paiement des frais académiques est une étape essentielle dans le processus d'inscription et de suivi académique.
+    ">
       <div class="flex flex-col gap-6">
         {% for amount in amounts %}
         <twig:Card>
@@ -50,8 +51,10 @@
       </div>
     </twig:WrapperSection>
 
-    <twig:WrapperSection title="Questions fréquemment posées" description="Nous avons répondu aux questions que vous vous posez sur l'entreprise, l'entrepreneuriat, et pourquoi suivre nos
-        formations (textuelles ou vidéo).">
+    <twig:WrapperSection title="Questions fréquemment posées" description="
+     Voici les réponses aux questions les plus courantes concernant les frais académiques. 
+     Si vous ne trouvez pas votre réponse ici, n’hésitez pas à nous contacter.
+     ">
       {% include "welcome/_quiz.html.twig" with {quizzes} %}
     </twig:WrapperSection>
   </div>

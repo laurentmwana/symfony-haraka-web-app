@@ -3,7 +3,7 @@
 {% block body %}
 {% include "student/paid/_state-paid.html.twig" with {paid: paid, eye: false} %}
 {% include "student/enumerate/_amount-level.html.twig" with {amount: amount} %}
-{% include "student/enumerate/_amount-paid.html.twig" with {payments: payments} %}
+{% include "student/enumerate/_amount-paid.html.twig" with {payments: payments, paid: paid} %}
 
 <div>
   {{ uiPaypal(payments) }}

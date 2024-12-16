@@ -6,16 +6,18 @@ namespace App\Controller\Admin;
 use App\Entity\Amount;
 use App\Helpers\Number;
 use App\Entity\Installment;
+use App\Helpers\RegexConst;
 use App\Form\AmountFormType;
 use App\Repository\AmountRepository;
-use App\Repository\InstallmentRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\InstallmentRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
 
 #[Route('/admin', name: '~')]
 class AmountController extends AbstractController
@@ -42,13 +44,13 @@ class AmountController extends AbstractController
     ]);
   }
 
-  #[Route('/amount/{id}', name: 'amount.show', methods: ['GET'], requirements: ['id' => REGEX_ID])]
+  #[Route('/amount/{id}', name: 'amount.show', methods: ['GET'], requirements: ['id' => "[0-9]+"])]
   public function show(Amount $amount): Response
   {
     return $this->render('admin/amount/show.html.twig', compact('amount'));
   }
 
-  #[Route('/amount/{id}/edit', name: 'amount.edit', methods: ['GET', 'POST'], requirements: ['id' => REGEX_ID])]
+  #[Route('/amount/{id}/edit', name: 'amount.edit', methods: ['GET', 'POST'], requirements: ['id' => "[0-9]+"])]
   public function edit(Request $request, Amount $amount): Response|RedirectResponse
   {
     $form = $this->createForm(AmountFormType::class, $amount);
@@ -99,7 +101,7 @@ class AmountController extends AbstractController
     ]);
   }
 
-  #[Route('/amount/{id}/delete', name: 'amount.delete', methods: ['DELETE'], requirements: ['id' => REGEX_ID])]
+  #[Route('/amount/{id}/delete', name: 'amount.delete', methods: ['DELETE'], requirements: ['id' => "[0-9]+"])]
   public function delete(Amount $amount): RedirectResponse
   {
     $this->em->remove($amount);

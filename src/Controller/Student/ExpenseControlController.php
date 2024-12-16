@@ -30,7 +30,7 @@ class  ExpenseControlController extends AbstractController
     ]);
   }
 
-  #[Route('/expense-control/{id}', name: 'expense-control.show', methods: ['GET'], requirements: ['id' => REGEX_ID])]
+  #[Route('/expense-control/{id}', name: 'expense-control.show', methods: ['GET'], requirements: ['id' => "[0-9]+"])]
   public function show(ExpenseControl $expenseControl): Response
   {
     return $this->render('student/expense-control/show.html.twig', compact('expenseControl'));

@@ -38,13 +38,13 @@ class  CheckerController extends AbstractController
     ]);
   }
 
-  #[Route('/checker/{id}', name: 'checker.show', methods: ['GET'], requirements: ['id' => REGEX_ID])]
+  #[Route('/checker/{id}', name: 'checker.show', methods: ['GET'], requirements: ['id' => "[0-9]+"])]
   public function show(Checker $checker): Response
   {
     return $this->render('admin/checker/show.html.twig', compact('checker'));
   }
 
-  #[Route('/checker/{id}/edit', name: 'checker.edit', methods: ['GET', 'POST'], requirements: ['id' => REGEX_ID])]
+  #[Route('/checker/{id}/edit', name: 'checker.edit', methods: ['GET', 'POST'], requirements: ['id' => "[0-9]+"])]
   public function edit(Request $request, Checker $checker): Response|RedirectResponse
   {
     $form = $this->createForm(CheckerFormType::class, $checker);
@@ -85,7 +85,7 @@ class  CheckerController extends AbstractController
     ]);
   }
 
-  #[Route('/checker/{id}/delete', name: 'checker.delete', methods: ['DELETE'], requirements: ['id' => REGEX_ID])]
+  #[Route('/checker/{id}/delete', name: 'checker.delete', methods: ['DELETE'], requirements: ['id' => "[0-9]+"])]
   public function delete(Checker $checker): RedirectResponse
   {
     $this->em->remove($checker);

@@ -19,19 +19,7 @@
   <div class="h-full relative" id="swup">
     <div class="container py-16">
       <div class="container-center">
-        <twig:PageHeader class="mb-3" title="Problème">
-
-        </twig:PageHeader>
-        <div class="card-wrapper mb-2">
-          <p class="text-description mb-2">
-
-          </p>
-        </div>
-
-        <twig:Button dimension="sm" href="{{ path('welcome') }}">
-          <i class="bi bi-arrow-left"></i>
-          <span>Page d'accueil</span>
-        </twig:Button>
+        {% block body %}{% endblock %}
       </div>
     </div>
   </div>
